@@ -1,0 +1,23 @@
+<div>
+    <h1> Catálogo de productos </h1>
+    <div ng-controller="pedirProduc as pedir"> 
+        <table class="table table-bordered">
+            <thead>
+                <tr class="success">
+                    <th>Identificador</th>
+                    <th>Nombre</th>
+                    <th>Precio</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr ng-repeat="x in productos" class="info">
+                    <td>{{ x.idproducto }}</td>
+                    <td>{{ x.nombre }}</td>
+                    <td>{{ x.precio }}</td>
+                </tr>
+            </tbody>
+        </table>
+        <button  ng-click="pedir.consultar()" class="btn btn-primary">consultar</button>
+    </div>
+</div>

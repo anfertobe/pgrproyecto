@@ -1,0 +1,71 @@
+<div>
+<table width="100%" ng-app ng-controller="Calificacion as of" ng-init="of.consultar()">
+    <tr>
+        <td colspan="2">
+            <div class="container-fluid" >
+            <h1>Calificacion</h1>
+            <br>
+            <div class="container-fluid" >
+                <ul class="nav nav-tabs">
+                    <li role="presentation"  ng-click="of.registro()" ><a>Adicionar</a></li>
+                    <li role="presentation" ng-click="of.seleccionarEmpleado()"><a>Seleccionar empleado</a></li>
+            </ul>
+            <br>
+            </div>
+        </td>
+    </tr>
+    <tr>
+         <div class="modal fade bs-example-modal-sm" id="myPleaseWait" tabindex="-1"
+    role="dialog" aria-hidden="false" data-backdrop="static">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    <span class="glyphicon glyphicon-time">
+                    </span>Espere un momento
+                 </h4>
+            </div>
+            <div class="modal-body">
+                <div class="progress">
+                    <div  class="progress-bar progress-bar-striped active" role="progressbar"
+                    style="width: 100%">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+     <td width="100%">
+             <table class="table" width="100%" >
+                                <tr>
+                                    <td width="45%" valign="top" >
+
+                                  <div class="panel-heading" ></div>
+                                     <table class="table" >
+                                               <tr>
+                                    <td width="50%" align="right"><h3>Rango</h3></td>
+                                    <td width="50%" align="center">
+                                    <select name="Estados" id="ofEstado" ng-model="of.calificacion.rango" >
+                                            <option>5</option>
+                                            <option>10</option>
+                                    </select>
+                                   </td>
+                                <br>
+                                </tr>
+                                <tr>
+                                    <td align="right" width="50%"><h3>Valor</h3></td>
+                                    <td width="50%" align="center"><input type="number" name="Valor" ng-model="of.calificacion.valor" required></td>
+                                </tr>
+                                <br>
+                                <tr>
+                                    <td align="right" width="50%"><h3>Comentario</h3></td>
+                                    <td width="50%" align="center"><textarea name="Descripcion" ng-model="of.calificacion.comentario" rows="4" cols="20">
+                                        </textarea></td>
+                                        <br>
+                                </tr>
+                            </table>
+                        </td>
+    </tr>
+</table>
+    </div>
+

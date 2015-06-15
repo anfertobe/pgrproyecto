@@ -1,0 +1,148 @@
+<nav class="navbar navbar-default">
+    
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-left">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">Menu</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li><a href="#">Link</a></li>
+         <li class="active"><a href="#/new">Comprar Licencias <span class="sr-only"></span></a></li>
+        <li class="dropdown">
+          <a data-toggle="dropdown" role="button">Prueba <span class="caret">                </span></a>
+          <ul class="dropdown-menu" role="menu">
+              <li class="divider"></li>
+              <li><a href="#">Action</a></li>
+         </ul>
+        </li>
+      </ul>
+      <form class="navbar-form navbar-left" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search">
+        </div>
+        <button type="submit" class="btn btn-default">Submit</button>
+      </form>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="#">Link</a></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">Dropdown <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="#">Action</a></li>
+            <li><a href="#">Another action</a></li>
+            <li><a href="#">Something else here</a></li>
+            <li><a href="#">Separated link</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+   <!-- /.navbar-collapse -->
+  </div>
+    
+</nav>
+<table width="100%" ng-app ng-controller="Categoria as of" ng-init="of.consultar()">
+    <tr>
+        <td colspan="2">
+            <div class="container-fluid" >
+            <h1>Categorias</h1>
+            <br>
+            <div class="container-fluid" >
+                <ul class="nav nav-tabs">
+                    <li role="presentation"  ng-click="of.registro()" ><a>Adicionar</a></li>
+                </ul>
+            <br>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2" width="100%">
+            <div class="container-fluid" >
+                    <table width="100%">
+                    <tr>
+                        <td style="aling:right" width="50%">
+                            Categorias
+                        </td>
+                        <td  style="aling:left" width="50%" >
+                        <select id="referenceslist" class="input-large" ng-model="OptionOf" ng-change="of.cargarCategoria()" >
+                            <option ng-repeat="ofer in Categorias">{{ofer.id}}-({{ofer.nombre}})</option>
+                        </select>
+                        
+                    <td>
+                    </tr>
+                 </table>   
+            </div>        
+          </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                        <div class="container-fluid">
+                            <table width="100%">
+                                <tr>
+                                    <td width="45%">
+
+                                  <div class="panel-heading" >Intereses</div>
+                                     <table class="table" >
+                                 <thead>
+                                 <th></th>
+                                 <th>Experiencia</th>
+                                 
+                                 </thead>
+                                 <tbody>
+                                     <tr ng-repeat="oft in of.Categoria.interes">
+                                         <td>{{oft.experiencia}}</td>
+                                     </tr>
+                                 </tbody>
+                             </table>
+                       </td>
+                       <td width="10%">
+                           
+                       </td>
+                        <td width="45%">
+                            <table width="100%" >
+                                <tr>
+                                    <td>Nombre</td>
+                                    <td><input type="text" ng-model="of.Categoria.nombre" required></td>
+                                </tr>
+                                <tr>
+                                    <td><h3>Intereses</h3></td>
+                                    
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Experiencia
+                                    </td>
+                                    <td>
+                                        <textarea name="experiencia" ng-model="of.Interes.experiencia" rows="4" cols="20"> </textarea>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td colspan="2"><input type="submit" value="Agregar" ng-click="of.agregarInteres()" /></td>
+                                </tr>
+                                 <tr>
+                            <td>Publicante</td>
+                                <td><select name="Publicante"  ng-model="OptionPub" >
+                                     <option ng-repeat="cat in Postulantes">{{cat.identificacion}}-({{cat.nombre}})</option>
+                                </select></td>
+                                </tr>
+                           </table>
+                            
+                        </td>
+                    </tr>
+                    
+                    
+                </table>
+                
+            </div>
+          </td>
+               
+    </tr>
+    </table>

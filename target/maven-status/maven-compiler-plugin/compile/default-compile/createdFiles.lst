@@ -1,0 +1,13 @@
+com\tservice\Logica\correo\Gmail.class
+com\tservice\restcontrollers\ResourceNotFoundException.class
+com\tservice\exceptions\tserviceExceptions.class
+com\tservice\Logica\pasadoJudicial\PasadoJudicial.class
+com\tservice\Logica\correo\Sender.class
+com\tservice\restcontrollers\TestRestController.class
+com\tservice\restcontrollers\RestControllerTservice.class
+com\tservice\restcontrollers\OperationFailedException.class
+com\tservice\Logica\pagos\ConsultaTransaccion.class
+com\tservice\mappers\HibernateAwareObjectMapper.class
+com\tservice\Logica\pagos\InformacionPago.class
+com\tservice\Logica\pagos\ResultadoTransaccion.class
+com\tservice\Logica\pasadoJudicial\Antecedente.class

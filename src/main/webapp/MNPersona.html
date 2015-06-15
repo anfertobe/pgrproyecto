@@ -1,0 +1,207 @@
+<div>
+<table width="100%" ng-app ng-controller="TipoRol as of" ng-init="of.consultar()">
+ <div class="modal fade bs-example-modal-sm" id="myPleaseWait" tabindex="-1"
+    role="dialog" aria-hidden="false" data-backdrop="static">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    <span class="glyphicon glyphicon-time">
+                    </span>Espere un momento
+                 </h4>
+            </div>
+            <div class="modal-body">
+                <div class="progress">
+                    <div  class="progress-bar progress-bar-striped active" role="progressbar"
+                    style="width: 100%">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    
+    <tr>
+        <td colspan="2">
+            <div class="container-fluid" >
+            <h1>Personas</h1>
+            <br>
+            <div class="container-fluid" >
+                <ul class="nav nav-tabs">
+                    <li role="presentation" id="adicionar" ng-hide="of.habilitar.hideAdicionar" ng-click="of.registro()" ><a>Adicionar</a></li>
+                    <li role="presentation" id="aplicarOferta" ng-hide="of.habilitar.hideAplicar"  ng-click="of.aplicarOferta()" ><a>Aplicar Oferta</a></li>
+                    <li role="presentation" id="aplicarOferta" ng-hide="of.habilitar.hideIntereses"  ng-click="of.MNInteres()" ><a>Intereses</a></li>
+                </ul>
+                <br>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2" width="100%">
+            <div class="container-fluid" >
+                    <table width="100%">
+                    <tr>
+                        <td style="aling:right" width="33%">
+                            Personas
+                        </td>
+                        <td  style="aling:left" width="33%" >
+                        <td><input type="text" name="Valor" ng-model="OptionFind" /></td>
+                        <td>
+                        <td style="aling:right" width="33%">
+                            <input type="submit" value="Buscar" ng-click="of.Buscar()" />
+                        </td>
+                        <td>Tipo </td>
+                                    <td><select name="Estados" id="ofEstado" ng-model="OptionTipo" ng-change="of.habilitarControles()"  >
+                                            <option>Publicante</option>
+                                            <option>Postulante</option>
+                                    </select></td>
+                                
+                    </tr>
+                 </table>   
+            </div>        
+          </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                        <div class="container-fluid">
+                            <table class="table" width="100%" >
+                                <tr><br></tr>
+                                <tr>
+                                    <td width="45%" valign="top" >
+                            
+                                  <div class="panel panel-default">
+                              
+                                  <div class="panel-heading" >Ofertas</div>
+                                     <table class="table" >
+                                 <thead>
+                                 <th></th>
+                                 <th>IdOferta</th>
+                                 <th>Descripcion</th>
+                                 <th>Valor</th>
+
+                                 </thead>
+                                 <tbody>
+                                     <tr ng-repeat="oft in ofertasG">
+                                         <td><input type="radio" name="radAnswer" value={{oft.id}} /> </td>
+                                         <td>{{oft.id}}</td>
+                                         <td>{{oft.descripcion}}</td>
+                                         <td>{{oft.valor}}</td>
+                                     </tr>
+                                 </tbody>
+                             </table>
+                       </td>
+                       <td width="10%">
+                           
+                       </td>
+                       
+                        <td width="45%">
+                           <div class="panel panel-default">
+                                <div class="panel-heading">Información
+                                 <table class="table">
+                                 <tr>
+                                    <h3>Información</h3>
+                                </tr>
+                                <tr>
+                                    <td width="50%" >Identificación</td>
+                                    <td  width="50%"><input type="text" ng-model="of.Persona.identificacion" required></td>
+                                </tr>
+                                <tr><td colspan="2"><br></td></tr>
+                                <tr>
+                                    <td  width="50%">Nombre</td>
+                                    <td  width="50%"><input type="text" name="nombre" ng-model="of.Persona.nombre" required>
+                                </tr>
+                                <tr><td colspan="2"><br></td></tr>
+                                 <tr>
+                                    <td width="50%">Fecha Nacimiento</td>
+                                    <td width="50%"><input type="date" name="fechaNacimiento" ng-model="of.Persona.fechaNacimiento" required>
+                                    </td>
+                                </tr>
+                                <tr><td colspan="2"><br></td></tr>
+                                <tr>
+                                    <td width="50%">Direccion</td>
+                                    <td width="50%"><textarea name="direccion" ng-model="of.Persona.direccion" rows="4" cols="20">
+                                    </textarea></td>
+                                </tr>
+                                <tr><td colspan="2"><br></td></tr>
+                                <tr>
+                                    <td width="50%">Correo</td>
+                                    <td width="50%"><input type="text" name="correo" ng-model="of.Persona.correo" required>
+                                    </td>
+                                </tr>
+                                <tr><td colspan="2"><br></td></tr>
+                                <tr>
+                                    <td width="50%">Telefono</td>
+                                    <td width="50%"><input type="text" name="telefono" ng-model="of.Persona.telefono" required>
+                                    </td>
+                                </tr>
+                                <tr><td colspan="2"><br></td></tr>
+                                <tr>
+                                    <td width="50%">País</td>
+                                    <td width="50%"><input type="text" name="pais" ng-model="of.Persona.pais" required>
+                                    </td>
+                                </tr>
+                                <tr><td colspan="2"><br></td></tr>
+                                <tr>
+                                    <td width="50%">Ciudad</td>
+                                    <td width="50%"><input type="text" name="ciudad" ng-model="of.Persona.ciudad" required>
+                                    </td>
+                                </tr>
+                                <tr><td colspan="2"><br></td></tr>
+                                <tr>
+                                    <td width="50%">Región</td>
+                                    <td width="50%"><input type="text" name="region" ng-model="of.Persona.region" required>
+                                    </td>
+                                </tr>
+                                <tr><td colspan="2"><br></td></tr>
+                                <tr>
+                                    <td colspan="2"><b>Publicante</b></td>
+                                </tr>
+                                <tr><td colspan="2"><br></td></tr>
+                                <tr>
+                                    <td>Experiencia</td>
+                                    <td><textarea name="experiencia" id="experiencia" ng-model="of.Publicante.experiencia" rows="4" cols="17">
+                                    </textarea></td>
+                                </tr>
+                                <tr><td colspan="2"><br></td></tr>
+                                <tr>
+                                    <td colspan="2"><b>Postulante</b></td>
+                                </tr>
+                                <tr><td colspan="2"><br></td></tr>
+                                <tr>
+                                    <td>Hoja de Vida</td>
+                                    <td><textarea name="hojadevida" id="hojadevida" ng-model="of.Postulante.hojaDeVida.hojaDeVida" rows="7" cols="20">
+                                    </textarea></td>
+                                </tr>
+                                <tr><td colspan="2"><br></td></tr>
+                                <tr>
+                                    <td>Fecha Actualizacion</td>
+                                    <td><input type="date" name="fechaActualizacion" id="fechaActualizacion" ng-model="of.Postulante.hojaDeVida.fechaActualizacion" required>
+                                    </td>
+                                </tr>
+                                <tr><td colspan="2"><br></td></tr>
+                                <tr>
+                                    <td>Foto</td>
+                                    <td><input type="text" name="foto" id="foto" ng-model="of.Postulante.hojaDeVida.foto" required>
+                                    </td>
+                                </tr>
+                                <tr><td colspan="2"><br></td></tr>
+                                <tr>
+                                    <td>Aspiración Salarial</td>
+                                    <td><input type="number" name="aspiracionSalarial" id="aspiracionSalarial" ng-model="of.Postulante.aspiracionSalarial" required>
+                                    </td>
+                                </tr>
+                            </table>
+                                </div>
+                               </div>
+                        </td>
+                    </tr>
+                    
+                    
+                </table>
+                
+            </div>
+          </td>
+               
+    </tr>
+    </table>
+    </div>
