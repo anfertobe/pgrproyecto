@@ -3,12 +3,12 @@
     <modelVersion>4.0.0</modelVersion>
 
 
-    <groupId>com.tservice</groupId>
-    <artifactId>tservice</artifactId>
+    <groupId>com.pgrproyecto</groupId>
+    <artifactId>pgrproyecto</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
 
-    <name>TService</name>
+    <name>pgrproyecto</name>
 
     <properties>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
