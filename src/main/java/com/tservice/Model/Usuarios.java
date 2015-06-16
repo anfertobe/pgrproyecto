@@ -38,8 +38,12 @@ public class Usuarios  implements java.io.Serializable {
     }
 
 	
-    public Usuarios(int carne) {
+    public Usuarios(int carne, String nombre, String identificaciongoogle, String email, String contraseña) {
         this.carne = carne;
+        this.nombre = nombre;
+        this.identificaciongoogle = identificaciongoogle;
+        this.email = email;
+        this.contraseña = contraseña;
     }
     public Usuarios(int carne, String nombre, String identificaciongoogle, String email, String contraseña, Set<Carreras> carrerases, Set<Grupos> gruposes_1) {
        this.carne = carne;

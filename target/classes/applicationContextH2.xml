@@ -16,7 +16,7 @@
 ">
  
     <context:component-scan base-package="com.tservice.Componentes"/>
-    <context:component-scan base-package="com.tservice.Logica"/>
+    <context:component-scan base-package="com.tservice.facade"/>
     <jpa:repositories base-package="com.tservice.Persistencia"/>
     
     <jdbc:embedded-database id="dataSource" type="H2">
