@@ -4,6 +4,7 @@ package com.tservice.Model;
 
 import java.util.HashSet;
 import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -20,7 +21,6 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="carreras"
-    ,catalog="coswg2"
 )
 public class Carreras  implements java.io.Serializable {
 
@@ -60,7 +60,7 @@ public class Carreras  implements java.io.Serializable {
     }
 
 
-@ManyToMany(fetch=FetchType.LAZY)
+@ManyToMany(fetch=FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name="carreras_has_usuarios", joinColumns = { 
         @JoinColumn(name="carreras_id", nullable=false, updatable=false) }, inverseJoinColumns = { 
         @JoinColumn(name="usuarios_carne", nullable=false, updatable=false) })

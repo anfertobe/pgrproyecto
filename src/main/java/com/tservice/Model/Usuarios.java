@@ -4,6 +4,7 @@ package com.tservice.Model;
 
 import java.util.HashSet;
 import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -20,7 +21,6 @@ import javax.persistence.UniqueConstraint;
  */
 @Entity
 @Table(name="usuarios"
-    ,catalog="coswg2"
     , uniqueConstraints = {@UniqueConstraint(columnNames="email"), @UniqueConstraint(columnNames="identificaciongoogle")} 
 )
 public class Usuarios  implements java.io.Serializable {
@@ -31,26 +31,32 @@ public class Usuarios  implements java.io.Serializable {
      private String identificaciongoogle;
      private String email;
      private String contraseña;
+     private String perfil;
      private Set<Carreras> carrerases = new HashSet(0);
      private Set<Grupos> gruposes_1 = new HashSet(0);
 
     public Usuarios() {
     }
 
+    public Usuarios(int carne) {
+        this.carne = carne;
+    }
 	
-    public Usuarios(int carne, String nombre, String identificaciongoogle, String email, String contraseña) {
+    public Usuarios(int carne, String nombre, String identificaciongoogle, String email, String contraseña, String perfil) {
         this.carne = carne;
         this.nombre = nombre;
+        this.perfil = perfil;
         this.identificaciongoogle = identificaciongoogle;
         this.email = email;
         this.contraseña = contraseña;
     }
-    public Usuarios(int carne, String nombre, String identificaciongoogle, String email, String contraseña, Set<Carreras> carrerases, Set<Grupos> gruposes_1) {
+    public Usuarios(int carne, String nombre, String identificaciongoogle, String email, String contraseña, String perfil, Set<Carreras> carrerases, Set<Grupos> gruposes_1) {
        this.carne = carne;
        this.nombre = nombre;
        this.identificaciongoogle = identificaciongoogle;
        this.email = email;
        this.contraseña = contraseña;
+       this.perfil = perfil;
        this.carrerases = carrerases;
        this.gruposes_1 = gruposes_1;
     }
@@ -87,6 +93,14 @@ public class Usuarios  implements java.io.Serializable {
         this.identificaciongoogle = identificaciongoogle;
     }
 
+        @Column(name="perfil", length=45)
+    public String getPerfil() {
+        return this.perfil;
+    }
+    
+    public void setPerfil(String perfil) {
+        this.perfil = perfil;
+    }
     
     @Column(name="email", unique=true, length=120)
     public String getEmail() {
@@ -119,10 +133,10 @@ public class Usuarios  implements java.io.Serializable {
         this.carrerases = carrerases;
     }
 
-@ManyToMany(fetch=FetchType.LAZY)
+@ManyToMany(fetch=FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinTable(name="usuarios_has_grupos", catalog="coswg2", joinColumns = { 
-        @JoinColumn(name="usuarios_carne", nullable=false, updatable=false) }, inverseJoinColumns = { 
-        @JoinColumn(name="grupos_id", nullable=false, updatable=false) })
+        @JoinColumn(name="usuarios_carne", nullable=false, updatable=true) }, inverseJoinColumns = { 
+        @JoinColumn(name="grupos_id", nullable=false, updatable=true) })
     public Set<Grupos> getGruposes_1() {
         return this.gruposes_1;
     }
@@ -130,10 +144,4 @@ public class Usuarios  implements java.io.Serializable {
     public void setGruposes_1(Set<Grupos> gruposes_1) {
         this.gruposes_1 = gruposes_1;
     }
-
-
-
-
 }
-
-
