@@ -6,12 +6,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
+import android.widget.TextView;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 public class GCMIntentService extends IntentService
 {
     private static final int NOTIF_ALERTA_ID = 1;
+    private TextView mensaje;
 
     public GCMIntentService() {
         super("GCMIntentService");
@@ -38,7 +40,7 @@ public class GCMIntentService extends IntentService
 
     private void mostrarNotification(String msg)
     {
-        NotificationManager mNotificationManager =
+       NotificationManager mNotificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         NotificationCompat.Builder mBuilder =

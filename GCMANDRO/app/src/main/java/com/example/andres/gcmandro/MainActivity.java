@@ -227,7 +227,7 @@ public class MainActivity extends Activity {
         boolean reg = false;
 
         HttpClient httpClient = new DefaultHttpClient();
-        HttpPost post = new HttpPost("http://192.168.0.20:8080/ServicioGcm/rest/servergcm/envio/" + usuario + "/" + regId);
+        HttpPost post = new HttpPost("http://pgrproyecto.herokuapp.com/rest/servergcm/envio/" + usuario + "/" + regId);
         post.setHeader("content-type", "application/json");
         try {
             System.out.println("conexion");

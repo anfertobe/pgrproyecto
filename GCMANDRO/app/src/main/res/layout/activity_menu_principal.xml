@@ -1,0 +1,45 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="com.example.andres.gcmandro.MenuPrincipal">
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Chat"
+        android:id="@+id/chat"
+        android:layout_marginTop="60dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Eventos"
+        android:id="@+id/eventos"
+        android:layout_marginTop="39dp"
+        android:layout_below="@+id/chat"
+        android:layout_alignLeft="@+id/chat"
+        android:layout_alignStart="@+id/chat" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Horario"
+        android:id="@+id/horario"
+        android:layout_centerVertical="true"
+        android:layout_alignLeft="@+id/eventos"
+        android:layout_alignStart="@+id/eventos" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cerrar sesion"
+        android:id="@+id/close"
+        android:layout_marginTop="43dp"
+        android:layout_below="@+id/horario"
+        android:layout_centerHorizontal="true" />
+</RelativeLayout>

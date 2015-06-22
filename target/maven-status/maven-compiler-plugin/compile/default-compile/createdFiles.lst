@@ -4,10 +4,12 @@ com\tservice\facade\App.class
 com\tservice\Model\Edificio.class
 com\tservice\Model\Grupos.class
 com\tservice\restcontrollersserver\ResourceNotFoundException.class
+com\tservice\facade\pruebasEstaticas.class
 com\tservice\Logica\correo\Sender.class
 com\tservice\Persistencia\EdificioCrudFactory.class
 com\tservice\Persistencia\GruposCrudFactory.class
 com\tservice\Persistencia\EventosCrudFactory.class
+com\tservice\facade\ConstantesServerGcm.class
 com\tservice\facade\Content.class
 com\tservice\facade\facade.class
 com\tservice\Model\Mensajes.class
