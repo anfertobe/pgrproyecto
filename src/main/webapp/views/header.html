@@ -23,38 +23,7 @@
                              id="step3"
                              ><i class="fa fa-bars"></i></a>
             </li>
-            <li class="dropdown hidden-xs">
-                <a href="javascript:;" class="dropdown-toggle" id="step1" data-toggle="dropdown"><i class="fa fa-cogs"></i></a>
-                <div class="dropdown-menu with-arrow panel panel-dark admin-options" ui-not-close-on-click>
-                    <div class="panel-heading"> Admin Options </div>
-                    <ul class="list-group">
-                        <li class="list-group-item">
-                            <p>Layouts Style</p>
-                            <label class="ui-radio"><input name="layout" type="radio" value="boxed" ng-model="admin.layout"><span>Boxed</span></label>
-                            <label class="ui-radio"><input name="layout" type="radio" value="wide" ng-model="admin.layout"><span>Wide</span></label>
-                        </li>
-                        <li class="list-group-item">
-                            <p>Menu Style</p>
-                            <label class="ui-radio"><input name="menu" type="radio" value="vertical" ng-model="admin.menu"><span>Vertical</span></label>
-                            <label class="ui-radio"><input name="menu" type="radio" value="horizontal" ng-model="admin.menu"><span>Horizontal</span></label>
-                        </li>
-                        <li class="list-group-item">
-                            <p>Additional</p>
-                            <label class="ui-checkbox"><input name="checkbox1" type="checkbox" value="option1" ng-model="admin.fixedHeader"><span>Fixed Top Header</span></label>
-                            <br>
-                            <label class="ui-checkbox"><input name="checkbox1" type="checkbox" value="option1" ng-model="admin.fixedSidebar"><span>Fixed Sidebar Menu</span></label>
-                        </li>
-                        <li class="list-group-item">
-                            <p>
-                                <span>Page Transition: </span> 
-                                <span class="space"></span>
-                                <select ng-model="admin.pageTransition"
-                                        ng-options="ageTransitionOpt.name for ageTransitionOpt in pageTransitionOpts"></select>
-                            </p>
-                        </li>
-                    </ul>
-                </div>
-            </li>
+
 <!--             <li class="dropdown hidden-xs">
                 <a href="javascript:;" class="dropdown-toggle" id="step4" data-toggle="dropdown">
                     <i class="fa fa-tint"></i>
