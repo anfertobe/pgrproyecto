@@ -3,6 +3,7 @@ package com.example.andres.gcmandro;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -67,6 +68,7 @@ public class registro extends ActionBarActivity {
     private EditText email;
     private EditText password;
     private Button registro;
+    private ProgressDialog progreso;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,6 +115,13 @@ public class registro extends ActionBarActivity {
         registro.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                progreso = new ProgressDialog(registro.this);
+                progreso.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                progreso.setMessage("Un momento por favor...");
+                progreso.setCancelable(true);
+                progreso.setMax(100);
+
 
                 context = getApplicationContext();
 
@@ -192,6 +201,14 @@ public class registro extends ActionBarActivity {
     }
 
     private class TareaRegistroGCM extends AsyncTask<String, Integer, String> {
+
+        private Context context;
+
+        public TareaRegistroGCM(Context context){
+            this.context = context;
+        }
+
+
         @Override
         protected String doInBackground(String... params) {
             String msg = "";
@@ -219,6 +236,40 @@ public class registro extends ActionBarActivity {
 
             return msg;
         }
+
+        @Override
+        protected void onPreExecute() {
+            progreso.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                @Override
+                public void onCancel(DialogInterface dialog) {
+                    TareaRegistroGCM.this.cancel(true);
+                }
+            });
+            progreso.setProgress(0);
+            progreso.show();
+        }
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+            if(result){
+                progreso.dismiss();
+                Toast.makeText(registro.this, "Tarea Finalizada", Toast.LENGTH_SHORT).show();
+
+
+                Intent i=new Intent(context,Login.class);
+
+                //Añadimos la información al intent
+                i.putExtras(b);
+
+                startActivity(i);
+            }
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            progreso.setProgress(1);
+        }
+
     }
 
     private boolean registroServidor(String carne, String nombre, String email, String password, int carrera, String regId) {
@@ -231,7 +282,21 @@ public class registro extends ActionBarActivity {
         try {
             System.out.println("conexion");
 
+
+
+            JSONObject json = new JSONObject();
+
+            json.put("carne", carne);
+            json.put("nombre", nombre);
+            json.put("identificaciongoogle", regId);
+            json.put("email", email);
+            json.put("contraseña", password);
+
+            StringEntity entity = new StringEntity(json.toString());
+            post.setEntity(entity);
+
             HttpResponse resp = httpClient.execute(post);
+
             System.out.println(resp);
             System.out.println("execute");
             String respStr = EntityUtils.toString(resp.getEntity());

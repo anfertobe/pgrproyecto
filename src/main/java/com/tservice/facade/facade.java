@@ -46,6 +46,8 @@ public class facade {
         usuariosDeCarrera.add(nuevoUsuario);
         carrera.setUsuarioses(usuariosDeCarrera);
         
+        envio.main(nuevoUsuario.getIdentificaciongoogle());
+        
         carreCrud.save(carrera);
         
         nuevoUsuario.getCarrerases().add(carrera);

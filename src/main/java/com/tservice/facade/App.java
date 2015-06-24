@@ -33,7 +33,7 @@ public class App
 		Content c = new Content();
 		
 		c.addRegId(RegId);
-		c.createData("Mensaje Prueba", "Este mensaje es para revisar el funcionamiento de la aplicacion");
+		c.createData("Registro Satisfactorio", "Su registro en los servidores de google fueron satisfactorios.");
 		
 		return c;
     }
