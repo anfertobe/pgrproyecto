@@ -12,6 +12,6 @@ import org.springframework.data.repository.CrudRepository;
  *
  * @author andres
  */
-public interface UsuariosCrudFactory extends CrudRepository<Usuarios, Integer>{
+public interface UsuariosCrudFactory extends CrudRepository<Usuarios, String>{
     
 }

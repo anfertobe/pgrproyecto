@@ -93,8 +93,17 @@
         android:layout_height="wrap_content"
         android:text="Registrar"
         android:id="@+id/registrar"
-        android:layout_below="@+id/editText5"
+        android:layout_below="@+id/carreras"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="52dp" />
+        android:layout_marginTop="44dp" />
+
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/carreras"
+        android:layout_marginTop="44dp"
+        android:layout_below="@+id/editText5"
+        android:layout_alignRight="@+id/registrar"
+        android:layout_alignEnd="@+id/registrar" />
 
 </RelativeLayout>

@@ -15,7 +15,7 @@ import javax.persistence.*;
 public class Usuarios  implements java.io.Serializable {
 
 
-     private int carne;
+     private String carne;
      private String nombre;
      private String identificaciongoogle;
      private String email;
@@ -27,11 +27,11 @@ public class Usuarios  implements java.io.Serializable {
     public Usuarios() {
     }
 
-    public Usuarios(int carne) {
+    public Usuarios(String carne) {
         this.carne = carne;
     }
 	
-    public Usuarios(int carne, String nombre, String identificaciongoogle, String email, String contraseña, String perfil) {
+    public Usuarios(String carne, String nombre, String identificaciongoogle, String email, String contraseña, String perfil) {
         this.carne = carne;
         this.nombre = nombre;
         this.perfil = perfil;
@@ -39,7 +39,7 @@ public class Usuarios  implements java.io.Serializable {
         this.email = email;
         this.contraseña = contraseña;
     }
-    public Usuarios(int carne, String nombre, String identificaciongoogle, String email, String contraseña, String perfil, Set<Carreras> carrerases, Set<Grupos> gruposes_1) {
+    public Usuarios(String carne, String nombre, String identificaciongoogle, String email, String contraseña, String perfil, Set<Carreras> carrerases, Set<Grupos> gruposes_1) {
        this.carne = carne;
        this.nombre = nombre;
        this.identificaciongoogle = identificaciongoogle;
@@ -53,12 +53,12 @@ public class Usuarios  implements java.io.Serializable {
      @Id 
 
     
-    @Column(name="carne", unique=true, nullable=false)
-    public int getCarne() {
+    @Column(name="carne", unique=true, nullable=false , length=20)
+    public String getCarne() {
         return this.carne;
     }
     
-    public void setCarne(int carne) {
+    public void setCarne(String carne) {
         this.carne = carne;
     }
 

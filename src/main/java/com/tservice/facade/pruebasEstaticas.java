@@ -37,7 +37,7 @@ public class pruebasEstaticas {
     }
     
     public void pruebaRegistro(facade l) throws servergcmExceptions{
-        Usuarios usu = new Usuarios(2087458);
+        Usuarios usu = new Usuarios("2087458");
         usu.setContraseña("2087458");
         usu.setEmail("andres1.torres-b@mail.escuelaing.edu.co");
         usu.setIdentificaciongoogle("dmf48f39f5b4uf8d49d9484vbrhvhsvjxwscbn2unx9sn038uc932948");
@@ -49,11 +49,11 @@ public class pruebasEstaticas {
     }
     
     public void pruebaLogin(facade l) throws servergcmExceptions{
-        l.login(2087458, "2087458");
+        l.login("2087458", "2087458");
     }
     
     public void pruebaCrearGrupo(facade l) throws servergcmExceptions{
-        Usuarios usu = new Usuarios(2087458);
+        Usuarios usu = new Usuarios("2087458");
         l.CrearGrupo("GrupoPrueba", usu);
     }
     
@@ -61,7 +61,7 @@ public class pruebasEstaticas {
         Grupos grupo = new Grupos();
         grupo.setId(10);
         
-        Usuarios usu = new Usuarios(2087459);
+        Usuarios usu = new Usuarios("2087459");
         usu.setContraseña("2087459");
         usu.setEmail("andres.torres-b@mail.escuelaing.edu.co");
         usu.setIdentificaciongoogle("dmf48f39f5b4uf8d49d9484vbrhvhsvjxwssdflcbn2unx9sn038uc932948");

@@ -9,6 +9,7 @@ import com.tservice.Persistencia.EventosCrudFactory;
 import com.tservice.Persistencia.GruposCrudFactory;
 import com.tservice.Persistencia.MensajesCrudFactory;
 import com.tservice.Persistencia.UsuariosCrudFactory;
+import com.tservice.exceptions.servergcmExceptions;
 import com.tservice.facade.facade;
 import java.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +42,18 @@ public class RestControllerGcm {
     @Autowired
     facade fachada;
 
+    
+     @RequestMapping(value="/login/{usuario}/{password}",method = RequestMethod.GET)
+     public ResponseEntity<?> login(@PathVariable("usuario") String usuario, @PathVariable("password") String password){
+         
+         try{
+             fachada.login(usuario, password);
+         }catch(Exception e){
+             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+         }
+         
+         return new ResponseEntity<>(HttpStatus.ACCEPTED);
+     }
     
     @RequestMapping(value="/envio/{usuario}/{idgoogle}",method = RequestMethod.POST)        
     public ResponseEntity<?> envioPrueba(@PathVariable("usuario") String usuario, @PathVariable("idgoogle") String idgoogle)  throws ResourceNotFoundException { 
@@ -91,7 +104,7 @@ public class RestControllerGcm {
         
         List<Eventos> edificios = new LinkedList<Eventos>();
         
-        Usuarios oUsuario=usuaCrud.findOne(Integer.parseInt(usuario));
+        Usuarios oUsuario=usuaCrud.findOne(usuario);
         
         if (oUsuario==null){
              ArrayList<Eventos> ev=new ArrayList<Eventos>();

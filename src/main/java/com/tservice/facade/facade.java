@@ -53,7 +53,7 @@ public class facade {
         usuCrud.save(nuevoUsuario);
     }
     
-    public void login(int carne, String contraseña) throws servergcmExceptions{
+    public void login(String carne, String contraseña) throws servergcmExceptions{
         if(!usuCrud.exists(carne))
             throw new servergcmExceptions("El usuario identificado con carne N° "+ carne +" no esta registrado, por favor revice su numero de cerne o registrece para poder acceder a nuestros servicios.");
         
