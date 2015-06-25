@@ -69,6 +69,7 @@ public class registro extends ActionBarActivity {
     private EditText password;
     private Button registro;
     private ProgressDialog progreso;
+    private HashMap <String, Integer> dictianaryCarreras;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,9 +79,10 @@ public class registro extends ActionBarActivity {
         carne = (EditText) findViewById(R.id.carne);
         nombre = (EditText) findViewById(R.id.nombre);
         email = (EditText) findViewById(R.id.email);
-        password =(EditText) findViewById(R.id.pass);
+        password =(EditText) findViewById(R.id.contraseña);
         registro = (Button) findViewById(R.id.registrar);
         carreras = (Spinner) findViewById(R.id.carreras);
+        dictianaryCarreras = new HashMap<String, Integer>();
 
         Bundle bundle = this.getIntent().getExtras();
 
@@ -97,18 +99,21 @@ public class registro extends ActionBarActivity {
         }
 
 
-        List<Object> lista = new LinkedList<Object>();
+        List<String> lista = new LinkedList<String>();
 
         for(int i = 0; i<array.length(); i++)
             try {
-                lista.add(array.getJSONObject(i));
+
+                JSONObject carrerajson = array.getJSONObject(i);
+                dictianaryCarreras.put(carrerajson.getString("nombre"), carrerajson.getInt("id"));
+                lista.add(carrerajson.getString("nombre"));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
 
         System.out.println(lista.size());
 
-        ArrayAdapter<Object> adapter = new ArrayAdapter<Object>(registro.this,  android.R.layout.simple_spinner_item, lista);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(registro.this,  android.R.layout.simple_spinner_item, lista);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         carreras.setAdapter(adapter);
 
@@ -132,8 +137,13 @@ public class registro extends ActionBarActivity {
 
                 //si no se obtiene nada se realiza el registro
                 if (regid.equals("")) {
-                    TareaRegistroGCM tarea = new TareaRegistroGCM();
-                    tarea.execute(carne.getText().toString(), nombre.getText().toString(), email.getText().toString(), password.getText().toString());
+
+                    String carreraSeleccionada = carreras.getSelectedItem().toString();
+
+                    System.out.println(carreraSeleccionada);
+
+                    TareaRegistroGCM tarea = new TareaRegistroGCM(registro.this);
+                    tarea.execute(carne.getText().toString(), nombre.getText().toString(), email.getText().toString(), password.getText().toString(), carreraSeleccionada);
                 }
             }
         });
@@ -200,7 +210,7 @@ public class registro extends ActionBarActivity {
         }
     }
 
-    private class TareaRegistroGCM extends AsyncTask<String, Integer, String> {
+    private class TareaRegistroGCM extends AsyncTask<String, Integer, Boolean> {
 
         private Context context;
 
@@ -210,7 +220,7 @@ public class registro extends ActionBarActivity {
 
 
         @Override
-        protected String doInBackground(String... params) {
+        protected Boolean doInBackground(String... params) {
             String msg = "";
 
             try {
@@ -224,7 +234,7 @@ public class registro extends ActionBarActivity {
                 Log.d(TAG, "Registrado en GCM: registration_id=" + regid);
 
                 //Nos registramos en nuestro servidor
-                boolean registrado = registroServidor(params[0], params[1], params[2], params[3], 1, regid);
+                boolean registrado = registroServidor(params[0], params[1], params[2], params[3], params[4], regid);
 
                 //Guardamos los datos del registro
                 if (registrado) {
@@ -234,7 +244,7 @@ public class registro extends ActionBarActivity {
                 Log.d(TAG, "Error registro en GCM:" + ex.getMessage());
             }
 
-            return msg;
+            return true;
         }
 
         @Override
@@ -258,9 +268,6 @@ public class registro extends ActionBarActivity {
 
                 Intent i=new Intent(context,Login.class);
 
-                //Añadimos la información al intent
-                i.putExtras(b);
-
                 startActivity(i);
             }
         }
@@ -272,12 +279,12 @@ public class registro extends ActionBarActivity {
 
     }
 
-    private boolean registroServidor(String carne, String nombre, String email, String password, int carrera, String regId) {
+    private boolean registroServidor(String carne, String nombre, String email, String password, String carrera, String regId) {
 
         boolean reg = false;
 
         HttpClient httpClient = new DefaultHttpClient();
-        HttpPost post = new HttpPost("https://proyectopgr.herokuapp.com/rest/servergcm/registro/" + carrera);
+        HttpPost post = new HttpPost("https://proyectopgr.herokuapp.com/rest/servergcm/registro/" + dictianaryCarreras.get(carrera));
         post.setHeader("content-type", "application/json");
         try {
             System.out.println("conexion");

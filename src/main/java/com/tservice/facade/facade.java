@@ -30,8 +30,10 @@ public class facade {
     @Autowired
     GruposCrudFactory gruposCrud;
     
-    public void Registro(Usuarios nuevoUsuario, Carreras carreraUsuario) throws servergcmExceptions
+    public Boolean Registro(Usuarios nuevoUsuario, Carreras carreraUsuario) throws servergcmExceptions
     {
+        
+        
         if(usuCrud.exists(nuevoUsuario.getCarne())){
             throw new servergcmExceptions("El usuario identificado con carne N° "+ nuevoUsuario.getCarne() + " ya se encuentra registrado");
         }
@@ -53,6 +55,8 @@ public class facade {
         nuevoUsuario.getCarrerases().add(carrera);
         
         usuCrud.save(nuevoUsuario);
+        
+        return true;
     }
     
     public void login(String carne, String contraseña) throws servergcmExceptions{
