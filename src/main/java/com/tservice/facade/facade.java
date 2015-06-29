@@ -65,7 +65,7 @@ public class facade {
         
         Usuarios usuarioRegistro = usuCrud.findOne(carne);
         
-        if(!contraseña.equals(usuarioRegistro.getContraseña()))
+        if(!contraseña.equals(usuarioRegistro.getContrasena()))
             throw new servergcmExceptions("Contraseña incorrecta, por favor verifique.");
     }
     

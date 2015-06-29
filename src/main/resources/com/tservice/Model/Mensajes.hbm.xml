@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 29/06/2015 02:53:07 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="com.tservice.Model.Mensajes" table="mensajes" catalog="coswg2" optimistic-lock="version">
+        <id name="id" type="java.lang.Integer">
+            <column name="id" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="grupos" class="com.tservice.Model.Grupos" fetch="select">
+            <column name="grupodestino" not-null="true" />
+        </many-to-one>
+        <many-to-one name="usuariosByUsuariosorigen" class="com.tservice.Model.Usuarios" fetch="select">
+            <column name="usuariosorigen" length="20" not-null="true" />
+        </many-to-one>
+        <many-to-one name="usuariosByUsuariodestino" class="com.tservice.Model.Usuarios" fetch="select">
+            <column name="usuariodestino" length="20" not-null="true" />
+        </many-to-one>
+        <property name="fecha" type="string">
+            <column name="fecha" length="45" />
+        </property>
+        <property name="visto" type="string">
+            <column name="visto" length="45" />
+        </property>
+        <property name="contenido" type="string">
+            <column name="contenido" />
+        </property>
+    </class>
+</hibernate-mapping>

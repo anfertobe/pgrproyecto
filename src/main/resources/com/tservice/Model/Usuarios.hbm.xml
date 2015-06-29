@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 29/06/2015 02:53:07 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="com.tservice.Model.Usuarios" table="usuarios" catalog="coswg2" optimistic-lock="version">
+        <id name="carne" type="string">
+            <column name="carne" length="20" />
+            <generator class="assigned" />
+        </id>
+        <property name="nombre" type="string">
+            <column name="nombre" length="100" />
+        </property>
+        <property name="identificaciongoogle" type="string">
+            <column name="identificaciongoogle" unique="true" />
+        </property>
+        <property name="email" type="string">
+            <column name="email" length="120" unique="true" />
+        </property>
+        <property name="contrase&#241;a" type="string">
+            <column name="contrase&#241;a" length="20" />
+        </property>
+        <property name="perfil" type="string">
+            <column name="perfil" length="45" />
+        </property>
+        <property name="identificacion" type="string">
+            <column name="identificacion" length="20" not-null="true" />
+        </property>
+        <property name="semestre" type="java.lang.Integer">
+            <column name="semestre" />
+        </property>
+        <set name="carrerases" table="carreras_has_usuarios" inverse="false" lazy="true" fetch="select">
+            <key>
+                <column name="usuarios_carne" length="20" not-null="true" />
+            </key>
+            <many-to-many entity-name="com.tservice.Model.Carreras">
+                <column name="carreras_id" not-null="true" />
+            </many-to-many>
+        </set>
+        <set name="gruposes" table="grupos" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="administrador" length="20" not-null="true" />
+            </key>
+            <one-to-many class="com.tservice.Model.Grupos" />
+        </set>
+        <set name="calificacions" table="calificacion" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="usuarios_identificacion" length="20" not-null="true" />
+            </key>
+            <one-to-many class="com.tservice.Model.Calificacion" />
+        </set>
+        <set name="mensajesesForUsuariosorigen" table="mensajes" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="usuariosorigen" length="20" not-null="true" />
+            </key>
+            <one-to-many class="com.tservice.Model.Mensajes" />
+        </set>
+        <set name="materiases" table="usuarios_has_materias" inverse="false" lazy="true" fetch="select">
+            <key>
+                <column name="usuarios_identificacion" length="20" not-null="true" />
+            </key>
+            <many-to-many entity-name="com.tservice.Model.Materias">
+                <column name="materias_id" not-null="true" />
+            </many-to-many>
+        </set>
+        <set name="mensajesesForUsuariodestino" table="mensajes" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="usuariodestino" length="20" not-null="true" />
+            </key>
+            <one-to-many class="com.tservice.Model.Mensajes" />
+        </set>
+        <set name="gruposes_1" table="usuarios_has_grupos" inverse="false" lazy="true" fetch="select">
+            <key>
+                <column name="usuarios_carne" length="20" not-null="true" />
+            </key>
+            <many-to-many entity-name="com.tservice.Model.Grupos">
+                <column name="grupos_id" not-null="true" />
+            </many-to-many>
+        </set>
+    </class>
+</hibernate-mapping>

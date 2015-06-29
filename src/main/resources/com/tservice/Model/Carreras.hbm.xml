@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 29/06/2015 02:53:07 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="com.tservice.Model.Carreras" table="carreras" catalog="coswg2" optimistic-lock="version">
+        <id name="id" type="java.lang.Integer">
+            <column name="id" />
+            <generator class="identity" />
+        </id>
+        <property name="nombre" type="string">
+            <column name="nombre" length="45" />
+        </property>
+        <property name="descripcion" type="string">
+            <column name="descripcion" length="150" />
+        </property>
+        <set name="eventoses" table="eventos_has_carreras" inverse="false" lazy="true" fetch="select">
+            <key>
+                <column name="carreras_id" not-null="true" />
+            </key>
+            <many-to-many entity-name="com.tservice.Model.Eventos">
+                <column name="eventos_id" not-null="true" />
+            </many-to-many>
+        </set>
+        <set name="usuarioses" table="carreras_has_usuarios" inverse="false" lazy="true" fetch="select">
+            <key>
+                <column name="carreras_id" not-null="true" />
+            </key>
+            <many-to-many entity-name="com.tservice.Model.Usuarios">
+                <column name="usuarios_carne" length="20" not-null="true" />
+            </many-to-many>
+        </set>
+        <set name="intereseses" table="intereses" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="carreras_id" />
+            </key>
+            <one-to-many class="com.tservice.Model.Intereses" />
+        </set>
+    </class>
+</hibernate-mapping>
