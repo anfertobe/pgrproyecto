@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+  <session-factory>
+    <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+    <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+    <property name="hibernate.connection.url">jdbc:mysql://desarrollo.is.escuelaing.edu.co:3306/coswg2</property>
+    <property name="hibernate.connection.username">coswg2</property>
+    <property name="hibernate.connection.password">coswg20215</property>
+    <mapping resource="com/tservice/Model/Eventos.hbm.xml"/>
+    <mapping resource="com/tservice/Model/Noticias.hbm.xml"/>
+    <mapping resource="com/tservice/Model/Carreras.hbm.xml"/>
+    <mapping resource="com/tservice/Model/Materias.hbm.xml"/>
+    <mapping resource="com/tservice/Model/Edificio.hbm.xml"/>
+    <mapping resource="com/tservice/Model/Grupos.hbm.xml"/>
+    <mapping resource="com/tservice/Model/Mensajes.hbm.xml"/>
+    <mapping resource="com/tservice/Model/Usuarios.hbm.xml"/>
+    <mapping resource="com/tservice/Model/Intereses.hbm.xml"/>
+    <mapping resource="com/tservice/Model/Ubicacion.hbm.xml"/>
+    <mapping resource="com/tservice/Model/Calificacion.hbm.xml"/>
+  </session-factory>
+</hibernate-configuration>
