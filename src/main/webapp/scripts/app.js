@@ -323,12 +323,12 @@ function(){"use strict";angular.module("app.ui.form.ctrls",[])
                     $scope.toggleMin=function(){
                         var _ref;
                         return $scope.minDate=null!=(_ref=$scope.minDate)?_ref:{"null":new Date}},
-                            $scope.toggleMin(),
-                            $scope.open=function($event){
+                    $scope.toggleMin(),
+                    $scope.open=function($event){
                                 return $event.preventDefault(),$event.stopPropagation(),$scope.opened=!0},
-                            $scope.dateOptions={"year-format":"'yy'","starting-day":1},
-                            $scope.formats=["dd-MMMM-yyyy","yyyy/MM/dd","shortDate"],
-                            $scope.format=$scope.formats[0]}])
+                    $scope.dateOptions={"year-format":"'yy'","starting-day":1},
+                    $scope.formats=["dd-MMMM-yyyy","yyyy/MM/dd","shortDate"],
+                    $scope.format=$scope.formats[0]}])
     .controller("TimepickerDemoCtrl",["$scope",
         function($scope){
             return $scope.mytime=new Date,

@@ -19,7 +19,7 @@ public class Usuarios  implements java.io.Serializable {
      private String nombre;
      private String identificaciongoogle;
      private String email;
-     private String contraseña;
+     private String password;
      private String perfil;
      private Set<Carreras> carrerases = new HashSet(0);
      private Set<Grupos> gruposes_1 = new HashSet(0);
@@ -31,28 +31,28 @@ public class Usuarios  implements java.io.Serializable {
         this.carne = carne;
     }
     
-    public Usuarios(String carne, String nombre, String identificaciongoogle, String email, String contraseña) {
+    public Usuarios(String carne, String nombre, String identificaciongoogle, String email, String password) {
         this.carne = carne;
         this.nombre = nombre;
         this.identificaciongoogle = identificaciongoogle;
         this.email = email;
-        this.contraseña = contraseña;
+        this.password = password;
     }
 	
-    public Usuarios(String carne, String nombre, String identificaciongoogle, String email, String contraseña, String perfil) {
+    public Usuarios(String carne, String nombre, String identificaciongoogle, String email, String password, String perfil) {
         this.carne = carne;
         this.nombre = nombre;
         this.perfil = perfil;
         this.identificaciongoogle = identificaciongoogle;
         this.email = email;
-        this.contraseña = contraseña;
+        this.password = password;
     }
-    public Usuarios(String carne, String nombre, String identificaciongoogle, String email, String contraseña, String perfil, Set<Carreras> carrerases, Set<Grupos> gruposes_1) {
+    public Usuarios(String carne, String nombre, String identificaciongoogle, String email, String password, String perfil, Set<Carreras> carrerases, Set<Grupos> gruposes_1) {
        this.carne = carne;
        this.nombre = nombre;
        this.identificaciongoogle = identificaciongoogle;
        this.email = email;
-       this.contraseña = contraseña;
+       this.password = password;
        this.perfil = perfil;
        this.carrerases = carrerases;
        this.gruposes_1 = gruposes_1;
@@ -109,13 +109,13 @@ public class Usuarios  implements java.io.Serializable {
     }
 
     
-    @Column(name="contraseña", length=20)
-    public String getContraseña() {
-        return this.contraseña;
+    @Column(name="password", length=20)
+    public String getPassword() {
+        return this.password;
     }
     
-    public void setContraseña(String contraseña) {
-        this.contraseña = contraseña;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
 @ManyToMany(fetch=FetchType.LAZY)

@@ -25,4 +25,11 @@ public class ConstantesServerGcm {
     
     public static final String Administrativo = "Administrativo";
     public static final String Estudiante = "Estudiante";
+    
+    /****
+     * Constantes Mensajes de servidor
+     */
+    
+    public static final String TituloMensaje = "Registro Satisfactorio";
+    public static final String ContenidoMensaje = "Su registro en los servidores de google fueron satisfactorios.";
 }

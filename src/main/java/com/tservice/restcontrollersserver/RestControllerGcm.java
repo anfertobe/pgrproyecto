@@ -42,6 +42,35 @@ public class RestControllerGcm {
     UsuariosCrudFactory usuaCrud;
     @Autowired
     facade fachada;
+    
+    
+    @RequestMapping(value="/mensaje",method = RequestMethod.POST)
+     public ResponseEntity<?> adicionarAmigo(@RequestBody Mensajes mensaje){
+         
+         boolean result = false;
+         
+         try{
+             result = fachada.envioMensajes(mensaje);
+         }catch(Exception e){
+             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+         }
+         
+         return new ResponseEntity<>(result, HttpStatus.ACCEPTED);
+     }
+    
+    @RequestMapping(value="/adicion/{idAmgo}",method = RequestMethod.POST)
+     public ResponseEntity<?> adicionarAmigo(@PathVariable("idAmgo") String idAmgo){
+         
+         boolean result = false;
+         
+         try{
+             result = fachada.adicionarAmigo(idAmgo);
+         }catch(Exception e){
+             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+         }
+         
+         return new ResponseEntity<>(result, HttpStatus.ACCEPTED);
+     }
 
     
      @RequestMapping(value="/login/{usuario}/{password}",method = RequestMethod.GET)
@@ -55,11 +84,23 @@ public class RestControllerGcm {
          
          return new ResponseEntity<>(HttpStatus.ACCEPTED);
      }
-     
-     @RequestMapping(value="/registro/{idcarrera}",method = RequestMethod.POST)
-     public ResponseEntity<?> registro(@RequestBody Usuarios usuario, @PathVariable("idcarrera") int idcarrera){
+
+          @RequestMapping(value="/registromomentaneo/{usuario}/{regid}",method = RequestMethod.PUT)
+     public ResponseEntity<?> registroMomentane(@PathVariable("usuario") String usuario, @PathVariable("regid") String regid){
+
+         try{
+             fachada.registroMomentaneo(usuario, regid);
+         }catch(Exception e){
+             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+         }
          
-         Carreras carrera = carrecrud.findOne(idcarrera);
+         return new ResponseEntity<>(HttpStatus.ACCEPTED);
+     }
+     
+     @RequestMapping(value="/registro/{carrera}",method = RequestMethod.PUT)
+     public ResponseEntity<?> registro(@RequestBody Usuarios usuario, @PathVariable("carrera") Integer idCarrera){
+         
+         Carreras carrera = carrecrud.findOne(idCarrera);
          
          try{
              fachada.Registro(usuario, carrera);

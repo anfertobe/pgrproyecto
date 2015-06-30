@@ -29,8 +29,11 @@ import org.apache.http.StatusLine;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicHeader;
+import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -131,7 +134,6 @@ public class registro extends ActionBarActivity {
                 context = getApplicationContext();
 
                 gcm = GoogleCloudMessaging.getInstance(registro.this);
-
                 //Obtenemos el Registration ID guardado
                 regid = getRegistrationId(context);
 
@@ -284,28 +286,29 @@ public class registro extends ActionBarActivity {
         boolean reg = false;
 
         HttpClient httpClient = new DefaultHttpClient();
-        HttpPost post = new HttpPost("https://proyectopgr.herokuapp.com/rest/servergcm/registro/" + dictianaryCarreras.get(carrera));
-        post.setHeader("content-type", "application/json");
+        HttpPut put = new HttpPut("http://192.168.0.31:8080/ServicioGcm/rest/servergcm/registro");
+
         try {
-            System.out.println("conexion");
 
+            JSONObject usuario = new JSONObject();
+            usuario.put("carne",carne);
+            usuario.put("nombre",nombre);
+            usuario.put("identificaciongoogle",regId);
+            usuario.put("email", email);
+            usuario.put("password", password);
 
+            StringEntity entity = new StringEntity(usuario.toString());
 
-            JSONObject json = new JSONObject();
+            entity.setContentType("application/json;charset=UTF-8");
+            entity.setContentEncoding(new
+                    BasicHeader(HTTP.CONTENT_TYPE, "application/json;charset=UTF-8"));
 
-            json.put("carne", carne);
-            json.put("nombre", nombre);
-            json.put("identificaciongoogle", regId);
-            json.put("email", email);
-            json.put("contraseña", password);
+            put.setEntity(entity);
 
-            StringEntity entity = new StringEntity(json.toString());
-            post.setEntity(entity);
-
-            HttpResponse resp = httpClient.execute(post);
-
-            System.out.println(resp);
+            HttpResponse resp = httpClient.execute(put);
             System.out.println("execute");
+            System.out.println(resp);
+
             String respStr = EntityUtils.toString(resp.getEntity());
             System.out.println(respStr);
 

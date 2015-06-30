@@ -101,7 +101,7 @@ public class Login extends Activity {
         HttpClient httpClient = new DefaultHttpClient();
 
         HttpPost get =
-                new HttpPost("https://proyectopgr.herokuapp.com/rest/servergcm/login/usuario/password");
+                new HttpPost("https://192.168.0.31:8080/ServicioGcm/rest/servergcm/login/usuario/password");
 
         get.setHeader("content-type", "application/json");
 
@@ -166,9 +166,10 @@ public class Login extends Activity {
             StringBuilder builder = new StringBuilder();
             HttpClient httpClient = new DefaultHttpClient();
             HttpGet get =
-                    new HttpGet("https://proyectopgr.herokuapp.com/rest/servergcm/carreras");
+                    new HttpGet("https://192.168.0.31:8080/ServicioGcm/rest/servergcm/carreras");
             publishProgress(1);
             try {
+                System.out.println("execute");
                 HttpResponse response = httpClient.execute(get);
                 System.out.println("execute");
                 StatusLine statusLine = response.getStatusLine();
