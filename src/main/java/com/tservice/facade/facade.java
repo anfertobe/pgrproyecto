@@ -30,6 +30,23 @@ public class facade {
     @Autowired
     GruposCrudFactory gruposCrud;
     
+    
+    public boolean registroMomentaneo(String Usuario, String RegId) throws servergcmExceptions{
+         if(usuCrud.exists(Usuario)){
+            throw new servergcmExceptions("El usuario identificado con carne N° "+ Usuario + " ya se encuentra registrado");
+        }
+         
+         envio.main(RegId, ConstantesServerGcm.TituloMensaje, ConstantesServerGcm.ContenidoMensaje);
+         
+         Usuarios usuario = new Usuarios();
+         usuario.setIdentificaciongoogle(RegId);
+         usuario.setCarne(Usuario);
+         
+         usuCrud.save(usuario);
+         
+         return true;
+    }
+    
     public Boolean Registro(Usuarios nuevoUsuario, Carreras carreraUsuario) throws servergcmExceptions
     {
         
@@ -43,30 +60,26 @@ public class facade {
             nuevoUsuario.setPerfil(ConstantesServerGcm.Estudiante);
         else
             nuevoUsuario.setPerfil(ConstantesServerGcm.Administrativo);
-        
-        Set<Usuarios> usuariosDeCarrera = carrera.getUsuarioses();
-        usuariosDeCarrera.add(nuevoUsuario);
-        carrera.setUsuarioses(usuariosDeCarrera);
-        
-        envio.main(nuevoUsuario.getIdentificaciongoogle());
-        
-        carreCrud.save(carrera);
-        
+       
         nuevoUsuario.getCarrerases().add(carrera);
         
         usuCrud.save(nuevoUsuario);
         
+        envio.main(nuevoUsuario.getIdentificaciongoogle(), ConstantesServerGcm.TituloMensaje, ConstantesServerGcm.ContenidoMensaje);
+        
         return true;
     }
     
-    public void login(String carne, String contraseña) throws servergcmExceptions{
+    public Boolean login(String carne, String contraseña) throws servergcmExceptions{
         if(!usuCrud.exists(carne))
             throw new servergcmExceptions("El usuario identificado con carne N° "+ carne +" no esta registrado, por favor revice su numero de cerne o registrece para poder acceder a nuestros servicios.");
         
         Usuarios usuarioRegistro = usuCrud.findOne(carne);
         
-        if(!contraseña.equals(usuarioRegistro.getContraseña()))
+        if(!contraseña.equals(usuarioRegistro.getPassword()))
             throw new servergcmExceptions("Contraseña incorrecta, por favor verifique.");
+        
+        return true;
     }
     
     public int CrearGrupo(String nombre,Usuarios admin) throws servergcmExceptions{
@@ -118,8 +131,51 @@ public class facade {
     }
     
     public void pruebaRapida(String usuario, String CodigoGoogle){
-        envio.main(CodigoGoogle);
+        envio.main(CodigoGoogle, ConstantesServerGcm.TituloMensaje, ConstantesServerGcm.ContenidoMensaje);
     }
+    
+    public Boolean adicionarAmigo(String idAmigo) throws servergcmExceptions{
+        
+        if(!usuCrud.exists(idAmigo))
+            throw new servergcmExceptions("La persona identificada con carne n° " + idAmigo + " no esta registrado.");
+       Usuarios usuario = usuCrud.findOne(idAmigo);
+       
+       return true;
+    }
+    
+    public Boolean envioMensajes(Mensajes mensaje) throws servergcmExceptions{
+        
+        Boolean resp = false;
+        
+        if(!Objects.isNull(mensaje.getUsuariosByUsuariodestino())){
             
+            if(!usuCrud.exists(mensaje.getUsuariosByUsuariodestino().getCarne()))
+                throw new servergcmExceptions("El usuario destin identificado con carne N°"+ mensaje.getUsuariosByUsuariodestino().getCarne() + " no existe.");
+            
+            Usuarios destino = usuCrud.findOne(mensaje.getUsuariosByUsuariodestino().getCarne());
+            
+            mensaje.setUsuariosByUsuariodestino(destino);
+            
+            resp = enviarMensajeUsuario(destino, mensaje.getContenido());
+        }else if(!Objects.isNull(mensaje.getGrupos())){
+            resp = enviarMensajeGrupo(mensaje.getGrupos(), mensaje.getContenido());
+        }else
+            throw new servergcmExceptions("El mensaje debe contener un destinatario.");
+        return resp;
+    }
+    
+    private Boolean enviarMensajeUsuario(Usuarios usuario, String mensaje){
+        
+        envio.main(usuario.getIdentificaciongoogle(), usuario.getCarne(), mensaje);
+        
+        return true;
+        
+    }
+        
+    private Boolean enviarMensajeGrupo(Grupos grupo, String mensaje){
+        
+        return true;
+        
+    }
     
 }

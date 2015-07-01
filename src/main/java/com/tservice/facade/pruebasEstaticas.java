@@ -38,7 +38,7 @@ public class pruebasEstaticas {
     
     public void pruebaRegistro(facade l) throws servergcmExceptions{
         Usuarios usu = new Usuarios("2087458");
-        usu.setContraseña("2087458");
+        usu.setPassword("2087458");
         usu.setEmail("andres1.torres-b@mail.escuelaing.edu.co");
         usu.setIdentificaciongoogle("dmf48f39f5b4uf8d49d9484vbrhvhsvjxwscbn2unx9sn038uc932948");
         usu.setNombre("Andres Fernando Torres Beltran");
@@ -62,7 +62,7 @@ public class pruebasEstaticas {
         grupo.setId(10);
         
         Usuarios usu = new Usuarios("2087459");
-        usu.setContraseña("2087459");
+        usu.setPassword("2087459");
         usu.setEmail("andres.torres-b@mail.escuelaing.edu.co");
         usu.setIdentificaciongoogle("dmf48f39f5b4uf8d49d9484vbrhvhsvjxwssdflcbn2unx9sn038uc932948");
         usu.setNombre("Andres Fernando Torres Beltran");

@@ -18,22 +18,22 @@ import org.springframework.stereotype.Service;
 @Service
 public class App 
 {
-    public void main(String RegId)
+    public void main(String RegId, String tituoloMensaje, String contenidoMensaje)
     {
         System.out.println( "Sending POST to GCM" );
         
         String apiKey = "AIzaSyDDO1Rb4lyjbUp5HjeYJ-LMCrm-RiiAYZU";
-        Content content = createContent(RegId);
+        Content content = createContent(RegId, tituoloMensaje, contenidoMensaje);
         
         POST2GCM.post(apiKey, content);
     }
     
-    public static Content createContent(String RegId){
+    public static Content createContent(String RegId, String tituoloMensaje, String contenidoMensaje){
 		
 		Content c = new Content();
 		
 		c.addRegId(RegId);
-		c.createData("Registro Satisfactorio", "Su registro en los servidores de google fueron satisfactorios.");
+		c.createData(tituoloMensaje,contenidoMensaje);
 		
 		return c;
     }

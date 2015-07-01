@@ -13,7 +13,7 @@ import org.springframework.data.repository.CrudRepository;
  * @author andres
  */
 
-public interface EdificioCrudFactory extends CrudRepository<Edificio, Integer>{
+public interface UbicacionCrudFactory extends CrudRepository<Ubicacion, Integer>{
     
 }
 

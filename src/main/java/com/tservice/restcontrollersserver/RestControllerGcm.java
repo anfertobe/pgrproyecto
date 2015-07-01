@@ -3,13 +3,7 @@ package com.tservice.restcontrollersserver;
 
 
 import com.tservice.Model.*;
-import com.tservice.Persistencia.CarrerasCrudFactory;
-import com.tservice.Persistencia.EdificioCrudFactory;
-import com.tservice.Persistencia.EventosCrudFactory;
-import com.tservice.Persistencia.GruposCrudFactory;
-import com.tservice.Persistencia.MensajesCrudFactory;
-import com.tservice.Persistencia.UsuariosCrudFactory;
-import com.tservice.exceptions.servergcmExceptions;
+import com.tservice.Persistencia.*;
 import com.tservice.facade.facade;
 import java.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class RestControllerGcm {
     
     @Autowired
-    EdificioCrudFactory edifiCrud;
+    UbicacionCrudFactory ubiCrud;
     @Autowired
     CarrerasCrudFactory carrecrud;
     @Autowired
@@ -42,6 +36,35 @@ public class RestControllerGcm {
     UsuariosCrudFactory usuaCrud;
     @Autowired
     facade fachada;
+    
+    
+    @RequestMapping(value="/mensaje",method = RequestMethod.POST)
+     public ResponseEntity<?> adicionarAmigo(@RequestBody Mensajes mensaje){
+         
+         boolean result = false;
+         
+         try{
+             result = fachada.envioMensajes(mensaje);
+         }catch(Exception e){
+             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+         }
+         
+         return new ResponseEntity<>(result, HttpStatus.ACCEPTED);
+     }
+    
+    @RequestMapping(value="/adicion/{idAmgo}",method = RequestMethod.POST)
+     public ResponseEntity<?> adicionarAmigo(@PathVariable("idAmgo") String idAmgo){
+         
+         boolean result = false;
+         
+         try{
+             result = fachada.adicionarAmigo(idAmgo);
+         }catch(Exception e){
+             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+         }
+         
+         return new ResponseEntity<>(result, HttpStatus.ACCEPTED);
+     }
 
     
      @RequestMapping(value="/login/{usuario}/{password}",method = RequestMethod.GET)
@@ -55,11 +78,23 @@ public class RestControllerGcm {
          
          return new ResponseEntity<>(HttpStatus.ACCEPTED);
      }
-     
-     @RequestMapping(value="/registro/{idcarrera}",method = RequestMethod.POST)
-     public ResponseEntity<?> registro(@RequestBody Usuarios usuario, @PathVariable("idcarrera") int idcarrera){
+
+          @RequestMapping(value="/registromomentaneo/{usuario}/{regid}",method = RequestMethod.PUT)
+     public ResponseEntity<?> registroMomentane(@PathVariable("usuario") String usuario, @PathVariable("regid") String regid){
+
+         try{
+             fachada.registroMomentaneo(usuario, regid);
+         }catch(Exception e){
+             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+         }
          
-         Carreras carrera = carrecrud.findOne(idcarrera);
+         return new ResponseEntity<>(HttpStatus.ACCEPTED);
+     }
+     
+     @RequestMapping(value="/registro/{carrera}",method = RequestMethod.PUT)
+     public ResponseEntity<?> registro(@RequestBody Usuarios usuario, @PathVariable("carrera") Integer idCarrera){
+         
+         Carreras carrera = carrecrud.findOne(idCarrera);
          
          try{
              fachada.Registro(usuario, carrera);
@@ -78,15 +113,15 @@ public class RestControllerGcm {
           return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
     
-    @RequestMapping(value="/edificios",method = RequestMethod.GET)        
-    public List<Edificio> consultarCalificacion()  throws ResourceNotFoundException { 
+    @RequestMapping(value="/Ubicaciones",method = RequestMethod.GET)        
+    public List<Ubicacion> consultarCalificacion()  throws ResourceNotFoundException { 
         
-        List<Edificio> edificios = new LinkedList<Edificio>();
+        List<Ubicacion> Ubicaciones = new LinkedList<Ubicacion>();
         
-        for(Edificio edif : edifiCrud.findAll())
-            edificios.add(edif);
+        for(Ubicacion edif : ubiCrud.findAll())
+            Ubicaciones.add(edif);
         
-          return edificios;
+          return Ubicaciones;
     }
     
 

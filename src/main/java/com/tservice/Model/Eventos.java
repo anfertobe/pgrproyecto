@@ -1,5 +1,5 @@
 package com.tservice.Model;
-// Generated 14-jun-2015 22:57:13 by Hibernate Tools 4.3.1
+// Generated 30-jun-2015 13:06:08 by Hibernate Tools 4.3.1
 
 
 import java.util.Date;
@@ -15,6 +15,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -27,26 +28,28 @@ import javax.persistence.TemporalType;
 public class Eventos  implements java.io.Serializable {
 
 
-     private Integer id;
-     private Edificio edificio;
+    private Integer id;
+     private Ubicacion ubicacion;
      private Date fecha;
      private String descripcion;
+     private String titulo;
+     private Set<Intereses> intereseses = new HashSet(0);
+     private Set<Calificacion> calificacions = new HashSet(0);
      private Set<Carreras> carrerases = new HashSet(0);
 
     public Eventos() {
     }
 
-	
-    public Eventos(Edificio edificio) {
-        this.edificio = edificio;
-    }
-    public Eventos(Edificio edificio, Date fecha, String descripcion, Set<Carreras> carrerases) {
-       this.edificio = edificio;
+    public Eventos(Ubicacion ubicacion, Date fecha, String descripcion, String titulo, Set<Intereses> intereseses, Set<Calificacion> calificacions, Set<Carreras> carrerases) {
+       this.ubicacion = ubicacion;
        this.fecha = fecha;
        this.descripcion = descripcion;
+       this.titulo = titulo;
+       this.intereseses = intereseses;
+       this.calificacions = calificacions;
        this.carrerases = carrerases;
     }
-   
+    
      @Id @GeneratedValue(strategy=IDENTITY)
 
     
@@ -59,14 +62,14 @@ public class Eventos  implements java.io.Serializable {
         this.id = id;
     }
 
-@ManyToOne(fetch=FetchType.EAGER)
-    @JoinColumn(name="lugar", nullable=false)
-    public Edificio getEdificio() {
-        return this.edificio;
+@ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="ubicacion_id")
+    public Ubicacion getUbicacion() {
+        return this.ubicacion;
     }
     
-    public void setEdificio(Edificio edificio) {
-        this.edificio = edificio;
+    public void setUbicacion(Ubicacion ubicacion) {
+        this.ubicacion = ubicacion;
     }
 
     @Temporal(TemporalType.DATE)
@@ -89,8 +92,36 @@ public class Eventos  implements java.io.Serializable {
         this.descripcion = descripcion;
     }
 
-@ManyToMany(fetch=FetchType.EAGER)
-    @JoinTable(name="eventos_has_carreras", catalog="coswg2", joinColumns = { 
+    
+    @Column(name="titulo", length=100)
+    public String getTitulo() {
+        return this.titulo;
+    }
+    
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
+
+@OneToMany(fetch=FetchType.LAZY, mappedBy="eventos")
+    public Set<Intereses> getIntereseses() {
+        return this.intereseses;
+    }
+    
+    public void setIntereseses(Set<Intereses> intereseses) {
+        this.intereseses = intereseses;
+    }
+
+@OneToMany(fetch=FetchType.LAZY, mappedBy="eventos")
+    public Set<Calificacion> getCalificacions() {
+        return this.calificacions;
+    }
+    
+    public void setCalificacions(Set<Calificacion> calificacions) {
+        this.calificacions = calificacions;
+    }
+    
+    @ManyToMany(fetch=FetchType.LAZY)
+    @JoinTable(name="eventos_has_carreras", joinColumns = { 
         @JoinColumn(name="eventos_id", nullable=false, updatable=false) }, inverseJoinColumns = { 
         @JoinColumn(name="carreras_id", nullable=false, updatable=false) })
     public Set<Carreras> getCarrerases() {
@@ -100,10 +131,6 @@ public class Eventos  implements java.io.Serializable {
     public void setCarrerases(Set<Carreras> carrerases) {
         this.carrerases = carrerases;
     }
-
-
-
-
 }
 
 
