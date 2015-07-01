@@ -102,7 +102,7 @@ public class Eventos  implements java.io.Serializable {
         this.titulo = titulo;
     }
 
-@OneToMany(fetch=FetchType.LAZY, mappedBy="eventos")
+    @OneToMany(fetch=FetchType.EAGER, mappedBy="eventos")
     public Set<Intereses> getIntereseses() {
         return this.intereseses;
     }
@@ -111,7 +111,7 @@ public class Eventos  implements java.io.Serializable {
         this.intereseses = intereseses;
     }
 
-@OneToMany(fetch=FetchType.LAZY, mappedBy="eventos")
+    @OneToMany(fetch=FetchType.EAGER, mappedBy="eventos")
     public Set<Calificacion> getCalificacions() {
         return this.calificacions;
     }

@@ -37,7 +37,36 @@ public class RestControllerGcm {
     @Autowired
     facade fachada;
     
+    @RequestMapping(value="/evento",method = RequestMethod.PUT)
+     public ResponseEntity<?> adicionarEvento(@RequestBody Eventos evento){
+         boolean result = false;
+             
+             try{
+             result=fachada.adicionarEvento(evento);
+             }catch(Exception e){
+                 return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+            }
+                         
+         return new ResponseEntity<>(result, HttpStatus.ACCEPTED);
+     }
     
+    
+    @RequestMapping(value="/noticia",method = RequestMethod.PUT)
+     public ResponseEntity<?> adicionarNoticia(@RequestBody Noticias noticia){
+         boolean result = false;
+             
+             try{
+                                  
+             result=fachada.adicionarNoticia(noticia);
+             }catch(Exception e){
+                 return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+            }
+                         
+         return new ResponseEntity<>(result, HttpStatus.ACCEPTED);
+     }
+    
+     
+     
     @RequestMapping(value="/mensaje",method = RequestMethod.POST)
      public ResponseEntity<?> adicionarAmigo(@RequestBody Mensajes mensaje){
          
@@ -170,6 +199,9 @@ public class RestControllerGcm {
         
         return edificios;
     }
+    
+    
+    
     
     private boolean isCarrera(Set<Carreras> busqueda ,Set<Carreras> buscar ){
     

@@ -26,6 +26,12 @@ public class facade {
     @Autowired
     CarrerasCrudFactory carreCrud;
     @Autowired
+    EventosCrudFactory eventosCrud;
+    @Autowired
+    NoticiasCrudFactory noticiasCrud;
+    @Autowired
+    CalificacionCrudFactory calificacionCrud;
+    @Autowired
     App envio;
     @Autowired
     GruposCrudFactory gruposCrud;
@@ -46,6 +52,41 @@ public class facade {
          
          return true;
     }
+    
+    public Boolean adicionarNoticia(Noticias noticia) throws servergcmExceptions{
+    
+        try{
+            noticiasCrud.save(noticia);
+        }catch(Exception e){
+            return false;
+        }
+    
+        return true;
+    }
+    
+    
+    public Boolean adicionarEvento(Eventos evento) throws servergcmExceptions{
+       
+        try{
+            eventosCrud.save(evento);
+        }catch(Exception e){
+            return false;
+        }
+    
+        return true;
+    }
+    
+    public Boolean agregarCalificacion(Calificacion calificacion) throws servergcmExceptions {
+        try{
+            calificacionCrud.save(calificacion);
+        }catch(Exception e){
+            return false;
+        }
+    
+        return true;
+    }
+    
+    
     
     public Boolean Registro(Usuarios nuevoUsuario, Carreras carreraUsuario) throws servergcmExceptions
     {
