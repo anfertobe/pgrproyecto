@@ -36,7 +36,7 @@ public class pruebas {
      public void hello() throws servergcmExceptions 
      {
         Usuarios usu = new Usuarios("2087459");
-        usu.setContrasena("2087459");
+        usu.setContraseña("2087459");
         usu.setEmail("andres.torres-b@mail.escuelaing.edu.co");
         usu.setIdentificaciongoogle("dmf48f39f5b4uf8d49d9484vbrudcn2unx9sn038uc932948");
         usu.setNombre("Andres Fernando Torres Beltran");
