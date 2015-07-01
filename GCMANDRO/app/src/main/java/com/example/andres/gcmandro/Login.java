@@ -166,7 +166,7 @@ public class Login extends Activity {
             StringBuilder builder = new StringBuilder();
             HttpClient httpClient = new DefaultHttpClient();
             HttpGet get =
-                    new HttpGet("https://192.168.0.31:8080/ServicioGcm/rest/servergcm/carreras");
+                    new HttpGet("http://192.168.0.31:8080/ServicioGcm/rest/servergcm/carreras");
             publishProgress(1);
             try {
                 System.out.println("execute");

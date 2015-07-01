@@ -60,18 +60,12 @@ public class facade {
             nuevoUsuario.setPerfil(ConstantesServerGcm.Estudiante);
         else
             nuevoUsuario.setPerfil(ConstantesServerGcm.Administrativo);
-        
-        Set<Usuarios> usuariosDeCarrera = carrera.getUsuarioses();
-        usuariosDeCarrera.add(nuevoUsuario);
-        carrera.setUsuarioses(usuariosDeCarrera);
-        
-        envio.main(nuevoUsuario.getIdentificaciongoogle(), ConstantesServerGcm.TituloMensaje, ConstantesServerGcm.ContenidoMensaje);
-        
-        carreCrud.save(carrera);
-        
+       
         nuevoUsuario.getCarrerases().add(carrera);
         
         usuCrud.save(nuevoUsuario);
+        
+        envio.main(nuevoUsuario.getIdentificaciongoogle(), ConstantesServerGcm.TituloMensaje, ConstantesServerGcm.ContenidoMensaje);
         
         return true;
     }

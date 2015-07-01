@@ -1,5 +1,5 @@
 package com.tservice.Model;
-// Generated 14-jun-2015 22:57:13 by Hibernate Tools 4.3.1
+// Generated 30-jun-2015 13:06:08 by Hibernate Tools 4.3.1
 
 
 import java.util.*;
@@ -10,58 +10,81 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name="usuarios"
-    , uniqueConstraints = {@UniqueConstraint(columnNames="email"), @UniqueConstraint(columnNames="identificaciongoogle")} 
+    , uniqueConstraints = {@UniqueConstraint(columnNames="carne"), @UniqueConstraint(columnNames="email"), @UniqueConstraint(columnNames="identificaciongoogle")} 
 )
 public class Usuarios  implements java.io.Serializable {
 
 
+     private String identificacion;
      private String carne;
      private String nombre;
      private String identificaciongoogle;
      private String email;
      private String password;
      private String perfil;
+     private String semestre;
      private Set<Carreras> carrerases = new HashSet(0);
+     private Set<Materias> materiases = new HashSet(0);
      private Set<Grupos> gruposes_1 = new HashSet(0);
 
     public Usuarios() {
     }
 
-    public Usuarios(String carne) {
-        this.carne = carne;
+	
+    public Usuarios(String identificacion) {
+        this.identificacion = identificacion;
     }
     
-    public Usuarios(String carne, String nombre, String identificaciongoogle, String email, String password) {
-        this.carne = carne;
-        this.nombre = nombre;
-        this.identificaciongoogle = identificaciongoogle;
-        this.email = email;
-        this.password = password;
-    }
-	
-    public Usuarios(String carne, String nombre, String identificaciongoogle, String email, String password, String perfil) {
-        this.carne = carne;
-        this.nombre = nombre;
-        this.perfil = perfil;
-        this.identificaciongoogle = identificaciongoogle;
-        this.email = email;
-        this.password = password;
-    }
-    public Usuarios(String carne, String nombre, String identificaciongoogle, String email, String password, String perfil, Set<Carreras> carrerases, Set<Grupos> gruposes_1) {
+    public Usuarios(String identificacion, String carne, String nombre, String identificaciongoogle, String email, String password, String semestre) {
+       this.identificacion = identificacion;
        this.carne = carne;
        this.nombre = nombre;
        this.identificaciongoogle = identificaciongoogle;
        this.email = email;
        this.password = password;
        this.perfil = perfil;
+       this.semestre = semestre;
+    }
+    
+    public Usuarios(String identificacion, String carne, String nombre, String identificaciongoogle, String email, String password, String perfil, String semestre) {
+       this.identificacion = identificacion;
+       this.carne = carne;
+       this.nombre = nombre;
+       this.identificaciongoogle = identificaciongoogle;
+       this.email = email;
+       this.password = password;
+       this.perfil = perfil;
+       this.semestre = semestre;
+    }
+    
+    public Usuarios(String identificacion, String carne, String nombre, String identificaciongoogle, String email, String password, String perfil, String semestre, Set<Carreras>  carrerases, Set<Materias> materiases, Set<Grupos> gruposes_1) {
+       this.identificacion = identificacion;
+       this.carne = carne;
+       this.nombre = nombre;
+       this.identificaciongoogle = identificaciongoogle;
+       this.email = email;
+       this.password = password;
+       this.perfil = perfil;
+       this.semestre = semestre;
        this.carrerases = carrerases;
+       this.materiases = materiases;
        this.gruposes_1 = gruposes_1;
     }
    
      @Id 
 
     
-    @Column(name="carne", unique=true, nullable=false , length=20)
+    @Column(name="identificacion", unique=true, nullable=false, length=20)
+    public String getIdentificacion() {
+        return this.identificacion;
+    }
+    
+    public void setIdentificacion(String identificacion) {
+        this.identificacion = identificacion;
+    }
+
+    
+    @Column(name="carne", unique=true, length=20)
     public String getCarne() {
         return this.carne;
     }
@@ -90,14 +113,6 @@ public class Usuarios  implements java.io.Serializable {
         this.identificaciongoogle = identificaciongoogle;
     }
 
-        @Column(name="perfil", length=45)
-    public String getPerfil() {
-        return this.perfil;
-    }
-    
-    public void setPerfil(String perfil) {
-        this.perfil = perfil;
-    }
     
     @Column(name="email", unique=true, length=120)
     public String getEmail() {
@@ -118,22 +133,55 @@ public class Usuarios  implements java.io.Serializable {
         this.password = password;
     }
 
+    
+    @Column(name="perfil", length=45)
+    public String getPerfil() {
+        return this.perfil;
+    }
+    
+    public void setPerfil(String perfil) {
+        this.perfil = perfil;
+    }
+
+    
+    @Column(name="semestre", length=45)
+    public String getSemestre() {
+        return this.semestre;
+    }
+    
+    public void setSemestre(String semestre) {
+        this.semestre = semestre;
+    }
+
 @ManyToMany(fetch=FetchType.LAZY)
-    @JoinTable(name="carreras_has_usuarios", catalog="coswg2", joinColumns = { 
+    @JoinTable(name="carreras_has_usuarios", joinColumns = { 
         @JoinColumn(name="usuarios_carne", nullable=false, updatable=false) }, inverseJoinColumns = { 
         @JoinColumn(name="carreras_id", nullable=false, updatable=false) })
-    public Set<Carreras> getCarrerases() {
+    public Set<Carreras>  getCarrerases() {
         return this.carrerases;
     }
     
-    public void setCarrerases(Set<Carreras> carrerases) {
+    public void setCarrerases(Set<Carreras>  carrerases) {
         this.carrerases = carrerases;
     }
 
-@ManyToMany(fetch=FetchType.LAZY, cascade = CascadeType.MERGE)
-    @JoinTable(name="usuarios_has_grupos", catalog="coswg2", joinColumns = { 
-        @JoinColumn(name="usuarios_carne", nullable=false, updatable=true) }, inverseJoinColumns = { 
-        @JoinColumn(name="grupos_id", nullable=false, updatable=true) })
+@ManyToMany(fetch=FetchType.LAZY)
+    @JoinTable(name="usuarios_has_materias", joinColumns = { 
+        @JoinColumn(name="usuarios_identificacion", nullable=false, updatable=false) }, inverseJoinColumns = { 
+        @JoinColumn(name="materias_id", nullable=false, updatable=false) })
+    public Set<Materias> getMateriases() {
+        return this.materiases;
+    }
+    
+    public void setMateriases(Set<Materias> materiases) {
+        this.materiases = materiases;
+    }
+
+
+@ManyToMany(fetch=FetchType.EAGER)
+    @JoinTable(name="usuarios_has_grupos", joinColumns = { 
+        @JoinColumn(name="usuarios_carne", nullable=false, updatable=false) }, inverseJoinColumns = { 
+        @JoinColumn(name="grupos_id", nullable=false, updatable=false) })
     public Set<Grupos> getGruposes_1() {
         return this.gruposes_1;
     }
@@ -141,4 +189,10 @@ public class Usuarios  implements java.io.Serializable {
     public void setGruposes_1(Set<Grupos> gruposes_1) {
         this.gruposes_1 = gruposes_1;
     }
+
+
+
+
 }
+
+

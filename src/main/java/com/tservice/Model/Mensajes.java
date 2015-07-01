@@ -1,5 +1,5 @@
 package com.tservice.Model;
-// Generated 14-jun-2015 22:57:13 by Hibernate Tools 4.3.1
+// Generated 30-jun-2015 13:06:08 by Hibernate Tools 4.3.1
 
 
 import javax.persistence.Column;
@@ -22,8 +22,8 @@ public class Mensajes  implements java.io.Serializable {
 
      private Integer id;
      private Grupos grupos;
-     private Usuarios usuariosByUsuariodestino;
      private Usuarios usuariosByUsuariosorigen;
+     private Usuarios usuariosByUsuariodestino;
      private String fecha;
      private String visto;
      private String contenido;
@@ -31,16 +31,10 @@ public class Mensajes  implements java.io.Serializable {
     public Mensajes() {
     }
 
-	
-    public Mensajes(Grupos grupos, Usuarios usuariosByUsuariodestino, Usuarios usuariosByUsuariosorigen) {
-        this.grupos = grupos;
-        this.usuariosByUsuariodestino = usuariosByUsuariodestino;
-        this.usuariosByUsuariosorigen = usuariosByUsuariosorigen;
-    }
-    public Mensajes(Grupos grupos, Usuarios usuariosByUsuariodestino, Usuarios usuariosByUsuariosorigen, String fecha, String visto, String contenido) {
+    public Mensajes(Grupos grupos, Usuarios usuariosByUsuariosorigen, Usuarios usuariosByUsuariodestino, String fecha, String visto, String contenido) {
        this.grupos = grupos;
-       this.usuariosByUsuariodestino = usuariosByUsuariodestino;
        this.usuariosByUsuariosorigen = usuariosByUsuariosorigen;
+       this.usuariosByUsuariodestino = usuariosByUsuariodestino;
        this.fecha = fecha;
        this.visto = visto;
        this.contenido = contenido;
@@ -59,7 +53,7 @@ public class Mensajes  implements java.io.Serializable {
     }
 
 @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="grupodestino", nullable=false)
+    @JoinColumn(name="grupodestino")
     public Grupos getGrupos() {
         return this.grupos;
     }
@@ -69,23 +63,23 @@ public class Mensajes  implements java.io.Serializable {
     }
 
 @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="usuariodestino", nullable=false)
-    public Usuarios getUsuariosByUsuariodestino() {
-        return this.usuariosByUsuariodestino;
-    }
-    
-    public void setUsuariosByUsuariodestino(Usuarios usuariosByUsuariodestino) {
-        this.usuariosByUsuariodestino = usuariosByUsuariodestino;
-    }
-
-@ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="usuariosorigen", nullable=false)
+    @JoinColumn(name="usuariosorigen")
     public Usuarios getUsuariosByUsuariosorigen() {
         return this.usuariosByUsuariosorigen;
     }
     
     public void setUsuariosByUsuariosorigen(Usuarios usuariosByUsuariosorigen) {
         this.usuariosByUsuariosorigen = usuariosByUsuariosorigen;
+    }
+
+@ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="usuariodestino")
+    public Usuarios getUsuariosByUsuariodestino() {
+        return this.usuariosByUsuariodestino;
+    }
+    
+    public void setUsuariosByUsuariodestino(Usuarios usuariosByUsuariodestino) {
+        this.usuariosByUsuariodestino = usuariosByUsuariodestino;
     }
 
     

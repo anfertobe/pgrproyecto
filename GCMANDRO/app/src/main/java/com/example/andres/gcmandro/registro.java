@@ -66,6 +66,8 @@ public class registro extends ActionBarActivity {
     private Context context;
 
     private Spinner carreras;
+    private Spinner semestre;
+    private EditText identificacion;
     private EditText carne;
     private EditText nombre;
     private EditText email;
@@ -86,6 +88,8 @@ public class registro extends ActionBarActivity {
         registro = (Button) findViewById(R.id.registrar);
         carreras = (Spinner) findViewById(R.id.carreras);
         dictianaryCarreras = new HashMap<String, Integer>();
+        identificacion = (EditText) findViewById(R.id.identificacion);
+        semestre = (Spinner) findViewById(R.id.semestre);
 
         Bundle bundle = this.getIntent().getExtras();
 
@@ -101,6 +105,7 @@ public class registro extends ActionBarActivity {
             e.printStackTrace();
         }
 
+        Log.i("Armar:","Lista");
 
         List<String> lista = new LinkedList<String>();
 
@@ -115,11 +120,21 @@ public class registro extends ActionBarActivity {
             }
 
         System.out.println(lista.size());
-
+        Log.i("Spinner:", "Carreras");
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(registro.this,  android.R.layout.simple_spinner_item, lista);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         carreras.setAdapter(adapter);
 
+        Log.i("Spinner:","Semestre");
+        //Creamos el adaptador
+        ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(registro.this,R.array.semestre,android.R.layout.simple_spinner_item);
+        //Añadimos el layout para el menú
+        System.out.println(adapter2);
+        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        //Le indicamos al spinner el adaptador a usar
+        System.out.println(adapter2);
+        semestre.setAdapter(adapter2);
+        System.out.println(adapter2);
         registro.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -141,11 +156,11 @@ public class registro extends ActionBarActivity {
                 if (regid.equals("")) {
 
                     String carreraSeleccionada = carreras.getSelectedItem().toString();
-
+                    String semestreselect = semestre.getSelectedItem().toString();
                     System.out.println(carreraSeleccionada);
 
                     TareaRegistroGCM tarea = new TareaRegistroGCM(registro.this);
-                    tarea.execute(carne.getText().toString(), nombre.getText().toString(), email.getText().toString(), password.getText().toString(), carreraSeleccionada);
+                    tarea.execute(identificacion.getText().toString(), carne.getText().toString(), nombre.getText().toString(), email.getText().toString(), password.getText().toString(), carreraSeleccionada, semestreselect);
                 }
             }
         });
@@ -236,7 +251,7 @@ public class registro extends ActionBarActivity {
                 Log.d(TAG, "Registrado en GCM: registration_id=" + regid);
 
                 //Nos registramos en nuestro servidor
-                boolean registrado = registroServidor(params[0], params[1], params[2], params[3], params[4], regid);
+                boolean registrado = registroServidor(params[0], params[1], params[2], params[3], params[4], params[5], params[6],regid);
 
                 //Guardamos los datos del registro
                 if (registrado) {
@@ -281,21 +296,23 @@ public class registro extends ActionBarActivity {
 
     }
 
-    private boolean registroServidor(String carne, String nombre, String email, String password, String carrera, String regId) {
+    private boolean registroServidor(String identificacion, String carne, String nombre, String email, String password, String carrera, String semestre, String regId) {
 
         boolean reg = false;
 
         HttpClient httpClient = new DefaultHttpClient();
-        HttpPut put = new HttpPut("http://192.168.0.31:8080/ServicioGcm/rest/servergcm/registro");
+        HttpPut put = new HttpPut("http://192.168.0.31:8080/ServicioGcm/rest/servergcm/registro/"+dictianaryCarreras.get(carrera));
 
         try {
 
             JSONObject usuario = new JSONObject();
+            usuario.put("identificacion",identificacion);
             usuario.put("carne",carne);
             usuario.put("nombre",nombre);
             usuario.put("identificaciongoogle",regId);
             usuario.put("email", email);
             usuario.put("password", password);
+            usuario.put("Semestre", Integer.getInteger(semestre));
 
             StringEntity entity = new StringEntity(usuario.toString());
 

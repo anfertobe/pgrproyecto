@@ -3,13 +3,7 @@ package com.tservice.restcontrollersserver;
 
 
 import com.tservice.Model.*;
-import com.tservice.Persistencia.CarrerasCrudFactory;
-import com.tservice.Persistencia.EdificioCrudFactory;
-import com.tservice.Persistencia.EventosCrudFactory;
-import com.tservice.Persistencia.GruposCrudFactory;
-import com.tservice.Persistencia.MensajesCrudFactory;
-import com.tservice.Persistencia.UsuariosCrudFactory;
-import com.tservice.exceptions.servergcmExceptions;
+import com.tservice.Persistencia.*;
 import com.tservice.facade.facade;
 import java.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class RestControllerGcm {
     
     @Autowired
-    EdificioCrudFactory edifiCrud;
+    UbicacionCrudFactory ubiCrud;
     @Autowired
     CarrerasCrudFactory carrecrud;
     @Autowired
@@ -119,15 +113,15 @@ public class RestControllerGcm {
           return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
     
-    @RequestMapping(value="/edificios",method = RequestMethod.GET)        
-    public List<Edificio> consultarCalificacion()  throws ResourceNotFoundException { 
+    @RequestMapping(value="/Ubicaciones",method = RequestMethod.GET)        
+    public List<Ubicacion> consultarCalificacion()  throws ResourceNotFoundException { 
         
-        List<Edificio> edificios = new LinkedList<Edificio>();
+        List<Ubicacion> Ubicaciones = new LinkedList<Ubicacion>();
         
-        for(Edificio edif : edifiCrud.findAll())
-            edificios.add(edif);
+        for(Ubicacion edif : ubiCrud.findAll())
+            Ubicaciones.add(edif);
         
-          return edificios;
+          return Ubicaciones;
     }
     
 
