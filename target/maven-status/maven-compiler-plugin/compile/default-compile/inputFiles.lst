@@ -5,11 +5,13 @@ C:\Users\LuisAndres\Documents\GitHub\pgrproyecto\src\main\java\com\tservice\Mode
 C:\Users\LuisAndres\Documents\GitHub\pgrproyecto\src\main\java\com\tservice\Persistencia\GruposCrudFactory.java
 C:\Users\LuisAndres\Documents\GitHub\pgrproyecto\src\main\java\com\tservice\facade\POST2GCM.java
 C:\Users\LuisAndres\Documents\GitHub\pgrproyecto\src\main\java\com\tservice\Model\Eventos.java
+C:\Users\LuisAndres\Documents\GitHub\pgrproyecto\src\main\java\com\tservice\Persistencia\CalificacionCrudFactory.java
 C:\Users\LuisAndres\Documents\GitHub\pgrproyecto\src\main\java\com\tservice\Persistencia\EventosCrudFactory.java
 C:\Users\LuisAndres\Documents\GitHub\pgrproyecto\src\main\java\com\tservice\facade\facade.java
 C:\Users\LuisAndres\Documents\GitHub\pgrproyecto\src\main\java\com\tservice\restcontrollersserver\OperationFailedException.java
 C:\Users\LuisAndres\Documents\GitHub\pgrproyecto\src\main\java\com\tservice\Model\Ubicacion.java
 C:\Users\LuisAndres\Documents\GitHub\pgrproyecto\src\main\java\com\tservice\Model\Intereses.java
+C:\Users\LuisAndres\Documents\GitHub\pgrproyecto\src\main\java\com\tservice\Persistencia\InteresesCrudFactory.java
 C:\Users\LuisAndres\Documents\GitHub\pgrproyecto\src\main\java\com\tservice\Model\Noticias.java
 C:\Users\LuisAndres\Documents\GitHub\pgrproyecto\src\main\java\com\tservice\Persistencia\MensajesCrudFactory.java
 C:\Users\LuisAndres\Documents\GitHub\pgrproyecto\src\main\java\com\tservice\facade\App.java
@@ -20,6 +22,7 @@ C:\Users\LuisAndres\Documents\GitHub\pgrproyecto\src\main\java\com\tservice\Logi
 C:\Users\LuisAndres\Documents\GitHub\pgrproyecto\src\main\java\com\tservice\facade\Content.java
 C:\Users\LuisAndres\Documents\GitHub\pgrproyecto\src\main\java\com\tservice\restcontrollersserver\RestControllerGcm.java
 C:\Users\LuisAndres\Documents\GitHub\pgrproyecto\src\main\java\com\tservice\Persistencia\CarrerasCrudFactory.java
+C:\Users\LuisAndres\Documents\GitHub\pgrproyecto\src\main\java\com\tservice\Persistencia\NoticiasCrudFactory.java
 C:\Users\LuisAndres\Documents\GitHub\pgrproyecto\src\main\java\com\tservice\restcontrollersserver\TestRestController.java
 C:\Users\LuisAndres\Documents\GitHub\pgrproyecto\src\main\java\com\tservice\mappers\HibernateAwareObjectMapper.java
 C:\Users\LuisAndres\Documents\GitHub\pgrproyecto\src\main\java\com\tservice\facade\pruebasEstaticas.java

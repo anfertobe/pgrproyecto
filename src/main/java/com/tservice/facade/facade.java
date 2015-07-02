@@ -32,6 +32,8 @@ public class facade {
     @Autowired
     CalificacionCrudFactory calificacionCrud;
     @Autowired
+    InteresesCrudFactory interesesCrud;
+    @Autowired
     App envio;
     @Autowired
     GruposCrudFactory gruposCrud;
@@ -69,6 +71,18 @@ public class facade {
        
         try{
             eventosCrud.save(evento);
+        }catch(Exception e){
+            return false;
+        }
+    
+        return true;
+    }
+    
+    
+    public Boolean adicionarInteres(Intereses interes) throws servergcmExceptions{
+       
+        try{
+            interesesCrud.save(interes);
         }catch(Exception e){
             return false;
         }

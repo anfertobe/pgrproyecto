@@ -98,7 +98,7 @@ public class Carreras  implements java.io.Serializable {
         this.usuarioses = usuarioses;
     }
 
-@OneToMany(fetch=FetchType.LAZY, mappedBy="carreras")
+@OneToMany(fetch=FetchType.EAGER, mappedBy="carreras")
     public Set<Intereses> getIntereseses() {
         return this.intereseses;
     }

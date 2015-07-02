@@ -35,6 +35,12 @@ public class RestControllerGcm {
     @Autowired
     UsuariosCrudFactory usuaCrud;
     @Autowired
+    NoticiasCrudFactory noticiasCrud;
+    @Autowired
+    CalificacionCrudFactory calificacionCrud;
+    @Autowired
+    InteresesCrudFactory interesesCrud;
+    @Autowired
     facade fachada;
     
     @RequestMapping(value="/evento",method = RequestMethod.PUT)
@@ -43,6 +49,19 @@ public class RestControllerGcm {
              
              try{
              result=fachada.adicionarEvento(evento);
+             }catch(Exception e){
+                 return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+            }
+                         
+         return new ResponseEntity<>(result, HttpStatus.ACCEPTED);
+     }
+    
+    @RequestMapping(value="/interes",method = RequestMethod.PUT)
+     public ResponseEntity<?> adicionarInteres(@RequestBody Intereses interes){
+         boolean result = false;
+             
+             try{
+             result=fachada.adicionarInteres(interes);
              }catch(Exception e){
                  return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
             }
@@ -177,8 +196,21 @@ public class RestControllerGcm {
           return edificios;
     }
     
+    @RequestMapping(value="/intereses",method = RequestMethod.GET)        
+    public List<Intereses> consultarIntereses()  throws ResourceNotFoundException { 
+        
+        List<Intereses> edificios = new LinkedList<Intereses>();
+        
+        for(Intereses edif : interesesCrud.findAll())
+            edificios.add(edif);
+        
+          return edificios;
+    }
     
-            @RequestMapping(value="/eventos/{usuario}",method = RequestMethod.GET)        
+    
+    
+    
+    @RequestMapping(value="/eventos/{usuario}",method = RequestMethod.GET)        
     public List<Eventos> consultarEventosUsuario(@PathVariable("usuario") String usuario)  throws ResourceNotFoundException { 
         
         List<Eventos> edificios = new LinkedList<Eventos>();
