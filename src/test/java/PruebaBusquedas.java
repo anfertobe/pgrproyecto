@@ -44,10 +44,7 @@ public class PruebaBusquedas {
     
    public static void main (String [ ] args) {
         
-       Usuarios usu=usuCrud.findOne(1);
-       
-       
-       
+    
 
    }
     

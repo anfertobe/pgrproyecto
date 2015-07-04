@@ -189,13 +189,14 @@ public class facade {
         envio.main(CodigoGoogle, ConstantesServerGcm.TituloMensaje, ConstantesServerGcm.ContenidoMensaje);
     }
     
-    public Boolean adicionarAmigo(String idAmigo) throws servergcmExceptions{
+    public Usuarios adicionarAmigo(String idAmigo) throws servergcmExceptions{
         
         if(!usuCrud.exists(idAmigo))
             throw new servergcmExceptions("La persona identificada con carne n° " + idAmigo + " no esta registrado.");
+        
        Usuarios usuario = usuCrud.findOne(idAmigo);
        
-       return true;
+       return usuario;
     }
     
     public Boolean envioMensajes(Mensajes mensaje) throws servergcmExceptions{

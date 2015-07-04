@@ -4,6 +4,7 @@ package com.tservice.restcontrollersserver;
 
 import com.tservice.Model.*;
 import com.tservice.Persistencia.*;
+import com.tservice.exceptions.servergcmExceptions;
 import com.tservice.facade.facade;
 import java.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -101,17 +102,15 @@ public class RestControllerGcm {
      }
     
     @RequestMapping(value="/adicion/{idAmgo}",method = RequestMethod.POST)
-     public ResponseEntity<?> adicionarAmigo(@PathVariable("idAmgo") String idAmgo){
+     public Usuarios adicionarAmigo(@PathVariable("idAmgo") String idAmgo) throws servergcmExceptions{
+            
+         Usuarios usuario = null;
          
-         boolean result = false;
+
+             usuario = fachada.adicionarAmigo(idAmgo);
          
-         try{
-             result = fachada.adicionarAmigo(idAmgo);
-         }catch(Exception e){
-             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-         }
          
-         return new ResponseEntity<>(result, HttpStatus.ACCEPTED);
+         return usuario;
      }
 
     
