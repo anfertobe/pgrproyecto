@@ -5,14 +5,26 @@
  */
 package com.tservice.facade;
 
+import com.tservice.BD.Connect;
 import com.tservice.Model.*;
 import com.tservice.Persistencia.*;
 import com.tservice.exceptions.servergcmExceptions;
-
+import java.sql.SQLException;
 import java.util.*;
-
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.service.ServiceRegistry;
+import org.hibernate.service.ServiceRegistryBuilder;
+import org.hibernate.cfg.Configuration;
 
 /**
  *
@@ -20,6 +32,33 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class facade {
+    
+    private Session session;
+    private Transaction tx;
+    static String sNoticiasDefault="select interNot.noticias_id from usuarios u \n" +
+    "join carreras_has_usuarios c on c.usuarios_carne=u.carne\n and u.identificacion=:valor " +
+    "join carreras car on c.carreras_id=car.id \n" +
+    "join intereses inter on inter.carreras_id=car.id \n" +
+    "join intereses interNot on inter.nombre=interNot.nombre and interNot.noticias_id is not null";
+    
+    static String sEventosDefault="select interEv.eventos_id from usuarios u \n" +
+    "join carreras_has_usuarios c on c.usuarios_carne=u.carne\n and u.identificacion=:valor " +
+    "join carreras car on c.carreras_id=car.id\n" +
+    "join intereses inter on inter.carreras_id=car.id \n " +
+    "join intereses interEv on inter.nombre=interEv.nombre and  interEv.eventos_id  is not null";
+        
+    static String sEventosPreferencia="select interBus.eventos_id from usuarios u \n" +
+    "inner join calificacion cal on cal.usuarios_identificacion=u.identificacion and cal.calificacion = 1 \n" +
+    "and cal.eventos_id is not null\n and u.identificacion=:valor " +
+    "inner join intereses inter on cal.eventos_id = inter.eventos_id \n" +
+    "inner join intereses interBus on  inter.nombre = interBus.nombre and interBus.eventos_id is not null \n";
+
+    static String sNoticiasPreferencia="select interBus.noticias_id from usuarios u \n" +
+    "inner join calificacion cal on cal.usuarios_identificacion=u.identificacion and cal.calificacion = 1 \n" +
+    "and cal.noticias_id is not null\n and u.identificacion=:valor " +
+    "inner join intereses inter on cal.noticias_id = inter.noticias_id \n" +
+    "inner join intereses interBus on  inter.nombre = interBus.nombre and interBus.noticias_id is not null";
+    
     
     @Autowired
     UsuariosCrudFactory usuCrud;
@@ -37,7 +76,6 @@ public class facade {
     App envio;
     @Autowired
     GruposCrudFactory gruposCrud;
-    
     
     public boolean registroMomentaneo(String Usuario, String RegId) throws servergcmExceptions{
          if(usuCrud.exists(Usuario)){
@@ -218,6 +256,94 @@ public class facade {
         }else
             throw new servergcmExceptions("El mensaje debe contener un destinatario.");
         return resp;
+    }
+        
+    public List<Eventos> getEventosUsuario(Usuarios usuario){
+        
+        List<Eventos> eventos=new ArrayList<Eventos>();
+        
+        List<String> incluidos=new ArrayList<String>();
+        
+        System.out.println("Inicio consulta");
+        
+        //Trae primero eventos segun preferencia
+        List<String> res=new ArrayList<String>();
+        try {
+            res = Connect.runQuery(sEventosPreferencia.replace(":valor",usuario.getIdentificacion()));
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(facade.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(facade.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        System.out.println("Obtiene lista size "+res.size());
+        
+        
+        
+        //El usuario no tiene preferencias traer default
+        if (res.isEmpty()){
+            try {
+                res=Connect.runQuery(sEventosDefault.replace(":valor",usuario.getIdentificacion()));
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(facade.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (SQLException ex) {
+                Logger.getLogger(facade.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+         
+        for(String evento:res){
+            Eventos ev=eventosCrud.findOne(Integer.parseInt(evento));
+            if(ev!=null){
+                if(!incluidos.contains(evento)){
+                    eventos.add(ev);
+                    incluidos.add(evento);
+                }
+            }
+        }
+        
+        return eventos;
+    }
+        
+    public List<Noticias> getNoticiasUsuario(Usuarios usuario){
+        
+        List<Noticias> noticias=new ArrayList<Noticias>();
+              
+        List<String> incluidos=new ArrayList<String>();
+        
+        //Trae primero noticias segun preferencia
+        List<String> res=new ArrayList<String>();
+        
+         try {
+            res = Connect.runQuery(sNoticiasPreferencia.replace(":valor",usuario.getIdentificacion()));
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(facade.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(facade.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       
+        
+        //El usuario no tiene preferencias traer default
+        if (res.isEmpty()){
+         try {
+            res = Connect.runQuery(sNoticiasDefault.replace(":valor",usuario.getIdentificacion()));
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(facade.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (SQLException ex) {
+                Logger.getLogger(facade.class.getName()).log(Level.SEVERE, null, ex);
+            }
+       }
+         
+        for(String noticia:res){
+            Noticias not=noticiasCrud.findOne(Integer.parseInt(noticia));
+            if(not!=null){
+                if(!incluidos.contains(noticia)){
+                        noticias.add(not);
+                        incluidos.add(noticia);
+                }
+            }
+        }
+        
+               
+        return noticias;
     }
     
     private Boolean enviarMensajeUsuario(Usuarios usuario, String mensaje){

@@ -57,6 +57,9 @@ public class RestControllerGcm {
          return new ResponseEntity<>(result, HttpStatus.ACCEPTED);
      }
     
+     
+     
+     
     @RequestMapping(value="/interes",method = RequestMethod.PUT)
      public ResponseEntity<?> adicionarInteres(@RequestBody Intereses interes){
          boolean result = false;
@@ -111,6 +114,38 @@ public class RestControllerGcm {
          
          
          return usuario;
+     }
+
+     
+     @RequestMapping(value="/eventos/{usuario}",method = RequestMethod.GET)
+     public List<Eventos> getEventosUsuario(@PathVariable("usuario") String usuario){
+         
+         List<Eventos> ev=new ArrayList<Eventos>();
+         
+         Usuarios usu=usuaCrud.findOne(usuario);
+        
+         try{
+             return fachada.getEventosUsuario(usu);
+         }catch(Exception e){
+             Eventos eve=evenCrud.findOne(2);
+             eve.setDescripcion(e.getMessage());
+             ev.add(eve);
+             return ev;
+         }
+     }
+
+     
+     @RequestMapping(value="/noticias/{usuario}",method = RequestMethod.GET)
+     public  List<Noticias> getNoticiasUsuario(@PathVariable("usuario") String usuario){
+         
+         
+         Usuarios usu=usuaCrud.findOne(usuario);
+         
+         try{
+             return fachada.getNoticiasUsuario(usu);
+         }catch(Exception e){
+             return null;
+         }
      }
 
     
@@ -209,46 +244,7 @@ public class RestControllerGcm {
     
     
     
-    @RequestMapping(value="/eventos/{usuario}",method = RequestMethod.GET)        
-    public List<Eventos> consultarEventosUsuario(@PathVariable("usuario") String usuario)  throws ResourceNotFoundException { 
-        
-        List<Eventos> edificios = new LinkedList<Eventos>();
-        
-        Usuarios oUsuario=usuaCrud.findOne(usuario);
-        
-        if (oUsuario==null){
-             ArrayList<Eventos> ev=new ArrayList<Eventos>();
-             return ev ;
-        }else{
-             
-            for(Eventos edif : evenCrud.findAll()){
-                if(isCarrera(edif.getCarrerases(),oUsuario.getCarrerases())){
-                        edificios.add(edif);
-                }
-            }
-        }
-        
-        return edificios;
-    }
-    
-    
-    
-    
-    private boolean isCarrera(Set<Carreras> busqueda ,Set<Carreras> buscar ){
-    
-        for(Carreras car : buscar){
-            if (busqueda.contains(car)){
-                return true;
-            }
-        }
-        
-        return false;
-    }
-    
-    
-    
-    
-            @RequestMapping(value="/mensajes",method = RequestMethod.GET)        
+    @RequestMapping(value="/mensajes",method = RequestMethod.GET)        
     public List<Mensajes> consultarMensajes()  throws ResourceNotFoundException { 
         
         List<Mensajes> edificios = new LinkedList<Mensajes>();

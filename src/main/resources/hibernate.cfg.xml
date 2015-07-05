@@ -7,16 +7,16 @@
     <property name="hibernate.connection.url">jdbc:mysql://desarrollo.is.escuelaing.edu.co:3306/coswg2</property>
     <property name="hibernate.connection.username">coswg2</property>
     <property name="hibernate.connection.password">coswg20215</property>
-    <mapping resource="com/tservice/Model/Eventos.hbm.xml"/>
-    <mapping resource="com/tservice/Model/Noticias.hbm.xml"/>
-    <mapping resource="com/tservice/Model/Carreras.hbm.xml"/>
-    <mapping resource="com/tservice/Model/Materias.hbm.xml"/>
-    <mapping resource="com/tservice/Model/Edificio.hbm.xml"/>
-    <mapping resource="com/tservice/Model/Grupos.hbm.xml"/>
-    <mapping resource="com/tservice/Model/Mensajes.hbm.xml"/>
-    <mapping resource="com/tservice/Model/Usuarios.hbm.xml"/>
-    <mapping resource="com/tservice/Model/Intereses.hbm.xml"/>
-    <mapping resource="com/tservice/Model/Ubicacion.hbm.xml"/>
-    <mapping resource="com/tservice/Model/Calificacion.hbm.xml"/>
+    <mapping class="com.tservice.Model.Eventos"/>
+    <mapping class="com.tservice.Model.Noticias"/>
+    <mapping class="com.tservice.Model.Carreras"/>
+    <mapping class="com.tservice.Model.Materias"/>
+    <mapping class="com.tservice.Model.Grupos"/>
+    <mapping class="com.tservice.Model.Mensajes"/>
+    <mapping class="com.tservice.Model.Usuarios"/>
+    <mapping class="com.tservice.Model.Intereses"/>
+    <mapping class="com.tservice.Model.Ubicacion"/>
+    <mapping class="com.tservice.Model.Calificacion"/>
+    
   </session-factory>
 </hibernate-configuration>

@@ -84,7 +84,7 @@ public class Noticias  implements java.io.Serializable {
         this.titulo = titulo;
     }
 
-@OneToMany(fetch=FetchType.EAGER, mappedBy="noticias")
+@OneToMany(fetch=FetchType.LAZY, mappedBy="noticias")
     public Set<Calificacion> getCalificacions() {
         return this.calificacions;
     }
@@ -93,7 +93,7 @@ public class Noticias  implements java.io.Serializable {
         this.calificacions = calificacions;
     }
 
-@OneToMany(fetch=FetchType.EAGER, mappedBy="noticias")
+@OneToMany(fetch=FetchType.LAZY, mappedBy="noticias")
     public Set<Intereses> getIntereseses() {
         return this.intereseses;
     }

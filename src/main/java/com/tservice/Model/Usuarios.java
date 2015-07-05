@@ -165,7 +165,7 @@ public class Usuarios  implements java.io.Serializable {
         this.carrerases = carrerases;
     }
 
-@ManyToMany(fetch=FetchType.LAZY)
+@ManyToMany(fetch=FetchType.EAGER)
     @JoinTable(name="usuarios_has_materias", joinColumns = { 
         @JoinColumn(name="usuarios_identificacion", nullable=false, updatable=false) }, inverseJoinColumns = { 
         @JoinColumn(name="materias_id", nullable=false, updatable=false) })
