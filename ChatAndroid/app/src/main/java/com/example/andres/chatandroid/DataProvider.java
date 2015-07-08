@@ -110,7 +110,7 @@ public class DataProvider extends ContentProvider {
                 case MESSAGES_ALLROWS:
                     id = db.insertOrThrow(TABLE_MESSAGES, null, values);
                     if (values.get(COL_RECEIVER_EMAIL) == null) {
-                        db.execSQL("update profile set count = count+1 where _id = ?", new Object[]{values.get(COL_IDENTIFICACION)});
+                        db.execSQL("update profile set count = count+1 where carne = ?", new Object[]{values.get(COL_SENDER_EMAIL)});
                         getContext().getContentResolver().notifyChange(CONTENT_URI_PROFILE, null);
                     }
                     break;

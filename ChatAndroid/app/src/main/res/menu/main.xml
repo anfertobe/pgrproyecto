@@ -5,12 +5,25 @@
     <item
         android:id="@+id/action_add"
         android:icon="@android:drawable/ic_menu_add"
-        android:title="Add"
+        android:title="agregar amigo"
         yourapp:showAsAction="always"/>
+
+    <item
+        android:id="@+id/action_group"
+        android:icon="@android:drawable/ic_input_add"
+        android:title="crear grupo"
+        yourapp:showAsAction="always"/>
+
     <item
         android:id="@+id/action_settings"
-        android:icon="@drawable/ic_launcher"
-        android:showAsAction="ifRoom"
+        android:icon="@android:drawable/ic_lock_idle_lock"
+        android:showAsAction="never"
         android:title="Settings"/>
 
+
+    <item
+        android:id="@+id/cerrar"
+        android:icon="@drawable/ic_launcher"
+        android:showAsAction="never"
+        android:title="cerrar sesion"/>
 </menu>

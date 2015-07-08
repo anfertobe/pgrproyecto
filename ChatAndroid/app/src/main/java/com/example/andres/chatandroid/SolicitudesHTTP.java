@@ -2,13 +2,22 @@ package com.example.andres.chatandroid;
 
 import android.util.Log;
 
+import com.google.android.gms.gcm.GoogleCloudMessaging;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicHeader;
+import org.apache.http.protocol.HTTP;
+import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -16,34 +25,30 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Objects;
 
 /**
  * Created by andres on 04/07/2015.
  */
 public class SolicitudesHTTP {
 
-    public JSONObject Post(String carne){
-        StringBuilder builder = new StringBuilder();
+    public JSONObject Post(String carne) {
+
         JSONObject json = new JSONObject();
         HttpClient client = new DefaultHttpClient();
-        HttpPost httpPost = new HttpPost(Common.getServerUrl()+"/adicion/"+carne.trim());
+        HttpPost httpPost = new HttpPost(Common.getServerUrl() + "/adicion/" + carne.trim());
         try {
-            Log.i("url",Common.getServerUrl()+"/adicion/"+carne);
+            Log.i("url", Common.getServerUrl() + "/adicion/" + carne);
             HttpResponse response = client.execute(httpPost);
-            Log.i("Execute","Post");
+            Log.i("Execute", "Post");
             StatusLine statusLine = response.getStatusLine();
             HttpEntity entity = response.getEntity();
-            Log.i("Respuesta",entity.toString());
-            InputStream content = entity.getContent();
-            BufferedReader reader =
-                    new BufferedReader(new InputStreamReader(content));
-            String line;
-            while ((line = reader.readLine()) != null) {
-                builder.append(line);
-            }
-            Log.i("builder",builder.toString());
-            json = new JSONObject(builder.toString());
-            Log.i("Json",json.toString());
+            Log.i("Respuesta", entity.toString());
+            String builder = lecturaBuilder(entity.getContent());
+            json = new JSONObject(builder);
+            Log.i("Json", json.toString());
 
         } catch (ClientProtocolException e) {
             e.printStackTrace();
@@ -52,14 +57,253 @@ public class SolicitudesHTTP {
         } catch (IOException e) {
             e.printStackTrace();
             Log.e(MainActivity.class.toString(),
-                    "Post request failed"+e.getLocalizedMessage());
-        }catch (JSONException e) {
+                    "Post request failed" + e.getLocalizedMessage());
+        } catch (JSONException e) {
             e.printStackTrace();
             Log.e(MainActivity.class.toString(),
-                    "Post request failed"+e.getLocalizedMessage());
+                    "Post request failed" + e.getLocalizedMessage());
         }
 
         return json;
+    }
+
+    public JSONArray Get() {
+
+        HttpClient httpClient = new DefaultHttpClient();
+        HttpGet get = new HttpGet(Common.getServerUrl() + "/carreras");
+        JSONArray json = null;
+        try {
+
+            Log.i("url", Common.getServerUrl() + "/carreras");
+            HttpResponse response = httpClient.execute(get);
+            Log.i("Execute", "Get");
+            StatusLine statusLine = response.getStatusLine();
+            HttpEntity entity = response.getEntity();
+            Log.i("Respuesta", entity.toString());
+            String builder = lecturaBuilder(entity.getContent());
+
+            if(!(builder==null) || !builder.isEmpty())
+            json = new JSONArray(builder);
+
+            Log.i("Json", json.toString());
+            System.out.println("content");
+
+        } catch (ClientProtocolException e) {
+             e.printStackTrace();
+            Log.e(MainActivity.class.toString(),
+                    "Get request failedc" + e.getLocalizedMessage());
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.e(MainActivity.class.toString(),
+                    "Get request failedio" + e.getLocalizedMessage());
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.e(MainActivity.class.toString(),
+                    "Get request failedjson" + e.getLocalizedMessage());
+        }
+        return json;
+    }
+
+    private String lecturaBuilder(InputStream content) throws IOException {
+        StringBuilder builder = new StringBuilder();
+        BufferedReader reader =
+                new BufferedReader(new InputStreamReader(content));
+        System.out.println("reader");
+        String line;
+        while ((line = reader.readLine()) != null) {
+            builder.append(line);
+            System.out.println(line);
+        }
+        Log.i("builder", builder.toString());
+        return builder.toString();
+    }
+
+    public boolean registroServidor(String identificacion, String carne, String nombre, String email, String password, String carrera, String semestre) {
+
+        boolean reg = false;
+
+        HttpClient httpClient = new DefaultHttpClient();
+        HttpPut put = new HttpPut(Constantes.SERVER_URL + "/registro/"+ carrera);
+        Log.i("url", Constantes.SERVER_URL + "/registro/" + carrera);
+
+        try {
+
+            JSONObject usuario = new JSONObject();
+            usuario.put("identificacion",identificacion);
+            usuario.put("carne",carne);
+            usuario.put("nombre",nombre);
+            usuario.put("identificaciongoogle",JSONObject.NULL);
+            usuario.put("email", email);
+            usuario.put("password", password);
+            usuario.put("semestre", Integer.getInteger(semestre));
+
+            StringEntity entity = new StringEntity(usuario.toString());
+
+            entity.setContentType("application/json;charset=UTF-8");
+            entity.setContentEncoding(new
+                    BasicHeader(HTTP.CONTENT_TYPE, "application/json;charset=UTF-8"));
+
+            put.setEntity(entity);
+
+            HttpResponse resp = httpClient.execute(put);
+            System.out.println("execute");
+            System.out.println(resp);
+
+            String respStr = EntityUtils.toString(resp.getEntity());
+            System.out.println(respStr);
+
+            if(respStr.equals("true")){
+                Log.d(Constantes.TAG, "Registrado en mi servidor.");
+                reg = true;
+                System.out.println("RegistroSatisfactorio");
+            }
+        } catch (Exception e) {
+            Log.d(Constantes.TAG, "Error registro en mi servidor: " + e.getCause() + " || " + e.getMessage() + "||" + e.getStackTrace());
+        }
+
+        return reg;
+    }
+
+    public boolean inicioSesion(String usuario, String password, String regId){
+        boolean respuesta = false;
+
+        HttpClient httpClient = new DefaultHttpClient();
+
+        HttpGet post =
+                new HttpGet(Constantes.SERVER_URL + "/login/" + usuario.trim() + "/" + password.trim() + "/" + regId.trim());
+
+        Log.i("URL",Constantes.SERVER_URL + "/login/" + usuario + "/" + password + "/" + regId);
+
+        post.setHeader("content-type", "application/json");
+
+        try {
+
+            HttpResponse resp = httpClient.execute(post);
+            String respStr = EntityUtils.toString(resp.getEntity());
+            Log.i("Respuesta", respStr);
+                if(respStr.equals("true"))
+                    respuesta = true;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return respuesta;
+    }
+
+    public String send(String remitente, String destinatario, String contenido){
+        String reg = "Message could not be sent";
+
+        HttpClient httpClient = new DefaultHttpClient();
+        HttpPut put = new HttpPut(Constantes.SERVER_URL + "/mensaje");
+        Log.i("url", Constantes.SERVER_URL + "/mensaje");
+
+        try {
+            Log.i("datos", remitente + "/" + destinatario);
+            JSONObject mensaje = new JSONObject();
+            //usuario.put("id",0);
+            mensaje.put("grupos",JSONObject.NULL);
+            mensaje.put("usuariosByUsuariosorigen",JsonUsuario(remitente));
+            mensaje.put("usuariosByUsuariodestino", JsonUsuario(destinatario));
+            mensaje.put("fecha", new Date());
+            mensaje.put("visto", JSONObject.NULL);
+            mensaje.put("contenido", contenido);
+
+            StringEntity entity = new StringEntity(mensaje.toString());
+
+            entity.setContentType("application/json;charset=UTF-8");
+            entity.setContentEncoding(new
+                    BasicHeader(HTTP.CONTENT_TYPE, "application/json;charset=UTF-8"));
+
+            put.setEntity(entity);
+
+            HttpResponse resp = httpClient.execute(put);
+            System.out.println("execute");
+            System.out.println(resp);
+
+            String respStr = EntityUtils.toString(resp.getEntity());
+            System.out.println(respStr);
+
+            if(respStr.equals("true")){
+                Log.d(Constantes.TAG, "Mensaje enviado");
+                reg = "";
+            }
+        } catch (ClientProtocolException e) {
+            e.printStackTrace();
+            Log.e(MainActivity.class.toString(),
+                    "Get request failedc" + e.getLocalizedMessage());
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.e(MainActivity.class.toString(),
+                    "Get request failedio" + e.getLocalizedMessage());
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.e(MainActivity.class.toString(),
+                    "Get request failedjson" + e.getLocalizedMessage());
+        }
+
+        return reg;
+    }
+
+    public JSONObject JsonUsuario(String usuario) throws JSONException {
+        JSONObject usuarioDestino = new JSONObject();
+        usuarioDestino.put("carne",usuario);
+        usuarioDestino.put("nombre",JSONObject.NULL);
+        usuarioDestino.put("identificaciongoogle",JSONObject.NULL);
+        usuarioDestino.put("email",JSONObject.NULL);
+        usuarioDestino.put("password",JSONObject.NULL);
+        usuarioDestino.put("perfil",JSONObject.NULL);
+        usuarioDestino.put("carrerases",JSONObject.NULL);
+        usuarioDestino.put("gruposes_1", JSONObject.NULL);
+
+        return usuarioDestino;
+
+    }
+    public boolean registroGrupo(String Administrador, String nombre, ArrayList<String> usuarios){
+        boolean respuesta = false;
+
+        HttpClient httpClient = new DefaultHttpClient();
+
+        HttpPost post =
+                new HttpPost(Constantes.SERVER_URL + "/adicion/grupo");
+
+        Log.i("URL", Constantes.SERVER_URL + "/adicion/grupo");
+
+        post.setHeader("content-type", "application/json");
+        try {
+
+            JSONObject grupo = new JSONObject();
+
+            grupo.put("id", 0);
+            grupo.put("usuarios", JsonUsuario(Administrador));
+            grupo.put("nombre", nombre);
+            grupo.put("fechacreacion", new Date());
+            grupo.put("estado", JSONObject.NULL);
+            grupo.put("tipoprivado",JSONObject.NULL);
+            grupo.put("usuarioses",usuariosGrupo(usuarios));
+            grupo.put("mensajeses",JSONObject.NULL);
+
+            HttpResponse resp = httpClient.execute(post);
+            String respStr = EntityUtils.toString(resp.getEntity());
+            Log.i("Respuesta", respStr);
+            if(respStr.equals("true"))
+                respuesta = true;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return respuesta;
+    }
+
+
+    private JSONArray usuariosGrupo(ArrayList<String> usuarios) throws JSONException {
+        JSONArray usuarioses = new JSONArray();
+
+        for(String usuario : usuarios){
+            usuarioses.put(JsonUsuario(usuario).toString());
+        }
+        return usuarioses;
     }
 
 }

@@ -6,6 +6,7 @@ import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import android.support.v4.content.Loader;
 import android.support.v4.widget.CursorAdapter;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,11 +34,13 @@ public class MainActivity extends ActionBarActivity implements LoaderManager.Loa
     private ActionBar actionBar;
     private ContactCursorAdapter ContactCursorAdapter;
     public static PhotoCache photoCache;
+    private SharedPreferences preferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        preferences = getSharedPreferences(MainActivity.class.getName(), Context.MODE_PRIVATE);
         listView = (ListView) findViewById(R.id.contactslist);
         listView.setOnItemClickListener(this);
         ContactCursorAdapter = new ContactCursorAdapter(this, null);
@@ -47,7 +51,8 @@ public class MainActivity extends ActionBarActivity implements LoaderManager.Loa
         photoCache = new PhotoCache(this);
         actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME, ActionBar.DISPLAY_SHOW_CUSTOM);
         actionBar.setTitle("You are");
-        //actionBar.setSubtitle(Common.getPreferredEmail());
+        Log.i("User",preferences.getString(Constantes.PROPERTY_USER, ""));
+        actionBar.setSubtitle(preferences.getString(Constantes.PROPERTY_USER, ""));
 
 //		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
 //
@@ -82,6 +87,11 @@ public class MainActivity extends ActionBarActivity implements LoaderManager.Loa
                 Intent intent = new Intent(this, SettingsActivity.class);
                 startActivity(intent);
                 return true;
+            case R.id.action_group:
+                Intent intentgroup = new Intent(this, chackListGrupos.class);
+                startActivity(intentgroup);
+                return true;
+
         }
         return super.onOptionsItemSelected(item);
     }
@@ -121,6 +131,8 @@ public class MainActivity extends ActionBarActivity implements LoaderManager.Loa
         ContactCursorAdapter.swapCursor(null);
     }
 
+
+    /*********************************************************************************/
     public class ContactCursorAdapter extends CursorAdapter {
 
         private LayoutInflater mInflater;
@@ -151,8 +163,9 @@ public class MainActivity extends ActionBarActivity implements LoaderManager.Loa
         public void bindView(View view, Context context, Cursor cursor) {
             ViewHolder holder = (ViewHolder) view.getTag();
             holder.text1.setText(cursor.getString(cursor.getColumnIndex(DataProvider.COL_NAME)));
-            holder.textEmail.setText(cursor.getString(cursor.getColumnIndex(DataProvider.COL_IDENTIFICACION)));
+            holder.textEmail.setText(cursor.getString(cursor.getColumnIndex(DataProvider.COL_CARNE)));
             int count = cursor.getInt(cursor.getColumnIndex(DataProvider.COL_COUNT));
+            Log.i("Cant mensajes", Integer.toString(count));
             if (count > 0) {
                 holder.text2.setVisibility(View.VISIBLE);
                 holder.text2.setText(String.format("%d new message%s", count, count == 1 ? "" : "s"));
@@ -170,6 +183,7 @@ public class MainActivity extends ActionBarActivity implements LoaderManager.Loa
         TextView textEmail;
         ImageView avatar;
     }
+    /*******************************************************************************************/
 
     @SuppressLint("InlinedApi")
     private Uri requestPhoto(String email) {

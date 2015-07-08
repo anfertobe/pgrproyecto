@@ -12,7 +12,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class POST2GCM {
 
-	
 	public static void post(String apiKey, Content content){
 		
 		try{
@@ -73,5 +72,6 @@ public class POST2GCM {
 				e.printStackTrace();
 			}
 	    }
+
 }
 

@@ -38,6 +38,7 @@ public class GCMBroadcastReceiver extends WakefulBroadcastReceiver
                 String senderEmail = intent.getStringExtra(DataProvider.COL_SENDER_EMAIL);
                 String receiverEmail = intent.getStringExtra(DataProvider.COL_RECEIVER_EMAIL);
                 ContentValues values = new ContentValues(2);
+                values.put(DataProvider.COL_TYPE,  DataProvider.MessageType.INCOMING.ordinal());
                 values.put(DataProvider.COL_MESSAGE, msg);
                 values.put(DataProvider.COL_SENDER_EMAIL, senderEmail);
                 values.put(DataProvider.COL_RECEIVER_EMAIL, receiverEmail);

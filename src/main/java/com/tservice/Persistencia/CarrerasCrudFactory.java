@@ -6,6 +6,8 @@
 package com.tservice.Persistencia;
 
 import com.tservice.Model.*;
+import java.util.List;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 /**
@@ -14,4 +16,6 @@ import org.springframework.data.repository.CrudRepository;
  */
 public interface CarrerasCrudFactory extends CrudRepository<Carreras, Integer>{
     
+    @Query("select id, nombre from Carreras")
+        public List<Carreras> search();
 }

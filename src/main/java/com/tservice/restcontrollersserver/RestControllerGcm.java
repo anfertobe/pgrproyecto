@@ -7,6 +7,8 @@ import com.tservice.Persistencia.*;
 import com.tservice.exceptions.servergcmExceptions;
 import com.tservice.facade.facade;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -111,36 +113,7 @@ public class RestControllerGcm {
             }
                          
          return new ResponseEntity<>(result, HttpStatus.ACCEPTED);
-     }
-    
-     
-     
-    @RequestMapping(value="/mensaje",method = RequestMethod.POST)
-     public ResponseEntity<?> adicionarAmigo(@RequestBody Mensajes mensaje){
-         
-         boolean result = false;
-         
-         try{
-             result = fachada.envioMensajes(mensaje);
-         }catch(Exception e){
-             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-         }
-         
-         return new ResponseEntity<>(result, HttpStatus.ACCEPTED);
-     }
-    
-    @RequestMapping(value="/adicion/{idAmgo}",method = RequestMethod.POST)
-     public Usuarios adicionarAmigo(@PathVariable("idAmgo") String idAmgo) throws servergcmExceptions{
-            
-         Usuarios usuario = null;
-         
-
-             usuario = fachada.adicionarAmigo(idAmgo);
-         
-         
-         return usuario;
-     }
-
+     } 
      
      @RequestMapping(value="/eventos/{usuario}",method = RequestMethod.GET)
      public List<Eventos> getEventosUsuario(@PathVariable("usuario") String usuario){
@@ -186,31 +159,7 @@ public class RestControllerGcm {
          return new ResponseEntity<>(HttpStatus.ACCEPTED);
      }
 
-          @RequestMapping(value="/registromomentaneo/{usuario}/{regid}",method = RequestMethod.PUT)
-     public ResponseEntity<?> registroMomentane(@PathVariable("usuario") String usuario, @PathVariable("regid") String regid){
 
-         try{
-             fachada.registroMomentaneo(usuario, regid);
-         }catch(Exception e){
-             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-         }
-         
-         return new ResponseEntity<>(HttpStatus.ACCEPTED);
-     }
-     
-     @RequestMapping(value="/registro/{carrera}",method = RequestMethod.PUT)
-     public ResponseEntity<?> registro(@RequestBody Usuarios usuario, @PathVariable("carrera") Integer idCarrera){
-         
-         Carreras carrera = carrecrud.findOne(idCarrera);
-         
-         try{
-             fachada.Registro(usuario, carrera);
-         }catch(Exception e){
-             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-         }
-         
-         return new ResponseEntity<>(HttpStatus.ACCEPTED);
-     }
     
     @RequestMapping(value="/envio/{usuario}/{idgoogle}",method = RequestMethod.POST)        
     public ResponseEntity<?> envioPrueba(@PathVariable("usuario") String usuario, @PathVariable("idgoogle") String idgoogle)  throws ResourceNotFoundException { 
@@ -230,20 +179,7 @@ public class RestControllerGcm {
         
           return Ubicaciones;
     }
-    
-
-    
-            @RequestMapping(value="/carreras",method = RequestMethod.GET)        
-    public List<Carreras> consultarCarreras()  throws ResourceNotFoundException { 
         
-        List<Carreras> edificios = new LinkedList<Carreras>();
-        
-        for(Carreras edif : carrecrud.findAll())
-            edificios.add(edif);
-        
-          return edificios;
-    }
-    
             @RequestMapping(value="/eventos",method = RequestMethod.GET)        
     public List<Eventos> consultarEventos()  throws ResourceNotFoundException { 
         
@@ -303,209 +239,67 @@ public class RestControllerGcm {
     }
     
     
-/*    
-    @Autowired
-    PersistenceFacede persistenci;
+    /****************************************************************************/
     
-    
-    
-    @RequestMapping(value="/Calificacion",method = RequestMethod.GET)        
-    public List<Calificacion> consultarCalificacion()  throws ResourceNotFoundException { 
-          return persistenci.traerCalificaciones();
-    }
-    
-    @RequestMapping(value="/Postulantes",method = RequestMethod.GET)        
-    public List<Postulante> consultarPostulantes()  throws ResourceNotFoundException { 
-          return persistenci.traerPostulantes();
-    }
-    
-    @RequestMapping(value="/Categorias",method = RequestMethod.GET)        
-    public List<Categoria> consultarCategorias() { 
-          return persistenci.traerCategorias();
-    }
-    
-    @RequestMapping(value="/Interes",method = RequestMethod.GET)        
-    public List<Interes> consultarIntereses()  throws ResourceNotFoundException { 
-          return persistenci.traerIntereses();
-    }
-    
-    @RequestMapping(value="/Interes",method = RequestMethod.PUT)        
-    public ResponseEntity<?> agregarInteres(@RequestBody Postulante postulante){ 
+    @RequestMapping(value="/mensaje",method = RequestMethod.PUT)        
+    public ResponseEntity<?> Mensaje(@RequestBody Mensajes mensaje)  throws ResourceNotFoundException { 
+        boolean result = false;
         
         try {
-            //System.out.println("Este es el postulante: "+interes.getIdentificacion().getNombre());
+            result = fachada.envioMensajes(mensaje);
+        } catch (servergcmExceptions ex) {
+            Logger.getLogger(RestControllerGcm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+          return new ResponseEntity<>(result, HttpStatus.ACCEPTED);
+    }
+    
+    
+    @RequestMapping(value="/adicion/{idAmgo}",method = RequestMethod.POST)
+     public Usuarios adicionarAmigo(@PathVariable("idAmgo") String idAmgo) throws servergcmExceptions{
             
-            persistenci.uddPostulante(postulante);
-        } catch (tserviceExceptions ex) {
-                        return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-        return new ResponseEntity<>(HttpStatus.ACCEPTED);
-    }
-    
-    @RequestMapping(value="/Calificacion/{IdOferta}",method = RequestMethod.PUT)        
-    public ResponseEntity<?> agregarCalificacion(@RequestBody Calificacion calificacion ,@PathVariable("IdOferta") int idOferta){ 
-        
-        Oferta oferta = oferCru.findOne(idOferta);
-       
-       if(oferta == null)
-           return new ResponseEntity<>("La oferta No Existe", HttpStatus.INTERNAL_SERVER_ERROR);
-         try {
-            persistenci.addCalificacion(oferta,calificacion);
-        } catch (tserviceExceptions ex) {
-            return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-       return new ResponseEntity<>(HttpStatus.ACCEPTED);
-    }
-    
-    
-   
-    @RequestMapping(value="Categorias/{idCategoria}",method = RequestMethod.GET)
-    public Categoria consultarCategoria(@PathVariable("idCategoria") int idCategoria) throws ResourceNotFoundException {
-        return persistenci.consultarCategoria(idCategoria);
-    }
-    
-    @RequestMapping(value="Postulantes/{idPostulante}",method = RequestMethod.GET)
-    public Postulante consultarPostulante(@PathVariable("idPostulante") int idPosultante) throws ResourceNotFoundException {
-        return persistenci.consultarPostulante(idPosultante);
-    }
-    
-    @RequestMapping(value="/Postulantes",method = RequestMethod.PUT)        
-    public ResponseEntity<?> agregarPostulante(@RequestBody Postulante postulante){ 
-        
-        try {
-            hojadevidacrud.save(postulante.getHojaDeVida());
-            persistenci.addPostulante(postulante);
-        } catch (tserviceExceptions ex) {
-                        hojadevidacrud.delete(postulante.getHojaDeVida());
-                       return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-        return new ResponseEntity<>(HttpStatus.ACCEPTED);
-    }
-    
-       
-    @RequestMapping(value="/Categorias",method = RequestMethod.PUT)        
-    public ResponseEntity<?> agregarCategoria(@RequestBody Categoria categoria){ 
-        
-        try {
-            persistenci.addCategoria(categoria);
-        } catch (tserviceExceptions ex) {
-                     return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-        return new ResponseEntity<>(HttpStatus.ACCEPTED);
-    }
-    
-        @RequestMapping(value="/Publicantes",method = RequestMethod.GET)        
-    public List<Publicante> consultarPublicantes()  throws ResourceNotFoundException { 
-          return persistenci.traerPublicantes();
-    }    
-    
-    @RequestMapping(value="Publicantes/{idPublicante}",method = RequestMethod.GET)
-    public Publicante consultarPublicante(@PathVariable("idPublicante") int idPublicante) throws ResourceNotFoundException {
-        return persistenci.consultarPublicante(idPublicante);
-    }
-    
-    @RequestMapping(value="/Publicantes",method = RequestMethod.PUT)        
-    public ResponseEntity<?> agregarPublicante(@RequestBody Publicante publicante)  throws ResourceNotFoundException{ 
-     
-        try {
-            persistenci.addPublicante(publicante);
-        } catch (tserviceExceptions ex) {
-            return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-       return new ResponseEntity<>(HttpStatus.ACCEPTED);
-    }
-  
-    
-    @RequestMapping(value="/Ofertas",method = RequestMethod.GET)        
-    public List<Oferta> consultarOfertas()  throws ResourceNotFoundException { 
-          return persistenci.traerOfertas();
-    }
-    
-    @RequestMapping(value="Ofertas/{idOferta}",method = RequestMethod.GET)
-    public Oferta consultarOferta(@PathVariable("idOferta") int idOferta) throws ResourceNotFoundException {
-        return persistenci.consultarOferta(idOferta);
-    }
-    
-    @RequestMapping(value="/Ofertas/{id}",method = RequestMethod.PUT)        
-    public ResponseEntity<?> agregarOferta(@RequestBody Oferta oferta, @PathVariable("id") int id){ 
-       Publicante publi = publicru.findOne(id);
-       
-       if(publi == null)
-           return new ResponseEntity<>("El Publicante No Existe", HttpStatus.INTERNAL_SERVER_ERROR);
-       
-        try {
-            persistenci.addOferta(publi,oferta);
-        } catch (tserviceExceptions ex) {
-            return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-       return new ResponseEntity<>(HttpStatus.ACCEPTED);
-    }
-    
-    @RequestMapping(value="/Ofertas/aplicarOferta/{idpostulante}/{idoferta}",method = RequestMethod.PUT)        
-      public ResponseEntity<?> aplicarOferta(@PathVariable("idpostulante") int idpostulante, @PathVariable("idoferta") int idoferta){ 
-     
-          Oferta ofer = oferCru.findOne(idoferta);
-          
-          if(ofer == null)
-              return new ResponseEntity<>("La Oferta no existe",HttpStatus.INTERNAL_SERVER_ERROR);
-          
-          Postulante post = poscru.findOne(idpostulante);
-          
-          if(post == null)
-              return new ResponseEntity<>("El postulante no existe",HttpStatus.INTERNAL_SERVER_ERROR);
-          
-          
-        try {
-            persistenci.aplicarOferta(post,ofer);
-        } catch (tserviceExceptions ex) {
-            return new ResponseEntity<>(ex.getMessage(), HttpStatus.EXPECTATION_FAILED);
-        }
-       
-        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+         Usuarios usuario = null;
+         
 
-    }
-  
-    @RequestMapping(value="/Ofertas/agregarEmpleadoOferta/{idpostulante}/{idoferta}",method = RequestMethod.PUT)        
-      public ResponseEntity<?> agregarEmpleadoOferta(@PathVariable("idpostulante") int idpostulante, @PathVariable("idoferta") int idoferta){ 
+             usuario = fachada.adicionarAmigo(idAmgo);
+         
+         
+         return usuario;
+     }
+
+    
+     @RequestMapping(value="/login/{usuario}/{password}/{regId}",method = RequestMethod.GET)
+     public ResponseEntity<?> login(@PathVariable("usuario") String usuario, @PathVariable("password") String password, @PathVariable("regId") String regId){
+         boolean respuesta = false;
+         
+         try{
+             respuesta = fachada.login(usuario, password, regId);
+         }catch(Exception e){
+             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+         }
+         
+         return new ResponseEntity<>(respuesta,HttpStatus.ACCEPTED);
+     }
      
-        Oferta ofer = oferCru.findOne(idoferta);
-          
-        if(ofer == null)
-            return new ResponseEntity<>("La Oferta no existe",HttpStatus.INTERNAL_SERVER_ERROR);
-          
-        Postulante post = poscru.findOne(idpostulante);
-          
-        if(post == null)
-            return new ResponseEntity<>("El postulante no existe",HttpStatus.INTERNAL_SERVER_ERROR);
-          
-        try {
-            persistenci.addEmpleadoOferta(post,ofer);
-        }catch (tserviceExceptions ex) {
-            return new ResponseEntity<>(ex.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-        
-        return new ResponseEntity<>("Ok", HttpStatus.ACCEPTED);
-       }
-      
-        @RequestMapping(value="/licencias",method = RequestMethod.GET)
-        public List<Licencias> consultarLicencias() throws ResourceNotFoundException {
-            return persistenci.traerLicencias();
-        }
-        
-        @RequestMapping(value="/pagarlicencias/{idLicencia}/usuario/{usuario}",method = RequestMethod.POST)
-        public ResponseEntity<?> pagarLicencia(@PathVariable("usuario") int usuario, @PathVariable("idLicencia") String idLicencia, @RequestBody InformacionPago pago) {
-            Publicante publi = publicru.findOne(usuario);
-            
-            persistenci.login(publi);
-            
-            Licencias licencia = licenciaCrud.findOne(Integer.parseInt(idLicencia));
-            try{
-                persistenci.realizarPago(licencia, pago);
-            }catch(Exception e){
-                return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-            
-            return new ResponseEntity<>("Ok", HttpStatus.ACCEPTED); 
-        }
-    */
+     @RequestMapping(value="/registro/{carrera}",method = RequestMethod.PUT)
+     public ResponseEntity<?> registro(@RequestBody Usuarios usuario, @PathVariable("carrera") Integer idCarrera){
+         
+         Carreras carrera = carrecrud.findOne(idCarrera);
+         
+         boolean respuesta = false;
+         
+         try{
+             respuesta = fachada.Registro(usuario, carrera);
+         }catch(Exception e){
+             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+         }
+         
+         return new ResponseEntity<>(respuesta, HttpStatus.ACCEPTED);
+     }
+
+            @RequestMapping(value="/carreras",method = RequestMethod.GET)        
+    public List<Carreras> consultarCarreras()  throws ResourceNotFoundException { 
+
+          return carrecrud.search();
+    }
 }

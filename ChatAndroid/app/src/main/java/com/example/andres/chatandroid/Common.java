@@ -1,6 +1,7 @@
 package com.example.andres.chatandroid;
 
 import android.app.Application;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
@@ -21,15 +22,6 @@ public class Common extends Application {
     public void onCreate() {
         super.onCreate();
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
-    }
-
-    public static String getPreferredEmail() {
-        return prefs.getString("chat_email_id", email_arr.length==0 ? "" : email_arr[0]);
-    }
-
-    public static String getDisplayName() {
-        String email = getPreferredEmail();
-        return prefs.getString("display_name", email.substring(0, email.indexOf('@')));
     }
 
     public static boolean isNotify() {

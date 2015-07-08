@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.database.SQLException;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -27,6 +28,8 @@ public class AddContactDialog extends DialogFragment {
     private EditText et;
     private ProgressDialog progreso;
     private Context context;
+    private SharedPreferences preferences;
+    private String usuarioRaiz;
 
     public static AddContactDialog newInstance() {
         AddContactDialog fragment = new AddContactDialog();
@@ -37,6 +40,10 @@ public class AddContactDialog extends DialogFragment {
         this.context = context;
     }
 
+    public void setUsuarioRaiz(String usuario){
+        usuarioRaiz = usuario;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +51,9 @@ public class AddContactDialog extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+
+
+
         et = new EditText(getActivity());
         et.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
         et.setHint("#carne");
@@ -61,17 +71,22 @@ public class AddContactDialog extends DialogFragment {
                     @Override
                     public void onClick(View v) {
                         String carne = et.getText().toString();
-                        try {
-                            progreso = new ProgressDialog(getActivity());
-                            progreso.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                            progreso.setMessage("Un momento por favor...");
-                            progreso.setCancelable(true);
-                            progreso.setMax(100);
-                            AdicionAmigo adicion = new AdicionAmigo(context);
-                            adicion.execute(carne);
+                        if (!carne.equals(usuarioRaiz)) {
+                            try {
+                                progreso = new ProgressDialog(getActivity());
+                                progreso.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                                progreso.setMessage("Un momento por favor...");
+                                progreso.setCancelable(true);
+                                progreso.setMax(100);
+                                AdicionAmigo adicion = new AdicionAmigo(context);
+                                adicion.execute(carne);
 
-                        } catch (SQLException sqle) {}
-                        //alertDialog.dismiss();
+                            } catch (SQLException sqle) {
+                            }
+                            //alertDialog.dismiss();
+                        } else {
+                            Toast.makeText(getActivity(), "no es posible adicionarce usted mismo como contacto", Toast.LENGTH_SHORT);
+                        }
                     }
                 });
             }

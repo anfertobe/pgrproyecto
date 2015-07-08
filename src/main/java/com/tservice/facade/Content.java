@@ -9,7 +9,6 @@ import java.util.Map;
 public class Content implements Serializable {
 
 	
-	
 	private List<String> registration_ids;
 	private Map<String,String> data;
 	
@@ -20,12 +19,12 @@ public class Content implements Serializable {
 		registration_ids.add(regId);
 	}
 	
-	public void createData(String title, String message){
+	public void createData(String remitente, String message){
 		if(data == null)
 			data = new HashMap<String,String>();
 	
-		data.put("title", title);
-		data.put("message", message);
+		data.put("remitente", remitente);
+                data.put("msg", message);
 	}
 	
 	

@@ -12,12 +12,15 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import java.util.ArrayList;
 
 /**
  * Created by andres on 03/07/2015.
@@ -29,15 +32,19 @@ public class ChatActivity extends ActionBarActivity implements MessagesFragment.
     private Button sendBtn;
     private String profileId;
     private String profileName;
-    private String profileEmail;
-    //private GcmUtil gcmUtil;
+    private String profileCarne;
+    private String user;
+    private SolicitudesHTTP solicitud;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.chat_activity);
 
+        user = getSharedPreferences(Constantes.sharePreference, Context.MODE_PRIVATE).getString(Constantes.PROPERTY_USER, "user");
+        Log.i("user", user);
         profileId = getIntent().getStringExtra(Common.PROFILE_ID);
+        Log.i("id",profileId);
         msgEdit = (EditText) findViewById(R.id.msg_edit);
         sendBtn = (Button) findViewById(R.id.send_btn);
         sendBtn.setOnClickListener(this);
@@ -45,16 +52,17 @@ public class ChatActivity extends ActionBarActivity implements MessagesFragment.
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
 
+        solicitud = new SolicitudesHTTP();
+
         Cursor c = getContentResolver().query(Uri.withAppendedPath(DataProvider.CONTENT_URI_PROFILE, profileId), null, null, null, null);
         if (c.moveToFirst()) {
             profileName = c.getString(c.getColumnIndex(DataProvider.COL_NAME));
-            profileEmail = c.getString(c.getColumnIndex(DataProvider.COL_IDENTIFICACION));
+            profileCarne = c.getString(c.getColumnIndex(DataProvider.COL_CARNE));
             actionBar.setTitle(profileName);
         }
         actionBar.setSubtitle("connecting ...");
 
         registerReceiver(registrationStatusReceiver, new IntentFilter(Common.ACTION_REGISTER));
-       // gcmUtil = new GcmUtil(getApplicationContext());
     }
 
     @Override
@@ -102,7 +110,7 @@ public class ChatActivity extends ActionBarActivity implements MessagesFragment.
 
     @Override
     public String getProfileEmail() {
-        return profileEmail;
+        return profileCarne;
     }
 
     private void send(final String txt) {
@@ -110,17 +118,14 @@ public class ChatActivity extends ActionBarActivity implements MessagesFragment.
             @Override
             protected String doInBackground(Void... params) {
                 String msg = "";
-                //try {
-                    //ServerUtilities.send(txt, profileEmail);
+
+                    solicitud.send(user, profileCarne, txt);
                     ContentValues values = new ContentValues(2);
                     values.put(DataProvider.COL_MESSAGE, txt);
-                    values.put(DataProvider.COL_RECEIVER_EMAIL, profileEmail);
-                    values.put(DataProvider.COL_SENDER_EMAIL, Common.getPreferredEmail());
+                    values.put(DataProvider.COL_RECEIVER_EMAIL, profileCarne);
+                    values.put(DataProvider.COL_SENDER_EMAIL,user);
                     getContentResolver().insert(DataProvider.CONTENT_URI_MESSAGES, values);
 
-                //} catch (IOException ex) {
-                //    msg = "Message could not be sent";
-                //}
                 return msg;
             }
 

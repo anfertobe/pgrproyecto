@@ -4,4 +4,18 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="chat">Chat</string>
+    <string name="title_activity_login">login</string>
+    <string name="title_activity_registro">Registro</string>
+    <string name="title_activity_adicionar_grupo">AdicionarGrupo</string>
+    <string name="title_activity_content_layout">content_layout</string>
+    <string name="title_activity_drawer">drawer</string>
+
+
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+    <string name="openDrawer">Menu abierto</string>
+    <string name="closeDrawer">Menu cerrado</string>
+    <string name="title_activity_pruebadrawer">pruebadrawer</string>
+    <string name="title_activity_grupo">grupo</string>
+    <string name="title_activity_chack_list_grupos">chackListGrupos</string>
 </resources>
