@@ -51,14 +51,18 @@ public class facade {
     "inner join calificacion cal on cal.usuarios_identificacion=u.identificacion and cal.calificacion = 1 \n" +
     "and cal.eventos_id is not null\n and u.identificacion=:valor " +
     "inner join intereses inter on cal.eventos_id = inter.eventos_id \n" +
-    "inner join intereses interBus on  inter.nombre = interBus.nombre and interBus.eventos_id is not null \n";
+    "inner join intereses interBus on  inter.nombre = interBus.nombre and interBus.eventos_id is not null and interBus.eventos_id <> cal.eventos_id  \n";
 
+    static String sEventosCalificados="select cal.eventos_id from calificacion cal where cal.usuarios_identificacion=:valor and cal.tipo='Evento'  \n " ;
+    
+        
     static String sNoticiasPreferencia="select interBus.noticias_id from usuarios u \n" +
     "inner join calificacion cal on cal.usuarios_identificacion=u.identificacion and cal.calificacion = 1 \n" +
     "and cal.noticias_id is not null\n and u.identificacion=:valor " +
     "inner join intereses inter on cal.noticias_id = inter.noticias_id \n" +
-    "inner join intereses interBus on  inter.nombre = interBus.nombre and interBus.noticias_id is not null";
+    "inner join intereses interBus on  inter.nombre = interBus.nombre and interBus.noticias_id is not null interBus.eventos_id <> cal.noticias_id";
     
+    static String sNoticiasCalificadas="select cal.noticias_id from calificacion cal where cal.usuarios_identificacion=:valor and cal.tipo='Noticia' \n" ;
     
     @Autowired
     UsuariosCrudFactory usuCrud;
@@ -128,13 +132,45 @@ public class facade {
         return true;
     }
     
-    public Boolean agregarCalificacion(Calificacion calificacion) throws servergcmExceptions {
-        try{
-            calificacionCrud.save(calificacion);
-        }catch(Exception e){
-            return false;
+    public Boolean agregarCalificacion(String usuario , String tipo , String idtipo ,Calificacion calificacion) throws servergcmExceptions {
+        Usuarios usu=usuCrud.findOne(usuario);
+        
+        calificacion.setId(Integer.parseInt(String.valueOf(calificacionCrud.count()+1)));
+        
+        if(usuario==null){
+            throw new servergcmExceptions("El usuario identificado con carne N° "+ usuario + " ya se encuentra registrado");
         }
-    
+        
+        calificacion.setUsuarios(usu);
+        
+        if(tipo.trim().toUpperCase().equals("EVENTOS")){
+            Eventos evento=eventosCrud.findOne(Integer.parseInt(idtipo));
+            if(evento==null){
+                    throw new servergcmExceptions("El evento  N° "+ idtipo + " ya se encuentra registrado");
+            }
+            calificacion.setEventos(evento);
+             Noticias noticia=noticiasCrud.findOne(2);
+            if(noticia==null){
+                    throw new servergcmExceptions("La noticia  N° "+ idtipo + " ya se encuentra registrado");
+            }
+            calificacion.setNoticias(noticia);
+        }else{
+            Noticias noticia=noticiasCrud.findOne(Integer.parseInt(idtipo));
+            if(noticia==null){
+                    throw new servergcmExceptions("La noticia  N° "+ idtipo + " ya se encuentra registrado");
+            }
+            calificacion.setNoticias(noticia);
+            Eventos evento=eventosCrud.findOne(2);
+            if(evento==null){
+                    throw new servergcmExceptions("El evento  N° "+ idtipo + " ya se encuentra registrado");
+            }
+            calificacion.setEventos(evento);
+        
+        }
+        
+        
+        calificacionCrud.save(calificacion);
+        
         return true;
     }
     
@@ -268,6 +304,9 @@ public class facade {
         
         //Trae primero eventos segun preferencia
         List<String> res=new ArrayList<String>();
+        List<String> resCal=new ArrayList<String>();
+        List<String> remove=new ArrayList<String>();
+        
         try {
             res = Connect.runQuery(sEventosPreferencia.replace(":valor",usuario.getIdentificacion()));
         } catch (ClassNotFoundException ex) {
@@ -288,6 +327,44 @@ public class facade {
             } catch (SQLException ex) {
                 Logger.getLogger(facade.class.getName()).log(Level.SEVERE, null, ex);
             }
+            
+              try {
+               resCal = Connect.runQuery(sEventosCalificados.replace(":valor",usuario.getIdentificacion()));
+           } catch (ClassNotFoundException ex) {
+               Logger.getLogger(facade.class.getName()).log(Level.SEVERE, null, ex);
+           } catch (SQLException ex) {
+               Logger.getLogger(facade.class.getName()).log(Level.SEVERE, null, ex);
+           }
+        
+            for(String noticia:res){
+                if(resCal.contains(noticia)){
+                    remove.add(noticia);
+                }
+            }
+            for(String rem:remove){
+                res.remove(rem);
+            }
+        
+        }else{
+        
+            try {
+               resCal = Connect.runQuery(sEventosCalificados.replace(":valor",usuario.getIdentificacion()));
+           } catch (ClassNotFoundException ex) {
+               Logger.getLogger(facade.class.getName()).log(Level.SEVERE, null, ex);
+           } catch (SQLException ex) {
+               Logger.getLogger(facade.class.getName()).log(Level.SEVERE, null, ex);
+           }
+        
+            for(String noticia:res){
+                if(resCal.contains(noticia)){
+                    remove.add(noticia);
+                }
+            }
+            for(String rem:remove){
+                res.remove(rem);
+            }
+        
+        
         }
          
         for(String evento:res){
@@ -311,6 +388,8 @@ public class facade {
         
         //Trae primero noticias segun preferencia
         List<String> res=new ArrayList<String>();
+        List<String> resCal=new ArrayList<String>();
+        List<String> remove=new ArrayList<String>();
         
          try {
             res = Connect.runQuery(sNoticiasPreferencia.replace(":valor",usuario.getIdentificacion()));
@@ -323,14 +402,53 @@ public class facade {
         
         //El usuario no tiene preferencias traer default
         if (res.isEmpty()){
+            
+                      
          try {
+                         
             res = Connect.runQuery(sNoticiasDefault.replace(":valor",usuario.getIdentificacion()));
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(facade.class.getName()).log(Level.SEVERE, null, ex);
             } catch (SQLException ex) {
                 Logger.getLogger(facade.class.getName()).log(Level.SEVERE, null, ex);
             }
-       }
+         
+          try {
+               resCal = Connect.runQuery(sNoticiasCalificadas.replace(":valor",usuario.getIdentificacion()));
+           } catch (ClassNotFoundException ex) {
+               Logger.getLogger(facade.class.getName()).log(Level.SEVERE, null, ex);
+           } catch (SQLException ex) {
+               Logger.getLogger(facade.class.getName()).log(Level.SEVERE, null, ex);
+           }
+        
+            for(String noticia:res){
+                if(resCal.contains(noticia)){
+                    remove.add(noticia);
+                }
+            }
+            for(String rem:remove){
+                res.remove(rem);
+            }
+        
+       }else{
+            try {
+               resCal = Connect.runQuery(sNoticiasCalificadas.replace(":valor",usuario.getIdentificacion()));
+           } catch (ClassNotFoundException ex) {
+               Logger.getLogger(facade.class.getName()).log(Level.SEVERE, null, ex);
+           } catch (SQLException ex) {
+               Logger.getLogger(facade.class.getName()).log(Level.SEVERE, null, ex);
+           }
+        
+            for(String noticia:res){
+                if(resCal.contains(noticia)){
+                    remove.add(noticia);
+                }
+            }
+            for(String rem:remove){
+                res.remove(rem);
+            }
+        
+        }
          
         for(String noticia:res){
             Noticias not=noticiasCrud.findOne(Integer.parseInt(noticia));

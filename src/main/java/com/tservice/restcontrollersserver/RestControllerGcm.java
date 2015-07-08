@@ -57,7 +57,32 @@ public class RestControllerGcm {
          return new ResponseEntity<>(result, HttpStatus.ACCEPTED);
      }
     
+    @RequestMapping(value="/calificacion/{usuario}/{tipo}/{idTipo}",method = RequestMethod.PUT)
+     public ResponseEntity<?> adicionarCalificacion(@RequestBody Calificacion calificacion,@PathVariable("usuario") String usuario,@PathVariable("tipo") String tipo,@PathVariable("idTipo") String idTipo){
+         boolean result = false;
+             
+             try{
+                fachada.agregarCalificacion(usuario,tipo,idTipo,calificacion);
+             }catch(Exception e){
+                 return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+            }
+                         
+         return new ResponseEntity<>(HttpStatus.ACCEPTED);
+     }
+    
      
+     
+    @RequestMapping(value="/calificaciones",method = RequestMethod.GET)
+     public List<Calificacion> getCalificaciones(){
+             
+        List<Calificacion> edificios = new LinkedList<Calificacion>();
+        
+        for(Calificacion edif : calificacionCrud.findAll())
+            edificios.add(edif);
+        
+          return edificios;
+     }
+    
      
      
     @RequestMapping(value="/interes",method = RequestMethod.PUT)
