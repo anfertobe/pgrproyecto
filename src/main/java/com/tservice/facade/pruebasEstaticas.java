@@ -31,7 +31,6 @@ public class pruebasEstaticas {
             pruebasEstaticas pruebas = new pruebasEstaticas();
             pruebas.pruebaRegistro(l);
             pruebas.pruebaLogin(l);
-            pruebas.pruebaCrearGrupo(l);
             pruebas.pruebaAdicionarAmigo(l);
             
     }
@@ -52,10 +51,6 @@ public class pruebasEstaticas {
         l.login("2087458", "2087458");
     }
     
-    public void pruebaCrearGrupo(facade l) throws servergcmExceptions{
-        Usuarios usu = new Usuarios("2087458");
-        l.CrearGrupo("GrupoPrueba", usu);
-    }
     
     public void pruebaAdicionarAmigo(facade l) throws servergcmExceptions{
         Grupos grupo = new Grupos();

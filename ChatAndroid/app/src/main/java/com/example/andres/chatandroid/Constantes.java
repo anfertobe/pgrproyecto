@@ -11,6 +11,7 @@ public class Constantes {
     public static final String PROPERTY_APP_VERSION = "appVersion";
     public static final String PROPERTY_EXPIRATION_TIME = "onServerExpirationTimeMs";
     public static final String PROPERTY_USER = "user";
+    public static final String PROPERTY_NAME = "name";
     public static final long EXPIRATION_TIME_MS = 1000 * 3600 * 24 * 7;
     public static final String TAG = "GCMDemo";
     public static final String sharePreference = "preferenciasAndroid";

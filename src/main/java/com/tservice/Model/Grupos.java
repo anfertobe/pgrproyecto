@@ -112,7 +112,7 @@ public class Grupos  implements java.io.Serializable {
         this.tipoprivado = tipoprivado;
     }
 
-@ManyToMany(fetch=FetchType.LAZY)
+@ManyToMany(fetch=FetchType.EAGER)
     @JoinTable(name="usuarios_has_grupos", joinColumns = { 
         @JoinColumn(name="grupos_id", nullable=false, updatable=false) }, inverseJoinColumns = { 
         @JoinColumn(name="usuarios_carne", nullable=false, updatable=false) })

@@ -2,24 +2,20 @@ package com.example.andres.chatandroid;
 
 import android.annotation.TargetApi;
 import android.app.*;
-import android.app.FragmentManager;
-import android.app.SearchManager;
 import android.content.Intent;
+import android.support.v7.app.*;
+import android.app.FragmentManager;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.view.LayoutInflater;
+import android.support.v7.app.ActionBar;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -28,12 +24,12 @@ import com.example.andres.chatandroid.chat.pruebadrawerFragment;
 import java.util.Locale;
 
 
-public class drawer extends  Activity implements AdapterView.OnItemClickListener{
+public class drawer extends  ActionBarActivity implements AdapterView.OnItemClickListener{
 
     private DrawerLayout mDrawer;
     private ListView mDrawerOptions;
     private static final String[] values = {"Drawer 1", "Drawer 2", "Drawer 3"};
-
+    private ActionBarDrawerToggle mDrawerToggle;
     private ScrimInsetsFrameLayout sifl;
 
     /**
@@ -43,6 +39,7 @@ public class drawer extends  Activity implements AdapterView.OnItemClickListener
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_drawer);
         //getActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -52,6 +49,32 @@ public class drawer extends  Activity implements AdapterView.OnItemClickListener
 
         mDrawerOptions.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, values));
         mDrawerOptions.setOnItemClickListener(drawer.this);
+
+        mDrawerToggle = new ActionBarDrawerToggle(
+                drawer.this,                  /* host Activity */
+                mDrawer,         /* DrawerLayout object */
+                R.drawable.ic_drawer,  /* nav drawer image to replace 'Up' caret */
+                R.string.drawer_open,  /* "open drawer" description for accessibility */
+                R.string.drawer_close  /* "close drawer" description for accessibility */
+        ) {
+            public void onDrawerClosed(View view) {
+                getSupportActionBar().setTitle("abierto");
+                getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME, ActionBar.DISPLAY_SHOW_CUSTOM);
+                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+            }
+
+            public void onDrawerOpened(View drawerView) {
+                getSupportActionBar().setTitle("cerrado");
+                getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME, ActionBar.DISPLAY_SHOW_CUSTOM);
+                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+            }
+        };
+
+        mDrawerToggle.setDrawerIndicatorEnabled(true);
+        mDrawer.setDrawerListener(mDrawerToggle);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -79,16 +102,40 @@ public class drawer extends  Activity implements AdapterView.OnItemClickListener
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case android.R.id.home:
-                if (mDrawer.isDrawerOpen(mDrawerOptions)){
-                    mDrawer.closeDrawers();
-                }else{
-                    mDrawer.openDrawer(mDrawerOptions);
-                }
-                return true;
+        switch (item.getItemId()) {
+            case R.id.action_add:
+                AddContactDialog newFragment = AddContactDialog.newInstance();
+                newFragment.setContext(drawer.this);
+                newFragment.show(getSupportFragmentManager(), "AddContactDialog");
+                return super.onOptionsItemSelected(item);
+            case R.id.action_group:
+                Intent intentgroup = new Intent(this, chackListGrupos.class);
+                startActivity(intentgroup);
+                return super.onOptionsItemSelected(item);
+            default:
+                return  super.onOptionsItemSelected(item);
         }
-
-        return super.onOptionsItemSelected(item);
+        // Handle your other action bar items...
     }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        // Sync the toggle state after onRestoreInstanceState has occurred.
+        mDrawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        // Pass any configuration change to the drawer toggls
+        mDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_drawer, menu);
+        return true;
+    }
+
 }

@@ -19,13 +19,30 @@ public class Content implements Serializable {
 		registration_ids.add(regId);
 	}
 	
-	public void createData(String remitente, String message){
+	public void createData(String remitente, String message, String claseMensaje, String idGrupo){
 		if(data == null)
 			data = new HashMap<String,String>();
-	
-		data.put("remitente", remitente);
-                data.put("msg", message);
+                
+                    data.put("tipo", claseMensaje);
+                    data.put("msg", message);
+                
+                if(claseMensaje.equals(ConstantesServerGcm.ClaseMensaje)){
+                    data.put("remitente", remitente);
+                }else if(claseMensaje.equals(ConstantesServerGcm.ClaseGrupo)){
+                    data.put("remitente", idGrupo);
+                    data.put("remitente2", remitente);
+                }                
 	}
+        
+        public void createDataCrearGrupo(String id, String nombre, String claseMensaje){
+            
+            if(data == null)
+			data = new HashMap<String,String>();
+            
+            data.put("tipo", claseMensaje);
+            data.put("id", id);
+            data.put("nombre", nombre);
+        }
 	
 	
 	public List<String> getRegistration_ids() {

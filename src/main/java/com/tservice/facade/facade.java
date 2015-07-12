@@ -75,28 +75,15 @@ public class facade {
     @Autowired
     CalificacionCrudFactory calificacionCrud;
     @Autowired
+    MensajesCrudFactory mensaCrud;
+    @Autowired
     InteresesCrudFactory interesesCrud;
     @Autowired
     App envio;
     @Autowired
     GruposCrudFactory gruposCrud;
     
-    public boolean registroMomentaneo(String Usuario, String RegId) throws servergcmExceptions{
-        
-         if(usuCrud.exists(Usuario)){
-            throw new servergcmExceptions("El usuario identificado con carne N° "+ Usuario + " ya se encuentra registrado");
-        }
-         
-         envio.main(RegId, ConstantesServerGcm.TituloMensaje, ConstantesServerGcm.ContenidoMensaje);
-         
-         Usuarios usuario = new Usuarios();
-         usuario.setIdentificaciongoogle(RegId);
-         usuario.setCarne(Usuario);
-         
-         usuCrud.save(usuario);
-         
-         return true;
-    }
+
     
     public Boolean adicionarNoticia(Noticias noticia) throws servergcmExceptions{
     
@@ -186,11 +173,6 @@ public class facade {
             throw new servergcmExceptions("Contraseña incorrecta, por favor verifique.");
         
         return true;
-    }
-    
-    
-    public void pruebaRapida(String usuario, String CodigoGoogle){
-        envio.main(CodigoGoogle, ConstantesServerGcm.TituloMensaje, ConstantesServerGcm.ContenidoMensaje);
     }
     
 
@@ -364,15 +346,7 @@ public class facade {
                
         return noticias;
     }
-    
-    private Boolean enviarMensajeUsuario(Usuarios usuario, String mensaje){
-        
-        envio.main(usuario.getIdentificaciongoogle(), usuario.getCarne(), mensaje);
-        
-        return true;
-        
-    }
-        
+     
 
     
     
@@ -428,34 +402,44 @@ public class facade {
         return true;
     }
     
-    public int CrearGrupo(String nombre,Usuarios admin) throws servergcmExceptions{
+    public Boolean CrearGrupo(Grupos grupo) throws servergcmExceptions{
         
-        if(!usuCrud.exists(admin.getCarne()))
+        if(!usuCrud.exists(grupo.getUsuarios().getCarne()))
             throw new servergcmExceptions("El usuario no existe en la base de datos por favor registrece y vuelva a intentarlo.");
         
-        Usuarios administrador = usuCrud.findOne(admin.getCarne());
+        grupo.setEstado(ConstantesServerGcm.estadoActivo);
         
+        Usuarios administrador = usuCrud.findOne(grupo.getUsuarios().getCarne());
+        grupo.setUsuarios(administrador);
         
-        
-        Grupos nuevoGrupo = new Grupos();
-        nuevoGrupo.setNombre(nombre);
-        nuevoGrupo.setEstado(ConstantesServerGcm.estadoActivo);
-        nuevoGrupo.setUsuarios(administrador);
-        nuevoGrupo.setFechacreacion(new Date());
         
         if(administrador.getEmail().contains("mail"))
-            nuevoGrupo.setTipoprivado(false);
+            grupo.setTipoprivado(false);
         else
-            nuevoGrupo.setTipoprivado(true);
+            grupo.setTipoprivado(true);
         
-        nuevoGrupo.getUsuarioses().add(admin);
-                
-        admin.getGruposes_1().add(nuevoGrupo);
-        gruposCrud.save(nuevoGrupo);
+        Set<Usuarios> usuariosInfoCompleta = new HashSet<>();
+        ArrayList<String> RegIds = new ArrayList<>();
         
+        for(Usuarios usuario : grupo.getUsuarioses()){
+            if(!usuario.getCarne().equals(null) && usuCrud.exists(usuario.getCarne())){
+                Usuarios usu = usuCrud.findOne(usuario.getCarne());
+                usuariosInfoCompleta.add(usu);
+                RegIds.add(usu.getIdentificaciongoogle());
+            }
+        }
+            
+        grupo.setUsuarioses(usuariosInfoCompleta);
+        grupo.getUsuarioses().add(administrador);
+        grupo.setFechacreacion(new Date());
         
+        grupo = gruposCrud.save(grupo);
         
-        return nuevoGrupo.getId();
+        RegIds.add(administrador.getIdentificaciongoogle());
+        
+        envio.mainCrearGrupo(grupo.getId().toString(), grupo.getNombre(), ConstantesServerGcm.CrearGrupo, RegIds);
+        
+        return true;
     }
     
     public void AdiciaonarUsuariosGrupo(Grupos grupo, Usuarios usuario) throws servergcmExceptions{
@@ -494,30 +478,58 @@ public class facade {
         if(!Objects.isNull(mensaje.getUsuariosByUsuariodestino())){
             
             if(!usuCrud.exists(mensaje.getUsuariosByUsuariodestino().getCarne()))
-                throw new servergcmExceptions("El usuario destin identificado con carne N°"+ mensaje.getUsuariosByUsuariodestino().getCarne() + " no existe.");
+                throw new servergcmExceptions("El usuario destino identificado con carne N°"+ mensaje.getUsuariosByUsuariodestino().getCarne() + " no existe.");
             
             Usuarios destino = usuCrud.findOne(mensaje.getUsuariosByUsuariodestino().getCarne());
             Usuarios remitente = usuCrud.findOne(mensaje.getUsuariosByUsuariosorigen().getCarne());
             mensaje.setUsuariosByUsuariodestino(destino);
             mensaje.setUsuariosByUsuariosorigen(remitente);
             
+            mensaCrud.save(mensaje);
+            
             resp = enviarMensajeUsuario(remitente, destino, mensaje.getContenido());
         }else if(!Objects.isNull(mensaje.getGrupos())){
-            resp = enviarMensajeGrupo(mensaje.getGrupos(), mensaje.getContenido());
+            
+            if(!gruposCrud.exists(mensaje.getGrupos().getId()))
+                throw new servergcmExceptions("Este grupo no esta registrado.");
+            
+            Grupos grupo = gruposCrud.findOne(mensaje.getGrupos().getId());
+            Usuarios usuarioOrigen = usuCrud.findOne(mensaje.getUsuariosByUsuariosorigen().getCarne());
+            
+            mensaje.setGrupos(grupo);
+            mensaje.setUsuariosByUsuariosorigen(usuarioOrigen);
+            
+            mensaCrud.save(mensaje);
+            
+            resp = enviarMensajeGrupo(grupo, mensaje.getContenido(), mensaje.getUsuariosByUsuariosorigen());
         }else
             throw new servergcmExceptions("El mensaje debe contener un destinatario.");
+        
         return resp;
     }
     
     private Boolean enviarMensajeUsuario(Usuarios remitente, Usuarios destino, String mensaje){
         
-        envio.main(destino.getIdentificaciongoogle(), destino.getCarne(), mensaje);
+        ArrayList<String> RegId = new ArrayList<>();
+        RegId.add(destino.getIdentificaciongoogle());
+        
+        envio.main(RegId, remitente.getCarne(), mensaje, ConstantesServerGcm.ClaseMensaje, null);
         
         return true;
         
     }
         
-    private Boolean enviarMensajeGrupo(Grupos grupo, String mensaje){
+    private Boolean enviarMensajeGrupo(Grupos grupo, String mensaje, Usuarios remitente){
+        
+        ArrayList<String> RegId = new ArrayList<>();
+        Set<Usuarios> destinatarios = grupo.getUsuarioses();
+        
+        for(Usuarios usuario: destinatarios){
+            if(!usuario.getCarne().equals(remitente.getCarne()))
+                RegId.add(usuario.getIdentificaciongoogle());
+        }
+            
+        envio.main(RegId, remitente.getCarne(), mensaje, ConstantesServerGcm.ClaseGrupo, grupo.getId().toString());
         
         return true;
         

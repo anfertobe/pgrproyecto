@@ -40,7 +40,7 @@ public class MainActivity extends ActionBarActivity implements LoaderManager.Loa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        preferences = getSharedPreferences(MainActivity.class.getName(), Context.MODE_PRIVATE);
+        preferences = getSharedPreferences(Constantes.sharePreference, Context.MODE_PRIVATE);
         listView = (ListView) findViewById(R.id.contactslist);
         listView.setOnItemClickListener(this);
         ContactCursorAdapter = new ContactCursorAdapter(this, null);
@@ -50,8 +50,8 @@ public class MainActivity extends ActionBarActivity implements LoaderManager.Loa
         actionBar.show();
         photoCache = new PhotoCache(this);
         actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME, ActionBar.DISPLAY_SHOW_CUSTOM);
-        actionBar.setTitle("You are");
-        Log.i("User",preferences.getString(Constantes.PROPERTY_USER, ""));
+        actionBar.setTitle(preferences.getString(Constantes.PROPERTY_NAME, ""));
+        Log.i("User",preferences.getString(Constantes.PROPERTY_NAME, ""));
         actionBar.setSubtitle(preferences.getString(Constantes.PROPERTY_USER, ""));
 
 //		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
@@ -80,12 +80,9 @@ public class MainActivity extends ActionBarActivity implements LoaderManager.Loa
         switch (item.getItemId()) {
             case R.id.action_add:
                 AddContactDialog newFragment = AddContactDialog.newInstance();
+                newFragment.setUsuarioRaiz(preferences.getString(Constantes.PROPERTY_USER,""));
                 newFragment.setContext(MainActivity.this);
                 newFragment.show(getSupportFragmentManager(), "AddContactDialog");
-                return true;
-            case R.id.action_settings:
-                Intent intent = new Intent(this, SettingsActivity.class);
-                startActivity(intent);
                 return true;
             case R.id.action_group:
                 Intent intentgroup = new Intent(this, chackListGrupos.class);
@@ -98,8 +95,12 @@ public class MainActivity extends ActionBarActivity implements LoaderManager.Loa
 
     @Override
     public void onItemClick(AdapterView<?> arg0, View view, int arg2, long arg3) {
+        ViewHolder viewholder = (ViewHolder) view.getTag();
+
+        String usuarioSeleccion = viewholder.textEmail.getText().toString();
+
         Intent intent = new Intent(this, ChatActivity.class);
-        intent.putExtra(Common.PROFILE_ID, String.valueOf(arg3));
+        intent.putExtra(Constantes.PROPERTY_USER, usuarioSeleccion);
         startActivity(intent);
     }
 
@@ -117,7 +118,7 @@ public class MainActivity extends ActionBarActivity implements LoaderManager.Loa
                 new String[]{DataProvider.COL_IDENTIFICACION, DataProvider.COL_CARNE, DataProvider.COL_NAME, DataProvider.COL_COUNT},
                 null,
                 null,
-                DataProvider.COL_IDENTIFICACION + " DESC");
+                DataProvider.COL_NAME + " ASC");
         return loader;
     }
 
@@ -231,4 +232,6 @@ public class MainActivity extends ActionBarActivity implements LoaderManager.Loa
         }
         return uri;
     }
+
+
 }

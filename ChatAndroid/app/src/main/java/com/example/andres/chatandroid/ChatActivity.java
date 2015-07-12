@@ -30,10 +30,10 @@ public class ChatActivity extends ActionBarActivity implements MessagesFragment.
 
     private EditText msgEdit;
     private Button sendBtn;
-    private String profileId;
     private String profileName;
     private String profileCarne;
     private String user;
+    private String userSeleccion;
     private SolicitudesHTTP solicitud;
 
     @Override
@@ -43,8 +43,7 @@ public class ChatActivity extends ActionBarActivity implements MessagesFragment.
 
         user = getSharedPreferences(Constantes.sharePreference, Context.MODE_PRIVATE).getString(Constantes.PROPERTY_USER, "user");
         Log.i("user", user);
-        profileId = getIntent().getStringExtra(Common.PROFILE_ID);
-        Log.i("id",profileId);
+        userSeleccion = getIntent().getStringExtra(Constantes.PROPERTY_USER);
         msgEdit = (EditText) findViewById(R.id.msg_edit);
         sendBtn = (Button) findViewById(R.id.send_btn);
         sendBtn.setOnClickListener(this);
@@ -54,7 +53,7 @@ public class ChatActivity extends ActionBarActivity implements MessagesFragment.
 
         solicitud = new SolicitudesHTTP();
 
-        Cursor c = getContentResolver().query(Uri.withAppendedPath(DataProvider.CONTENT_URI_PROFILE, profileId), null, null, null, null);
+        Cursor c = getContentResolver().query(Uri.withAppendedPath(DataProvider.CONTENT_URI_PROFILE, userSeleccion), null, null, null, null);
         if (c.moveToFirst()) {
             profileName = c.getString(c.getColumnIndex(DataProvider.COL_NAME));
             profileCarne = c.getString(c.getColumnIndex(DataProvider.COL_CARNE));
@@ -78,7 +77,7 @@ public class ChatActivity extends ActionBarActivity implements MessagesFragment.
             case R.id.action_edit:
                 EditContactDialog dialog = new EditContactDialog();
                 Bundle args = new Bundle();
-                args.putString(Common.PROFILE_ID, profileId);
+                args.putString(Constantes.PROPERTY_USER, userSeleccion);
                 args.putString(DataProvider.COL_NAME, profileName);
                 dialog.setArguments(args);
                 dialog.show(getSupportFragmentManager(), "EditContactDialog");
@@ -120,7 +119,9 @@ public class ChatActivity extends ActionBarActivity implements MessagesFragment.
                 String msg = "";
 
                     solicitud.send(user, profileCarne, txt);
+                    Log.i("type",Integer.toString(DataProvider.MessageType.OUTGOING.ordinal()));
                     ContentValues values = new ContentValues(2);
+                    values.put(DataProvider.COL_TYPE, DataProvider.MessageType.OUTGOING.ordinal());
                     values.put(DataProvider.COL_MESSAGE, txt);
                     values.put(DataProvider.COL_RECEIVER_EMAIL, profileCarne);
                     values.put(DataProvider.COL_SENDER_EMAIL,user);
@@ -142,7 +143,7 @@ public class ChatActivity extends ActionBarActivity implements MessagesFragment.
     protected void onPause() {
         ContentValues values = new ContentValues(1);
         values.put(DataProvider.COL_COUNT, 0);
-        getContentResolver().update(Uri.withAppendedPath(DataProvider.CONTENT_URI_PROFILE, profileId), values, null, null);
+        getContentResolver().update(Uri.withAppendedPath(DataProvider.CONTENT_URI_PROFILE, userSeleccion), values, null, null);
         super.onPause();
     }
 

@@ -11,6 +11,7 @@ import android.content.ContentUris;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -48,6 +49,7 @@ public class chackListGrupos extends ActionBarActivity implements LoaderManager.
     private Button crear;
     private EditText nombreGrupo;
     private ProgressDialog progreso;
+    private SharedPreferences pref;
 
 
     @Override
@@ -67,6 +69,8 @@ public class chackListGrupos extends ActionBarActivity implements LoaderManager.
         nombreGrupo = (EditText)findViewById(R.id.nombreGrupo);
         crear = (Button) findViewById(R.id.crearGrupo);
 
+        pref = getSharedPreferences(Constantes.sharePreference,Context.MODE_PRIVATE);
+
         crear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -79,8 +83,10 @@ public class chackListGrupos extends ActionBarActivity implements LoaderManager.
                     progreso.setCancelable(true);
                     progreso.setMax(100);
 
+                    String user = pref.getString(Constantes.PROPERTY_USER, "user");
+                    Log.i("user",user);
                     RegistroGrupo registro = new RegistroGrupo(chackListGrupos.this);
-                    registro.execute();
+                    registro.execute(nombreGrupo.getText().toString(), user);
                 }else{
                     Toast.makeText(chackListGrupos.this,"Debe escoger al menos dos usuarios", Toast.LENGTH_SHORT);
                 }
@@ -90,12 +96,15 @@ public class chackListGrupos extends ActionBarActivity implements LoaderManager.
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+
+        String[] selectargs = new String[]{"%grupo%"};
+
         CursorLoader loader = new CursorLoader(this,
                 DataProvider.CONTENT_URI_PROFILE,
                 new String[]{DataProvider.COL_IDENTIFICACION, DataProvider.COL_CARNE, DataProvider.COL_NAME, DataProvider.COL_COUNT},
-                null,
-                null,
-                DataProvider.COL_IDENTIFICACION + " DESC");
+                DataProvider.COL_CARNE + " not like ?",
+                selectargs,
+                DataProvider.COL_NAME + " ASC");
         return loader;
     }
 
@@ -133,7 +142,7 @@ public class chackListGrupos extends ActionBarActivity implements LoaderManager.
     private class ContactCursorAdapter1 extends CursorAdapter {
 
         private LayoutInflater mInflater;
-        private View itemLayout;
+        //private View itemLayout;
 
         public ContactCursorAdapter1(Context context, Cursor c) {
             super(context, c, 0);
@@ -147,7 +156,8 @@ public class chackListGrupos extends ActionBarActivity implements LoaderManager.
 
         @Override
         public View newView(Context context, Cursor cursor, ViewGroup parent) {
-            itemLayout = mInflater.inflate(R.layout.check_list_info, parent, false);
+
+            View itemLayout = mInflater.inflate(R.layout.check_list_info, parent, false);
             ViewHolder holder = new ViewHolder();
             itemLayout.setTag(holder);
             holder.checkBox = (CheckBox) itemLayout.findViewById(R.id.checkBox1);
@@ -158,6 +168,9 @@ public class chackListGrupos extends ActionBarActivity implements LoaderManager.
 
         @Override
         public void bindView(View view, Context context, Cursor cursor) {
+           // if(cursor.getString(cursor.getColumnIndex(DataProvider.COL_CARNE)).contains("grupo"))
+             //   return;
+
             ViewHolder holder = (ViewHolder) view.getTag();
             holder.checkBox.setText(cursor.getString(cursor.getColumnIndex(DataProvider.COL_NAME)));
             holder.textEmail.setText(cursor.getString(cursor.getColumnIndex(DataProvider.COL_CARNE)));
@@ -237,7 +250,10 @@ public class chackListGrupos extends ActionBarActivity implements LoaderManager.
             boolean respuesta = false;
             publishProgress(1);
 
+            Log.i("Crear Grupo", params[1]);
+
             SolicitudesHTTP solicitud = new SolicitudesHTTP();
+            respuesta = solicitud.registroGrupo(params[0],params[1],usuariosSelecionados);
 
 
             return respuesta;
@@ -260,7 +276,7 @@ public class chackListGrupos extends ActionBarActivity implements LoaderManager.
         protected void onPostExecute(Boolean result) {
             if(result){
 
-                Toast.makeText(chackListGrupos.this, "Inicio de sesion completo", Toast.LENGTH_SHORT).show();
+                Toast.makeText(chackListGrupos.this, "Grupo Creado", Toast.LENGTH_SHORT).show();
                 Intent i=new Intent(context,MainActivity.class);
                 startActivity(i);
 

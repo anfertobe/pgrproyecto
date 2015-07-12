@@ -89,7 +89,7 @@ public class MessagesFragment extends ListFragment implements LoaderManager.Load
             }
             return df[0].format(dt);
         } catch (ParseException e) {
-            return datetime;
+            return DateFormat.getDateTimeInstance().format(new Date());
         }
     }
 
@@ -166,7 +166,16 @@ public class MessagesFragment extends ListFragment implements LoaderManager.Load
         public void bindView(View view, Context context, Cursor cursor) {
             ViewHolder holder = (ViewHolder) view.getTag();
             String email = cursor.getString(cursor.getColumnIndex(DataProvider.COL_SENDER_EMAIL));
-            holder.text1.setText(getDisplayTime(cursor.getString(cursor.getColumnIndex(DataProvider.COL_TIME))));
+
+            if(cursor.getString(cursor.getColumnIndex(DataProvider.COL_SENDER_EMAIL)).contains("grupo")){
+                String time = getDisplayTime(cursor.getString(cursor.getColumnIndex(DataProvider.COL_TIME)));
+                String remitente = cursor.getString(cursor.getColumnIndex(DataProvider.COL_SENDER_EMAIL2));
+                holder.text1.setText(remitente + ", " + time);
+            }else
+                holder.text1.setText(getDisplayTime(cursor.getString(cursor.getColumnIndex(DataProvider.COL_TIME))));
+
+
+
             holder.text2.setText(cursor.getString(cursor.getColumnIndex(DataProvider.COL_MESSAGE)));
             MainActivity.photoCache.DisplayBitmap(requestPhoto(email), holder.avatar);
         }

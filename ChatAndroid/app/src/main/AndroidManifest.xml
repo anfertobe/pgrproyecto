@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.andres.chatandroid" >
-
     <uses-sdk
         android:minSdkVersion="9"
         android:targetSdkVersion="21" />
-
     <permission
         android:name="com.example.andres.chatandroid.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
-
     <uses-permission android:name="com.example.andres.chatandroid.permission.C2D_MESSAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
@@ -23,15 +20,6 @@
     <uses-permission android:name="android.permission.USE_CREDENTIALS" /> <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
-
-    <android:uses-permission
-        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        android:maxSdkVersion="18" />
-    <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <android:uses-permission
-        android:name="android.permission.READ_EXTERNAL_STORAGE"
-        android:maxSdkVersion="18" />
-
     <application
         android:name=".Common"
         android:allowBackup="true"
@@ -39,15 +27,14 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".MainActivity"
-            android:label="@string/app_name" >
+            android:name=".login"
+            android:label="login" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <receiver
             android:name=".GCMBroadcastReceiver"
             android:permission="com.google.android.c2dm.permission.SEND" >
@@ -57,37 +44,29 @@
                 <category android:name="com.example.andres.chatandroid" />
             </intent-filter>
         </receiver>
-
         <provider
             android:name=".DataProvider"
             android:authorities="com.example.andres.chatandroid.provider"
             android:exported="false" >
         </provider>
-
         <activity
             android:name=".ChatActivity"
             android:label="@string/chat" >
         </activity>
-        <activity
-            android:name=".SettingsActivity"
-            android:label="@string/action_settings" >
-        </activity>
-
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-
         <activity
-            android:name=".drawer"
-            android:label="@string/title_activity_drawer" >
+            android:name=".MainActivity"
+            android:label="@string/app_name" >
         </activity>
         <activity
             android:name=".registro"
             android:label="@string/title_activity_registro" >
         </activity>
         <activity
-            android:name=".login"
-            android:label="login" >
+            android:name=".drawer"
+            android:label="@string/title_activity_drawer" >
         </activity>
         <activity
             android:name=".chat.pruebadrawer"
@@ -98,5 +77,4 @@
             android:label="@string/title_activity_chack_list_grupos" >
         </activity>
     </application>
-
 </manifest>

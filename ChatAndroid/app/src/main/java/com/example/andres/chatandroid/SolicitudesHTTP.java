@@ -20,7 +20,6 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -136,6 +135,10 @@ public class SolicitudesHTTP {
             usuario.put("email", email);
             usuario.put("password", password);
             usuario.put("semestre", Integer.getInteger(semestre));
+            usuario.put("perfil",JSONObject.NULL);
+            usuario.put("carrerases",new JSONArray());
+            usuario.put("gruposes_1", new JSONArray());
+            usuario.put("materiases", new JSONArray());
 
             StringEntity entity = new StringEntity(usuario.toString());
 
@@ -201,12 +204,22 @@ public class SolicitudesHTTP {
             Log.i("datos", remitente + "/" + destinatario);
             JSONObject mensaje = new JSONObject();
             //usuario.put("id",0);
-            mensaje.put("grupos",JSONObject.NULL);
+
+            if(destinatario.contains("grupo")){
+                String idgrupo = destinatario.replace("grupo ", "");
+                mensaje.put("grupos",jsonGrupo(idgrupo));
+                mensaje.put("usuariosByUsuariodestino", JSONObject.NULL);
+            }else{
+                mensaje.put("grupos",JSONObject.NULL);
+                mensaje.put("usuariosByUsuariodestino", JsonUsuario(destinatario));
+            }
+
             mensaje.put("usuariosByUsuariosorigen",JsonUsuario(remitente));
-            mensaje.put("usuariosByUsuariodestino", JsonUsuario(destinatario));
             mensaje.put("fecha", new Date());
             mensaje.put("visto", JSONObject.NULL);
             mensaje.put("contenido", contenido);
+
+            Log.i("JSIN",mensaje.toString());
 
             StringEntity entity = new StringEntity(mensaje.toString());
 
@@ -246,19 +259,22 @@ public class SolicitudesHTTP {
 
     public JSONObject JsonUsuario(String usuario) throws JSONException {
         JSONObject usuarioDestino = new JSONObject();
+        usuarioDestino.put("identificacion",usuario);
         usuarioDestino.put("carne",usuario);
         usuarioDestino.put("nombre",JSONObject.NULL);
         usuarioDestino.put("identificaciongoogle",JSONObject.NULL);
         usuarioDestino.put("email",JSONObject.NULL);
         usuarioDestino.put("password",JSONObject.NULL);
         usuarioDestino.put("perfil",JSONObject.NULL);
-        usuarioDestino.put("carrerases",JSONObject.NULL);
-        usuarioDestino.put("gruposes_1", JSONObject.NULL);
+        usuarioDestino.put("carrerases",new JSONArray());
+        usuarioDestino.put("gruposes_1", new JSONArray());
+        usuarioDestino.put("semestre", JSONObject.NULL);
+        usuarioDestino.put("materiases", new JSONArray());
 
         return usuarioDestino;
 
     }
-    public boolean registroGrupo(String Administrador, String nombre, ArrayList<String> usuarios){
+    public boolean registroGrupo(String nombre, String Administrador, ArrayList<String> usuarios){
         boolean respuesta = false;
 
         HttpClient httpClient = new DefaultHttpClient();
@@ -276,11 +292,21 @@ public class SolicitudesHTTP {
             grupo.put("id", 0);
             grupo.put("usuarios", JsonUsuario(Administrador));
             grupo.put("nombre", nombre);
-            grupo.put("fechacreacion", new Date());
+            grupo.put("fechacreacion", JSONObject.NULL);
             grupo.put("estado", JSONObject.NULL);
             grupo.put("tipoprivado",JSONObject.NULL);
             grupo.put("usuarioses",usuariosGrupo(usuarios));
-            grupo.put("mensajeses",JSONObject.NULL);
+            grupo.put("mensajeses",new JSONArray());
+
+            Log.i("JSON", grupo.toString());
+
+            StringEntity entity = new StringEntity(grupo.toString());
+
+            entity.setContentType("application/json;charset=UTF-8");
+            entity.setContentEncoding(new
+                    BasicHeader(HTTP.CONTENT_TYPE, "application/json;charset=UTF-8"));
+
+            post.setEntity(entity);
 
             HttpResponse resp = httpClient.execute(post);
             String respStr = EntityUtils.toString(resp.getEntity());
@@ -301,9 +327,25 @@ public class SolicitudesHTTP {
         JSONArray usuarioses = new JSONArray();
 
         for(String usuario : usuarios){
-            usuarioses.put(JsonUsuario(usuario).toString());
+            usuarioses.put(JsonUsuario(usuario));
         }
+
+
         return usuarioses;
+    }
+
+    private JSONObject jsonGrupo(String idGrupo) throws JSONException {
+        JSONObject grupo = new JSONObject();
+        grupo.put("id", idGrupo);
+        grupo.put("usuarios", JSONObject.NULL);
+        grupo.put("nombre", JSONObject.NULL);
+        grupo.put("fechacreacion", JSONObject.NULL);
+        grupo.put("estado", JSONObject.NULL);
+        grupo.put("tipoprivado",JSONObject.NULL);
+        grupo.put("usuarioses",JSONObject.NULL);
+        grupo.put("mensajeses",JSONObject.NULL);
+
+        return grupo;
     }
 
 }

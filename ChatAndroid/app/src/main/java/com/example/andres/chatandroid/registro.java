@@ -26,6 +26,7 @@ public class registro extends Activity {
     private Button registro;
     private ProgressDialog progreso;
     private HashMap<String, String> dictianaryCarreras;
+    private SharedPreferences pref;
 
     private SolicitudesHTTP solicitud;
 
@@ -45,7 +46,7 @@ public class registro extends Activity {
         dictianaryCarreras = new HashMap<>();
         identificacion = (EditText) findViewById(R.id.identificacion);
         semestre = (Spinner) findViewById(R.id.semestre);
-
+        pref = getSharedPreferences(Constantes.sharePreference,Context.MODE_PRIVATE);
         Bundle bundle = this.getIntent().getExtras();
 
         final String carrera = bundle.getString("CARRERAS");
@@ -80,11 +81,10 @@ public class registro extends Activity {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(registro.this,  android.R.layout.simple_spinner_item, lista);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         carreras.setAdapter(adapter);
-
         Log.i("Spinner:","Semestre");
         //Creamos el adaptador
         ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(registro.this,R.array.semestre,android.R.layout.simple_spinner_item);
-        //Añadimos el layout para el menú
+        //Anadimos el layout para el menu
         adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         //Le indicamos al spinner el adaptador a usar
         semestre.setAdapter(adapter2);
@@ -107,15 +107,13 @@ public class registro extends Activity {
                 tarea.execute(identificacion.getText().toString(), carne.getText().toString(), nombre.getText().toString(), email.getText().toString(), password.getText().toString(), carreraSeleccionada, semestreselect);
             }
         });
-
     }
-
-
-
 
     private class TareaRegistro extends AsyncTask<String, Integer, Boolean> {
 
         private Context context;
+        private String user;
+        private String nombre;
 
         public TareaRegistro(Context context){
             this.context = context;
@@ -129,7 +127,8 @@ public class registro extends Activity {
             Log.i("Carrera",params[5]);
                 //Nos registramos en nuestro servidor
             registrado = solicitud.registroServidor(params[0], params[1], params[2], params[3], params[4], params[5], params[6]);
-
+            user = params[1];
+            nombre = params[2];
 
             return registrado;
         }
@@ -149,7 +148,11 @@ public class registro extends Activity {
         @Override
         protected void onPostExecute(Boolean result) {
             if(result){
-                Toast.makeText(registro.this, "Registro completo", Toast.LENGTH_SHORT).show();
+                SharedPreferences.Editor editor = pref.edit();
+                editor.putString(Constantes.PROPERTY_USER, carne.toString());
+                editor.putString(Constantes.PROPERTY_NAME, nombre.toString());
+                editor.commit();
+                        Toast.makeText(registro.this, "Registro completo", Toast.LENGTH_SHORT).show();
                 Intent i=new Intent(context,login.class);
                 startActivity(i);
             }else{

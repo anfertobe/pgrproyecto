@@ -108,7 +108,7 @@ public class login extends Activity {
                 regid = registrogcm.getRegistrationId(preferences);
 
                 inicioSesion inicio = new inicioSesion(login.this);
-                inicio.execute(username.getText().toString(), password.getText().toString());
+                inicio.execute(username.getText().toString().trim(), password.getText().toString());
 
             }
         });
@@ -214,7 +214,7 @@ public class login extends Activity {
 
     private class inicioSesion extends AsyncTask<String, Integer, Boolean> {
         private Context context;
-
+        private String user;
         public inicioSesion(Context context){
             this.context = context;
         }
@@ -233,11 +233,12 @@ public class login extends Activity {
                     Log.i("regid",regid);
                 }
 
-
+                user = params[0];
                 Log.d(Constantes.TAG, "Registrado en GCM: registration_id=" + regid);
+                Log.d(Constantes.TAG, "user=" + params[0]);
 
                 //Guardamos los datos del registro
-                registrogcm.setRegistrationId(preferences, params[0], regid);
+
 
                 SolicitudesHTTP solicitud = new SolicitudesHTTP();
                 respuesta = solicitud.inicioSesion(params[0], params[1], regid);
@@ -268,6 +269,7 @@ public class login extends Activity {
         @Override
         protected void onPostExecute(Boolean result) {
             if(result){
+                registrogcm.setRegistrationId(preferences, user, regid);
                 registrogcm.broadcastStatus(true);
                 Toast.makeText(login.this, "Inicio de sesion completo", Toast.LENGTH_SHORT).show();
                 Intent i=new Intent(context,MainActivity.class);

@@ -37,7 +37,7 @@ public class EditContactDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         final Context ctx = getActivity();
-        final String profileId = getArguments().getString(Common.PROFILE_ID);
+        final String carne = getArguments().getString(Constantes.PROPERTY_USER);
         String profileName = getArguments().getString(DataProvider.COL_NAME);
         final EditText et = new EditText(ctx);
         et.setText(profileName);
@@ -53,7 +53,7 @@ public class EditContactDialog extends DialogFragment {
 
                         ContentValues values = new ContentValues(1);
                         values.put(DataProvider.COL_NAME, name);
-                        ctx.getContentResolver().update(Uri.withAppendedPath(DataProvider.CONTENT_URI_PROFILE, profileId), values, null, null);
+                        ctx.getContentResolver().update(Uri.withAppendedPath(DataProvider.CONTENT_URI_PROFILE, carne), values, null, null);
 
                         mListener.onEditContact(name);
                     }

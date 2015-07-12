@@ -30,6 +30,8 @@ public class ConstantesServerGcm {
      * Constantes Mensajes de servidor
      */
     
-    public static final String TituloMensaje = "Registro Satisfactorio";
-    public static final String ContenidoMensaje = "Su registro en los servidores de google fueron satisfactorios.";
+    public static final String ClaseGrupo = "Grupo";
+    public static final String ClaseMensaje = "Mensaje";
+    public static final String CrearGrupo = "CrearGrupo";
+    
 }

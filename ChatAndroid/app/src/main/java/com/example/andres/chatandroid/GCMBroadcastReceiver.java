@@ -11,6 +11,7 @@ import android.os.PowerManager;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.WakefulBroadcastReceiver;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
@@ -34,18 +35,42 @@ public class GCMBroadcastReceiver extends WakefulBroadcastReceiver
             } else if (GoogleCloudMessaging.MESSAGE_TYPE_DELETED.equals(messageType)) {
                 sendNotification("Deleted messages on server", false);
             } else {
-                String msg = intent.getStringExtra(DataProvider.COL_MESSAGE);
-                String senderEmail = intent.getStringExtra(DataProvider.COL_SENDER_EMAIL);
-                String receiverEmail = intent.getStringExtra(DataProvider.COL_RECEIVER_EMAIL);
-                ContentValues values = new ContentValues(2);
-                values.put(DataProvider.COL_TYPE,  DataProvider.MessageType.INCOMING.ordinal());
-                values.put(DataProvider.COL_MESSAGE, msg);
-                values.put(DataProvider.COL_SENDER_EMAIL, senderEmail);
-                values.put(DataProvider.COL_RECEIVER_EMAIL, receiverEmail);
-                context.getContentResolver().insert(DataProvider.CONTENT_URI_MESSAGES, values);
+                if(intent.getStringExtra("tipo").equals("CrearGrupo")){
+                    String carne = "grupo " + intent.getStringExtra("id");
+                    String nombre= intent.getStringExtra("nombre");
+                    ContentValues values = new ContentValues(2);
+                    values.put(DataProvider.COL_NAME,nombre);
+                    values.put(DataProvider.COL_CARNE,carne);
+                    context.getContentResolver().insert(DataProvider.CONTENT_URI_PROFILE, values);
+                    if (Common.isNotify()) {
+                        sendNotification("New message", true);
+                    }
 
-                if (Common.isNotify()) {
-                    sendNotification("New message", true);
+                }else {
+
+                    String msg = intent.getStringExtra(DataProvider.COL_MESSAGE);
+                    Log.i("msg", msg);
+                    String senderEmail = intent.getStringExtra(DataProvider.COL_SENDER_EMAIL);
+                    Log.i("senderEmail", senderEmail);
+                    String receiverEmail = intent.getStringExtra(DataProvider.COL_RECEIVER_EMAIL);
+                    ContentValues values = new ContentValues(2);
+                    Log.i("Type", Integer.toString(DataProvider.MessageType.INCOMING.ordinal()));
+                    values.put(DataProvider.COL_TYPE, DataProvider.MessageType.INCOMING.ordinal());
+                    values.put(DataProvider.COL_MESSAGE, msg);
+
+                    if(intent.getStringExtra("tipo").equals("Mensaje")){
+                        values.put(DataProvider.COL_SENDER_EMAIL, senderEmail);
+                    }else if(intent.getStringExtra("tipo").equals("Grupo")){
+                        values.put(DataProvider.COL_SENDER_EMAIL, "grupo " + senderEmail);
+                        String remitente2 = intent.getStringExtra(DataProvider.COL_SENDER_EMAIL2);
+                        values.put(DataProvider.COL_SENDER_EMAIL2, remitente2);
+                    }
+
+                    context.getContentResolver().insert(DataProvider.CONTENT_URI_MESSAGES, values);
+
+                    if (Common.isNotify()) {
+                        sendNotification("New message", true);
+                    }
                 }
             }
             setResultCode(Activity.RESULT_OK);

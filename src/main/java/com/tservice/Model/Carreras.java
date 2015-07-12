@@ -86,7 +86,7 @@ public class Carreras  implements java.io.Serializable {
         this.eventoses = eventoses;
     }
 
-@ManyToMany(fetch=FetchType.LAZY)
+@ManyToMany(fetch=FetchType.EAGER)
     @JoinTable(name="carreras_has_usuarios",joinColumns = { 
         @JoinColumn(name="carreras_id", nullable=false, updatable=false) }, inverseJoinColumns = { 
         @JoinColumn(name="usuarios_carne", nullable=false, updatable=false) })
@@ -98,7 +98,7 @@ public class Carreras  implements java.io.Serializable {
         this.usuarioses = usuarioses;
     }
 
-@OneToMany(fetch=FetchType.EAGER, mappedBy="carreras")
+@OneToMany(fetch=FetchType.LAZY, mappedBy="carreras")
     public Set<Intereses> getIntereseses() {
         return this.intereseses;
     }

@@ -10,6 +10,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.util.Log;
 
 /**
  * Created by andres on 03/07/2015.
@@ -35,6 +36,7 @@ public class DataProvider extends ContentProvider {
         public static final String COL_ID 	            = "_id";
         public static final String COL_TYPE				= "type";
         public static final String COL_SENDER_EMAIL 	= "remitente";
+        public static final String COL_SENDER_EMAIL2 	= "remitente2";
         public static final String COL_RECEIVER_EMAIL 	= "destinatario";
         public static final String COL_MESSAGE 			= "msg";
         public static final String COL_TIME 			= "tiempo";
@@ -59,7 +61,7 @@ public class DataProvider extends ContentProvider {
             uriMatcher.addURI("com.example.andres.chatandroid.provider", "messages", MESSAGES_ALLROWS);
             uriMatcher.addURI("com.example.andres.chatandroid.provider", "messages/#", MESSAGES_SINGLE_ROW);
             uriMatcher.addURI("com.example.andres.chatandroid.provider", "profile", PROFILE_ALLROWS);
-            uriMatcher.addURI("com.example.andres.chatandroid.provider", "profile/#", PROFILE_SINGLE_ROW);
+            uriMatcher.addURI("com.example.andres.chatandroid.provider", "profile/*", PROFILE_SINGLE_ROW);
         }
 
         @Override
@@ -72,6 +74,8 @@ public class DataProvider extends ContentProvider {
         public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
             SQLiteDatabase db = dbHelper.getReadableDatabase();
             SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+
+            Log.i("URI", uri.toString());
 
             switch(uriMatcher.match(uri)) {
                 case MESSAGES_ALLROWS:
@@ -89,7 +93,8 @@ public class DataProvider extends ContentProvider {
 
                 case PROFILE_SINGLE_ROW:
                     qb.setTables(TABLE_PROFILE);
-                    qb.appendWhere("_id = " + uri.getLastPathSegment());
+                    Log.i("URIlast", uri.getLastPathSegment());
+                    qb.appendWhere("carne = " + "'" +uri.getLastPathSegment().toString() + "'");
                     break;
 
                 default:
@@ -147,7 +152,7 @@ public class DataProvider extends ContentProvider {
                     break;
 
                 case PROFILE_SINGLE_ROW:
-                    count = db.update(TABLE_PROFILE, values, "_id = ?", new String[]{uri.getLastPathSegment()});
+                    count = db.update(TABLE_PROFILE, values, "carne = ?", new String[]{uri.getLastPathSegment()});
                     break;
 
                 default:
@@ -177,7 +182,7 @@ public class DataProvider extends ContentProvider {
                     break;
 
                 case PROFILE_SINGLE_ROW:
-                    count = db.delete(TABLE_PROFILE, "_id = ?", new String[]{uri.getLastPathSegment()});
+                    count = db.delete(TABLE_PROFILE, "carne = ?", new String[]{uri.getLastPathSegment()});
                     break;
 
                 default:
@@ -208,6 +213,7 @@ public class DataProvider extends ContentProvider {
                         + COL_TYPE        	  +" integer, "
                         + COL_MESSAGE         +" text, "
                         + COL_SENDER_EMAIL 	  +" text, "
+                        + COL_SENDER_EMAIL2   +" text, "
                         + COL_RECEIVER_EMAIL  +" text, "
                         + COL_TIME 			  +" datetime default current_timestamp);");
 

@@ -159,16 +159,6 @@ public class RestControllerGcm {
          return new ResponseEntity<>(HttpStatus.ACCEPTED);
      }
 
-
-    
-    @RequestMapping(value="/envio/{usuario}/{idgoogle}",method = RequestMethod.POST)        
-    public ResponseEntity<?> envioPrueba(@PathVariable("usuario") String usuario, @PathVariable("idgoogle") String idgoogle)  throws ResourceNotFoundException { 
-        
-        fachada.pruebaRapida(usuario, idgoogle);
-        
-          return new ResponseEntity<>(HttpStatus.ACCEPTED);
-    }
-    
     @RequestMapping(value="/Ubicaciones",method = RequestMethod.GET)        
     public List<Ubicacion> consultarCalificacion()  throws ResourceNotFoundException { 
         
@@ -255,6 +245,20 @@ public class RestControllerGcm {
     }
     
     
+    @RequestMapping(value="/adicion/grupo",method = RequestMethod.POST)
+     public ResponseEntity<?> adicionarGrupo(@RequestBody Grupos grupo) {
+            
+         Boolean respuesta = false;
+
+        try {
+            respuesta = fachada.CrearGrupo(grupo);
+        } catch (servergcmExceptions ex) {
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+         
+         return new ResponseEntity<>(respuesta, HttpStatus.ACCEPTED);
+     }
+    
     @RequestMapping(value="/adicion/{idAmgo}",method = RequestMethod.POST)
      public Usuarios adicionarAmigo(@PathVariable("idAmgo") String idAmgo) throws servergcmExceptions{
             
@@ -297,9 +301,18 @@ public class RestControllerGcm {
          return new ResponseEntity<>(respuesta, HttpStatus.ACCEPTED);
      }
 
-            @RequestMapping(value="/carreras",method = RequestMethod.GET)        
-    public List<Carreras> consultarCarreras()  throws ResourceNotFoundException { 
+//            @RequestMapping(value="/carreras",method = RequestMethod.GET)        
+//    public List<Carreras> consultarCarreras()  throws ResourceNotFoundException { 
+//
+//          return carrecrud.search();
+//    }
+    
+    @RequestMapping(value="/carreas",method = RequestMethod.GET)        
+    public Iterable<Carreras> consultarcarreras()  throws ResourceNotFoundException { 
 
-          return carrecrud.search();
+          return carrecrud.findAll();
     }
+    
+    
+    
 }
