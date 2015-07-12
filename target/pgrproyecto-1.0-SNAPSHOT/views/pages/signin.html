@@ -1,8 +1,7 @@
-<div class="page-signin">
-
+<div class="page-signin" data-ng-controller="loginCtrl as log" >
     <div class="signin-header">
         <section class="logo text-center">
-            <a href="#/">{{main.brand}}</a>
+            <a   href="#/">{{main.brand}}</a>
         </section>
     </div>
 
@@ -10,13 +9,13 @@
         <div class="container">
             <div class="form-container">
 
-                <form class="form-horizontal">
-                    <fieldset>
+                <form class="form-horizontal" >
+                    <fieldset >
                         <div class="form-group">
                             <div class="btn-icon-lined btn-icon-round btn-icon-sm btn-default-light">
-                                <span class="glyphicon glyphicon-envelope"></span>
+                                <span class="glyphicon glyphicon-user"></span>
                             </div>
-                            <input type="email"
+                            <input  type="text" data-ng-model="usuario"
                                    class="form-control input-lg input-round text-center"
                                    placeholder="Username"
                                    >
@@ -25,19 +24,19 @@
                             <div class="btn-icon-lined btn-icon-round btn-icon-sm btn-default-light">
                                 <span class="glyphicon glyphicon-lock"></span>
                             </div>
-                            <input type="password"
+                            <input type="password" data-ng-model="password"
                                    class="form-control input-lg input-round text-center"
                                    placeholder="Password"
                                    >
                         </div>
-                        <div class="form-group">
-                            <a href="#/" class="btn btn-primary btn-lg btn-round btn-block text-center">Log in</a>
+                        <div class="form-group center-block">
+                            <button type="button" data-ng-click="log.login()" class="btn btn-primary btn-block btn-default-light btn-round ">Log In</button>
                         </div>
                     </fieldset>
                 </form>
 
                 <section>
-                    <p class="text-center"><a href="#/pages/forgot-password">Forgot your password?</a></p>
+                    <p class="text-center"><a data="#/pages/forgot-password">Forgot your password?</a></p>
                     <p class="text-center text-muted text-small">Don't have an account yet? <a href="#/pages/signup">Sign up</a></p>
                 </section>
                 

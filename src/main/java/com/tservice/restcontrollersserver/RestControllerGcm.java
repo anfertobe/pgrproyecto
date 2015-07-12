@@ -51,7 +51,7 @@ public class RestControllerGcm {
          boolean result = false;
              
              try{
-             result=fachada.adicionarEvento(evento);
+                result=fachada.adicionarEvento(evento);
              }catch(Exception e){
                  return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
             }
