@@ -132,10 +132,4 @@ public class Grupos  implements java.io.Serializable {
     public void setMensajeses(Set<Mensajes> mensajeses) {
         this.mensajeses = mensajeses;
     }
-
-
-
-
 }
-
-
