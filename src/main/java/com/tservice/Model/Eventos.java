@@ -50,8 +50,7 @@ public class Eventos  implements java.io.Serializable {
        this.carrerases = carrerases;
     }
     
-     @Id @GeneratedValue(strategy=IDENTITY)
-
+     @Id 
     
     @Column(name="id", unique=true, nullable=false)
     public Integer getId() {

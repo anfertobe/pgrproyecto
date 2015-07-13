@@ -63,7 +63,7 @@ public class Intereses  implements java.io.Serializable {
         this.carreras = carreras;
     }
 
-    @ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="eventos_id")
     public Eventos getEventos() {
         return this.eventos;
@@ -73,7 +73,7 @@ public class Intereses  implements java.io.Serializable {
         this.eventos = eventos;
     }
 
-@ManyToOne(fetch=FetchType.LAZY)
+@ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="noticias_id")
     public Noticias getNoticias() {
         return this.noticias;

@@ -86,11 +86,13 @@ public class facade {
 
     
     public Boolean adicionarNoticia(Noticias noticia) throws servergcmExceptions{
-    
+      
+        noticia.setId(Integer.parseInt(String.valueOf(noticiasCrud.count()+1)));
+        
         try{
             noticiasCrud.save(noticia);
         }catch(Exception e){
-            return false;
+            throw new servergcmExceptions("Error " + e.getMessage());
         }
     
         return true;
@@ -98,11 +100,13 @@ public class facade {
     
     
     public Boolean adicionarEvento(Eventos evento) throws servergcmExceptions{
-       
+        evento.setId(Integer.parseInt(String.valueOf(eventosCrud.count()+1)));
+        
+        
         try{
             eventosCrud.save(evento);
         }catch(Exception e){
-            return false;
+            throw new servergcmExceptions("Error " + e.getMessage());
         }
     
         return true;
@@ -110,7 +114,8 @@ public class facade {
     
     
     public Boolean adicionarInteres(Intereses interes) throws servergcmExceptions{
-       
+       interes.setId(Integer.parseInt(String.valueOf(interesesCrud.count()+1)));
+        
         try{
             interesesCrud.save(interes);
         }catch(Exception e){

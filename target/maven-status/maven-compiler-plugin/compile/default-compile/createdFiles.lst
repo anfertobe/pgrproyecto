@@ -12,6 +12,7 @@ com\tservice\Model\Materias.class
 com\tservice\Persistencia\GruposCrudFactory.class
 com\tservice\Persistencia\EventosCrudFactory.class
 com\tservice\facade\ConstantesServerGcm.class
+com\tservice\BD\Connect.class
 com\tservice\facade\Content.class
 com\tservice\facade\facade.class
 com\tservice\Model\Mensajes.class

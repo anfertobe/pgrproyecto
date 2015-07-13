@@ -181,6 +181,18 @@ public class RestControllerGcm {
           return edificios;
     }
     
+          
+    @RequestMapping(value="/noticias",method = RequestMethod.GET)        
+    public List<Noticias> consultarNoticias()  throws ResourceNotFoundException { 
+        
+        List<Noticias> edificios = new LinkedList<Noticias>();
+        
+        for(Noticias edif : noticiasCrud.findAll())
+            edificios.add(edif);
+        
+          return edificios;
+    }
+    
     @RequestMapping(value="/intereses",method = RequestMethod.GET)        
     public List<Intereses> consultarIntereses()  throws ResourceNotFoundException { 
         

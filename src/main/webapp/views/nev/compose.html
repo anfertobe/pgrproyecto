@@ -1,0 +1,100 @@
+<div class="page" ng-controller="addNEVCtrl as evt" ng-init="evt.consultar()">
+    <div class="row">
+        <div class="col-sm-3">
+             <div class="row">
+        <div class="col-md-12">
+            <ul class="nav nav-boxed nav-justified">
+                <li><a href="javascript:;"><i class="color-success fa fa-home"></i> Home</a></li>
+                
+            </ul>
+        </div>
+    </div>
+              <section class="panel panel-default mail-categories">
+                 <ul class="list-group">
+                    <li class="list-group-item"><a href="javascript:;">
+                        <i class="fa fa-envelope-o"></i>Noticias<span class="badge badge-danger pull-right">{{noticias.length}}</span>
+                    </a></li>
+                    <li class="list-group-item"><a href="javascript:;">
+                        <i class="fa fa-star"></i>Eventos
+                        <span class="badge badge-info pull-right">{{eventos.length}}</span>
+                    </a></li>
+                </ul>
+            </section>
+            <section class="panel panel-default mail-categories">
+                <div class="panel-heading">Tipo Nom</div>
+                <ul class="list-group">
+                    <li class="list-group-item"><a href="javascript:;">
+                        Noticias <i class="fa fa-circle color-danger pull-right"></i>
+                    </a></li>
+                    <li class="list-group-item"><a href="javascript:;">
+                        Eventos <i class="fa fa-circle color-info pull-right"></i>
+                    </a></li>
+                </ul>
+            </section>
+        </div>
+        <div class="col-sm-9">
+            <section class="panel panel-default mail-container mail-compose">
+                <div class="panel-heading"><strong><span class="glyphicon glyphicon-th"></span>Eventos y Noticias</strong></div>
+                <div class="panel-body">
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label for="mail_to" class="col-xs-2">Titulo</label>
+                            <div class="col-xs-10">
+                                <input type="text" ng-model="NEV.titulo" id="mail_to" class="form-control">
+                                
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="mail_cc"  class="col-xs-2">Autoria</label>
+                            <div class="col-xs-10">
+                                <input type="text" ng-model="NEV.autoria" id="mail_cc" class="form-control">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="mail_cc" class="col-xs-2">Tipo:</label>
+                             <div class="col-xs-10">
+                                 <button type="button" ng-click="evt.tipo('Noticia')" class="btn btn-line-danger">Noticia</button>
+                                 <button type="button" ng-click="evt.tipo('Evento')" class="btn btn-line-primary">Evento</button>
+                            </div>
+                        </div>
+                       <section class="panel panel-default">
+                             <div class="panel-heading"><strong><span class="glyphicon glyphicon-th"></span> Intereses</strong></div>
+                        <div class="panel-body" >
+                        <tags-input ng-model="NEV.intereses" class="ui-tags-input" ></tags-input>
+                        </div>
+                  
+                        </section>
+                      
+                        
+                        <div class="form-group">
+                            <label for="mail_bcc" class="col-xs-2">Fecha</label>
+                            <div class="col-xs-10">
+                                   <div class="input-group ui-datepicker">
+                                    <input type="text" 
+                                           class="form-control"
+                                           datepicker-popup="yyyy-MM-dd"
+                                           ng-model="NEV.fecha"
+                                           is-open="opened"
+                                           min="minDate"
+                                           datepicker-options="dateOptions" 
+                                           date-disabled="disabled(date, mode)"
+                                           ng-required="true" 
+                                           close-text="Close">
+                                    <span class="input-group-addon" ng-click="open($event)"><i class="fa fa-calendar"></i></span>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        <div text-angular ng-model="NEV.contenido" class="ui-editor"></div>
+                    </form>
+                    <div class="mail-actions">
+                          <div class="panel-body">
+                             <button class="btn btn-w-md btn-gap btn-success" ng-click="evt.agregar()">Agregar</button>
+                          </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
