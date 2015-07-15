@@ -3862,6 +3862,10 @@ function(){
             $scope.noticias=[];
             $scope.intereses=[];
             
+            $scope.inter={ 
+                 text:""
+            };
+            
             $scope.NEV={
                     id: 0,
                     contenido: '',
@@ -3872,7 +3876,7 @@ function(){
                 };
            
             $scope.tipo=null;
-            $scope.intereses=[];
+            $scope.interesesNEV=[];
                 
             this.consultar = function(){
                 
@@ -3931,8 +3935,16 @@ function(){
                                               $scope.NEV.fecha=$scope.eventos[i].fecha;
                                               $scope.NEV.contenido=$scope.eventos[i].descripcion;
                                               $scope.NEV.titulo=$scope.eventos[i].titulo;
-                                             
                                               $scope.tipo='Evento';
+                                              for(var e=0;e<$scope.intereses.length;e++){
+                                                  if($scope.intereses[e].noticias!=null){
+                                                    if($scope.intereses[e].noticias.id==$scope.NEV.id){
+                                                        $scope.inter.text=$scope.intereses[e].nombre;
+                                                        $scope.NEV.intereses.push($scope.inter);
+                                                        
+                                                    }
+                                                  }
+                                              }
                                             }
                                       } 
                                     }
@@ -3949,6 +3961,15 @@ function(){
                                                  $scope.NEV.fecha=res;
                                                  $scope.tipo='Noticia';
                                                
+                                                for(var e=0;e<$scope.intereses.length;e++){
+                                                     if($scope.intereses[e].eventos!=null){
+                                                          if($scope.intereses[e].eventos.id==$scope.NEV.id){
+                                                              $scope.inter.text=$scope.intereses[e].nombre;
+                                                              $scope.NEV.intereses.push($scope.inter);
+                                                                
+                                                            }
+                                                    }
+                                                }
                                              }
                                          }
                                      }
@@ -4076,6 +4097,7 @@ function(){
                                                $scope.interes.descripcion=$scope.NEV.intereses[i].text;
                                                $scope.interes.nombre=$scope.NEV.intereses[i].text;
 
+                                              
                                                $http.put('rest/servergcm/interes',  $scope.interes).
                                                          success(function (data, status, headers, config) {
                                                          }).
