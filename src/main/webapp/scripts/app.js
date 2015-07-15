@@ -3832,6 +3832,28 @@ function(){
                                     alert('error!' + data + '/' + status);
                                 });
                 });
+                
+                $scope.interval_id=setInterval(function(){
+                         $http.get("rest/servergcm/eventos").
+                                success(function (response) {
+                                    $scope.eventos=response;
+                                                                    
+                                   
+                              
+                                }).
+                                error(function (data, status, headers, config) {
+                                    alert('error!' + data + '/' + status);
+                          });
+                           
+                          $http.get("rest/servergcm/noticias").
+                                success(function (response) {
+                                    $scope.noticias
+                                }).
+                                error(function (data, status, headers, config) {
+                                    alert('error!' + data + '/' + status);
+                                });
+                       
+                   },1000000);
             };
         }]).controller("selectNEVCtrl",["$scope","$rootScope","$http",'$timeout',
         function($scope, $rootScope, $http,$timeout){
@@ -3940,7 +3962,27 @@ function(){
                                 });
                 });
                 
+                $scope.interval_id=setInterval(function(){
+                         $http.get("rest/servergcm/eventos").
+                                success(function (response) {
+                                    $scope.eventos=response;
+                                                                    
+                                   
+                              
+                                }).
+                                error(function (data, status, headers, config) {
+                                    alert('error!' + data + '/' + status);
+                          });
+                           
+                          $http.get("rest/servergcm/noticias").
+                                success(function (response) {
+                                    $scope.noticias
+                                }).
+                                error(function (data, status, headers, config) {
+                                    alert('error!' + data + '/' + status);
+                                });
                        
+                   },1000000);      
             };
         }]).controller("addNEVCtrl",["$scope","$rootScope","$http",'$timeout',"logger",
         function($scope, $rootScope, $http,$timeout,logger){
@@ -4052,8 +4094,7 @@ function(){
                        delete $scope.noticia.carrerases
                        delete $scope.noticia.ubicacion
                        
-                       alert(JSON.stringify($scope.noticia));
-                       $http.put('rest/servergcm/noticia',  $scope.noticia).
+                        $http.put('rest/servergcm/noticia',  $scope.noticia).
                                 success(function (data, status, headers, config) {
                                          for (var i = 0; i < $scope.NEV.intereses.length; i++) {
                                                $scope.noticia.id=$scope.noticias.length+1;
@@ -4084,7 +4125,7 @@ function(){
                        $scope.evento.descripcion= $scope.NEV.contenido;
                        $scope.evento.titulo= $scope.NEV.titulo;
                        $scope.evento.fecha= $scope.NEV.fecha;
-                       alert(JSON.stringify($scope.evento));
+                       
                        $http.put('rest/servergcm/evento',  $scope.evento).
                                 success(function (data, status, headers, config) {
                                     for (var i = 0; i < $scope.NEV.intereses.length; i++) {
@@ -4145,7 +4186,104 @@ function(){
                                 });
                 });
                 
+                   $scope.interval_id=setInterval(function(){
+                         $http.get("rest/servergcm/eventos").
+                                success(function (response) {
+                                    $scope.eventos=response;
+                                                                    
+                                   
                               
+                                }).
+                                error(function (data, status, headers, config) {
+                                    alert('error!' + data + '/' + status);
+                          });
+                           
+                          $http.get("rest/servergcm/noticias").
+                                success(function (response) {
+                                    $scope.noticias
+                                }).
+                                error(function (data, status, headers, config) {
+                                    alert('error!' + data + '/' + status);
+                                });
+                       
+                   },1000000);
+                              
+            };
+        }]).controller("notificacionCtrl",["$scope","$rootScope","$http",'$timeout',"logger",
+        function($scope, $rootScope, $http,$timeout,logger){
+           
+            var consulta=null;
+            
+            $scope.noticiasNot=null;
+            $scope.eventosNot=null;
+            $scope.findNot=false;
+            $scope.findEV=false;
+            
+           this.consultar = function(){
+                 $timeout(function() {
+                    $http.get("rest/servergcm/eventos").
+                                success(function (response) {
+                                $scope.eventosNot=response;
+                                $scope.findEV=true;
+                                }).
+                                error(function (data, status, headers, config) {
+                                    alert('error!' + data + '/' + status);
+                                });
+                });
+                
+                  $timeout(function() {
+                    $http.get("rest/servergcm/noticias").
+                                success(function (response) {
+                                $scope.noticiasNot=response;
+                                         $scope.findNot=true;
+                                }).
+                                error(function (data, status, headers, config) {
+                                    alert('error!' + data + '/' + status);
+                                });
+                });
+               
+                  $scope.interval_id=setInterval(function(){
+                         $http.get("rest/servergcm/eventos").
+                                success(function (response) {
+                                    
+                                    if($scope.findEV){
+                                 
+                                         var diff=response.length-$scope.eventosNot.length;    
+                                    if(diff>0){
+                                        $scope.eventosNot=response;
+                                        return logger.log("Tiene "+ diff + " evento(s) nuevos !!");
+                                    }
+                                }
+                                    
+                                   
+                              
+                                }).
+                                error(function (data, status, headers, config) {
+                                    alert('error!' + data + '/' + status);
+                          });
+                           
+                          $http.get("rest/servergcm/noticias").
+                                success(function (response) {
+                                    
+                                    if ($scope.findNot){
+                                    
+                                        var diff=response.length-$scope.noticiasNot.length;
+                                        if(diff>0){
+                                            $scope.noticiasNot=response;
+                                            return logger.log("Tiene "+ diff + " noticia(s) nuevos !!");
+                                        }
+                               
+                                    
+                                    }
+                                }).
+                                error(function (data, status, headers, config) {
+                                    alert('error!' + data + '/' + status);
+                                });
+                       
+                   },100);
+                 
+               
+               
             };
         }])
         

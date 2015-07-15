@@ -1,4 +1,4 @@
-<header class="top-header clearfix">
+<header class="top-header clearfix" >
 
     <!-- Logo -->
     <div class="logo">
@@ -15,7 +15,7 @@
         <span class="icon-bar"></span>
     </div>
 
-    <div class="top-nav">
+    <div class="top-nav" ng-controller="notificacionCtrl as evt" ng-init="evt.consultar()" >
         <ul class="nav-left list-unstyled">
             <li>
                 <a href="#/" data-toggle-nav-collapsed-min
