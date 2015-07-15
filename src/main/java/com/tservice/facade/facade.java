@@ -87,7 +87,11 @@ public class facade {
     
     public Boolean adicionarNoticia(Noticias noticia) throws servergcmExceptions{
       
-        noticia.setId(Integer.parseInt(String.valueOf(noticiasCrud.count()+1)));
+        int id=Integer.parseInt(String.valueOf(noticiasCrud.count()+1));
+        while(noticiasCrud.findOne(id)!=null){
+            id+=1;
+        }
+        noticia.setId(id);
         
         try{
             noticiasCrud.save(noticia);
@@ -100,7 +104,13 @@ public class facade {
     
     
     public Boolean adicionarEvento(Eventos evento) throws servergcmExceptions{
-        evento.setId(Integer.parseInt(String.valueOf(eventosCrud.count()+1)));
+        
+                
+        int id=Integer.parseInt(String.valueOf(eventosCrud.count()+1));
+        while(eventosCrud.findOne(id)!=null){
+            id+=1;
+        }
+        evento.setId(id);
         
         
         try{
@@ -114,8 +124,14 @@ public class facade {
     
     
     public Boolean adicionarInteres(Intereses interes) throws servergcmExceptions{
-       interes.setId(Integer.parseInt(String.valueOf(interesesCrud.count()+1)));
+       
+       int id=Integer.parseInt(String.valueOf(interesesCrud.count()+1));
+        while(interesesCrud.findOne(id)!=null){
+            id+=1;
+        }
+        interes.setId(id);
         
+       
         try{
             interesesCrud.save(interes);
         }catch(Exception e){

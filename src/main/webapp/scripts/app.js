@@ -3786,9 +3786,9 @@ function(){
         }]).controller("eventosCtrl",["$scope","$rootScope","$http",'$timeout',
         function($scope, $rootScope, $http,$timeout){
             
-            $scope.eventos=[],
+            $scope.eventos=[];
             $scope.noticias=[];
-          
+            $scope.intereses=[];
             this.clickEV=function(id){
                 if(typeof(Storage) !== "undefined") {
                         sessionStorage.verEvento =  id ;
@@ -3811,56 +3811,57 @@ function(){
 
                 
             this.consultar = function(){
-                $timeout(function() {
-                    $http.get("rest/servergcm/eventos").
-                                success(function (response) {
-                                $scope.eventos=response;
-                               
-                                }).
-                                error(function (data, status, headers, config) {
-                                    alert('error!' + data + '/' + status);
-                                });
-                });
-                
-                  $timeout(function() {
-                    $http.get("rest/servergcm/noticias").
-                                success(function (response) {
-                                $scope.noticias=response;
-                               
-                                }).
-                                error(function (data, status, headers, config) {
-                                    alert('error!' + data + '/' + status);
-                                });
-                });
-                
-                $scope.interval_id=setInterval(function(){
-                         $http.get("rest/servergcm/eventos").
-                                success(function (response) {
-                                    $scope.eventos=response;
-                                                                    
-                                   
-                              
-                                }).
-                                error(function (data, status, headers, config) {
-                                    alert('error!' + data + '/' + status);
-                          });
+                 if(typeof(Storage) !== "undefined") {
+                      if(sessionStorage.eventos!=null){
+                          var jsonData = JSON.parse(sessionStorage.eventos);
+                          $scope.eventos=jsonData;
+                          
+                       }
+                        if(sessionStorage.noticias!=null){
+                            var jsonData = JSON.parse(sessionStorage.noticias);
+                           $scope.noticias=jsonData;
                            
-                          $http.get("rest/servergcm/noticias").
-                                success(function (response) {
-                                    $scope.noticias
-                                }).
-                                error(function (data, status, headers, config) {
-                                    alert('error!' + data + '/' + status);
-                                });
-                       
-                   },1000000);
+                        }
+                        if(sessionStorage.intereses!=null){
+                           var jsonData = JSON.parse(sessionStorage.intereses);
+                           $scope.intereses=jsonData;
+                           
+                        }	
+                }else {
+                     alert('Sorry! No Web Storage support..');
+                }
+                                
+                $scope.interval_id=setInterval(function(){
+                           if(typeof(Storage) !== "undefined") {
+                      if(sessionStorage.eventos!=null){
+                          var jsonData = JSON.parse(sessionStorage.eventos);
+                          $scope.eventos=jsonData;
+                          
+                       }
+                        if(sessionStorage.noticias!=null){
+                            var jsonData = JSON.parse(sessionStorage.noticias);
+                           $scope.noticias=jsonData;
+                           
+                        }
+                        if(sessionStorage.intereses!=null){
+                           var jsonData = JSON.parse(sessionStorage.intereses);
+                           $scope.intereses=jsonData;
+                           
+                        }	
+                }else {
+                     alert('Sorry! No Web Storage support..');
+                }
+            
+                },4000);
+          
             };
         }]).controller("selectNEVCtrl",["$scope","$rootScope","$http",'$timeout',
         function($scope, $rootScope, $http,$timeout){
             
-            $scope.eventos=[],
+            $scope.eventos=[];
             $scope.noticias=[];
-    
+            $scope.intereses=[];
+            
             $scope.NEV={
                     id: 0,
                     contenido: '',
@@ -3874,13 +3875,57 @@ function(){
             $scope.intereses=[];
                 
             this.consultar = function(){
-                 $timeout(function() {
-                    $http.get("rest/servergcm/eventos").
-                                success(function (response) {
-                                $scope.eventos=response;
-                                 if(typeof(Storage) !== "undefined") {
-                                         if(sessionStorage.verNoticia==-1){
-                                            for (var i = 0; i < $scope.eventos.length; i++) {
+                
+                  if(typeof(Storage) !== "undefined") {
+                      if(sessionStorage.eventos!=null){
+                          var jsonData = JSON.parse(sessionStorage.eventos);
+                          $scope.eventos=jsonData;
+                          
+                       }
+                        if(sessionStorage.noticias!=null){
+                           var jsonData = JSON.parse(sessionStorage.noticias);
+                           $scope.noticias=jsonData;
+                           
+                        }
+                        if(sessionStorage.intereses!=null){
+                          var jsonData = JSON.parse(sessionStorage.intereses);
+                           $scope.intereses=jsonData;
+                           
+                        }	
+                }else {
+                     alert('Sorry! No Web Storage support..');
+                }
+                                
+                $scope.interval_id=setInterval(function(){
+                           if(typeof(Storage) !== "undefined") {
+                      if(sessionStorage.eventos!=null){
+                          var jsonData = JSON.parse(sessionStorage.eventos);
+                          $scope.eventos=jsonData;
+                          
+                       }
+                        if(sessionStorage.noticias!=null){
+                            var jsonData = JSON.parse(sessionStorage.noticias);
+                           $scope.noticias=jsonData;
+                           
+                        }
+                        if(sessionStorage.intereses!=null){
+                           var jsonData = JSON.parse(sessionStorage.intereses);
+                           $scope.intereses=jsonData;
+                           
+                        }	
+                }else {
+                     alert('Sorry! No Web Storage support..');
+                }
+            
+                },4000);
+                    
+                
+                $timeout(function() {
+                         
+                       if(typeof(Storage) !== "undefined") {
+                          if(sessionStorage.verNoticia==-1){
+                                   
+                                     for (var i = 0; i < $scope.eventos.length; i++) {
                                             if ($scope.eventos[i].id == sessionStorage.verEvento) {
                                               $scope.NEV.id=$scope.eventos[i].id;
                                               $scope.NEV.fecha=$scope.eventos[i].fecha;
@@ -3891,19 +3936,8 @@ function(){
                                             }
                                       } 
                                     }
-                                    }
-                                }).
-                                error(function (data, status, headers, config) {
-                                    alert('error!' + data + '/' + status);
-                                });
-                });
-                
-                  $timeout(function() {
-                    $http.get("rest/servergcm/noticias").
-                                success(function (response) {
-                                $scope.noticias=response;
-                                if(typeof(Storage) !== "undefined") {
-                                     if (sessionStorage.verEvento==-1){
+                                    
+                                if (sessionStorage.verEvento==-1){
                                          for (var i = 0; i < $scope.noticias.length; i++) {
                                              if ($scope.noticias[i].id == sessionStorage.verNoticia) {
                                                  $scope.NEV.id=$scope.noticias[i].id;
@@ -3918,71 +3952,8 @@ function(){
                                              }
                                          }
                                      }
-                                }   
-                                }).
-                                error(function (data, status, headers, config) {
-                                    alert('error!' + data + '/' + status);
-                                });
-                });
+                   }});   
                 
-                 $timeout(function() {
-                    $http.get("rest/servergcm/intereses").
-                                success(function (response) {
-                                $scope.intereses=response;
-                                    for (var i = 0; i < $scope.intereses.length; i++) {
-                                        if($scope.tipo=='Noticia'){
-                                       
-                                              for (var i = 0; i < $scope.intereses.length; i++) {
-                                                if($scope.intereses[i].noticias != null){
-                                                    if($scope.NEV.id==$scope.intereses[i].noticias.id){
-                                                          $scope.NEV.intereses[$scope.NEV.intereses.length]=$scope.intereses[i].nombre
-                                                          
-                                                      }
-                                                    }
-                                                }
-                                            }else{
-                                       
-                                            for (var i = 0; i < $scope.intereses.length; i++) {
-                                                if($scope.intereses[i].eventos != null){
-                                                    if($scope.NEV.id==$scope.intereses[i].eventos.id){
-                                                          $scope.NEV.intereses[$scope.NEV.intereses.length]=$scope.intereses[i].nombre
-                                                          
-                                                      }
-                                                    }
-                                                }
-                                            }
-                                       
-                                        
-                                        }
-                                    
-                                    
-                                }).
-                                error(function (data, status, headers, config) {
-                                    alert('error!' + data + '/' + status);
-                                });
-                });
-                
-                $scope.interval_id=setInterval(function(){
-                         $http.get("rest/servergcm/eventos").
-                                success(function (response) {
-                                    $scope.eventos=response;
-                                                                    
-                                   
-                              
-                                }).
-                                error(function (data, status, headers, config) {
-                                    alert('error!' + data + '/' + status);
-                          });
-                           
-                          $http.get("rest/servergcm/noticias").
-                                success(function (response) {
-                                    $scope.noticias
-                                }).
-                                error(function (data, status, headers, config) {
-                                    alert('error!' + data + '/' + status);
-                                });
-                       
-                   },1000000);      
             };
         }]).controller("addNEVCtrl",["$scope","$rootScope","$http",'$timeout',"logger",
         function($scope, $rootScope, $http,$timeout,logger){
@@ -4029,7 +4000,8 @@ function(){
             
             $scope.eventos=[],
             $scope.noticias=[];
-    
+            $scope.intereses=[];
+            
             $scope.NEV={
                     id: 0,
                     contenido: '',
@@ -4106,8 +4078,6 @@ function(){
 
                                                $http.put('rest/servergcm/interes',  $scope.interes).
                                                          success(function (data, status, headers, config) {
-
-                                                            return logger.logSuccess($scope.NEV.tipo+ " agregada correctamente");
                                                          }).
                                                          error(function (data, status, headers, config) {
 
@@ -4125,7 +4095,8 @@ function(){
                        $scope.evento.descripcion= $scope.NEV.contenido;
                        $scope.evento.titulo= $scope.NEV.titulo;
                        $scope.evento.fecha= $scope.NEV.fecha;
-                       
+                      
+                      alert(JSON.stringify($scope.evento));
                        $http.put('rest/servergcm/evento',  $scope.evento).
                                 success(function (data, status, headers, config) {
                                     for (var i = 0; i < $scope.NEV.intereses.length; i++) {
@@ -4139,7 +4110,6 @@ function(){
                                                $http.put('rest/servergcm/interes',  $scope.interes).
                                                          success(function (data, status, headers, config) {
 
-                                                            return logger.logSuccess($scope.NEV.tipo+ " agregada correctamente");
                                                          }).
                                                          error(function (data, status, headers, config) {
 
@@ -4164,49 +4134,49 @@ function(){
             }
                
             this.consultar = function(){
-                 $timeout(function() {
-                    $http.get("rest/servergcm/eventos").
-                                success(function (response) {
-                                $scope.eventos=response;
-                              
-                                }).
-                                error(function (data, status, headers, config) {
-                                    alert('error!' + data + '/' + status);
-                                });
-                });
                 
-                  $timeout(function() {
-                    $http.get("rest/servergcm/noticias").
-                                success(function (response) {
-                                $scope.noticias=response;
-                               
-                                }).
-                                error(function (data, status, headers, config) {
-                                    alert('error!' + data + '/' + status);
-                                });
-                });
-                
-                   $scope.interval_id=setInterval(function(){
-                         $http.get("rest/servergcm/eventos").
-                                success(function (response) {
-                                    $scope.eventos=response;
-                                                                    
-                                   
-                              
-                                }).
-                                error(function (data, status, headers, config) {
-                                    alert('error!' + data + '/' + status);
-                          });
+                 if(typeof(Storage) !== "undefined") {
+                      if(sessionStorage.eventos!=null){
+                          var jsonData = JSON.parse(sessionStorage.eventos);
+                          $scope.eventos=jsonData;
+                          
+                       }
+                        if(sessionStorage.noticias!=null){
+                            var jsonData = JSON.parse(sessionStorage.noticias);
+                           $scope.noticias=jsonData;
                            
-                          $http.get("rest/servergcm/noticias").
-                                success(function (response) {
-                                    $scope.noticias
-                                }).
-                                error(function (data, status, headers, config) {
-                                    alert('error!' + data + '/' + status);
-                                });
-                       
-                   },1000000);
+                        }
+                        if(sessionStorage.intereses!=null){
+                           var jsonData = JSON.parse(sessionStorage.intereses);
+                           $scope.intereses=jsonData;
+                           
+                        }	
+                }else {
+                     alert('Sorry! No Web Storage support..');
+                }
+                                
+                $scope.interval_id=setInterval(function(){
+                 if(typeof(Storage) !== "undefined") {
+                      if(sessionStorage.eventos!=null){
+                          var jsonData = JSON.parse(sessionStorage.eventos);
+                          $scope.eventos=jsonData;
+                          
+                       }
+                        if(sessionStorage.noticias!=null){
+                            var jsonData = JSON.parse(sessionStorage.noticias);
+                           $scope.noticias=jsonData;
+                           
+                        }
+                        if(sessionStorage.intereses!=null){
+                           var jsonData = JSON.parse(sessionStorage.intereses);
+                           $scope.intereses=jsonData;
+                           
+                        }	
+                }else {
+                     alert('Sorry! No Web Storage support..');
+                }
+            
+                },4000);
                               
             };
         }]).controller("notificacionCtrl",["$scope","$rootScope","$http",'$timeout',"logger",
@@ -4214,46 +4184,25 @@ function(){
            
             var consulta=null;
             
-            $scope.noticiasNot=null;
-            $scope.eventosNot=null;
-            $scope.findNot=false;
-            $scope.findEV=false;
+            $scope.noticiasNot=[];
+            $scope.eventosNot=[];
             
-           this.consultar = function(){
-                 $timeout(function() {
-                    $http.get("rest/servergcm/eventos").
-                                success(function (response) {
-                                $scope.eventosNot=response;
-                                $scope.findEV=true;
-                                }).
-                                error(function (data, status, headers, config) {
-                                    alert('error!' + data + '/' + status);
-                                });
-                });
-                
-                  $timeout(function() {
-                    $http.get("rest/servergcm/noticias").
-                                success(function (response) {
-                                $scope.noticiasNot=response;
-                                         $scope.findNot=true;
-                                }).
-                                error(function (data, status, headers, config) {
-                                    alert('error!' + data + '/' + status);
-                                });
-                });
-               
+            this.consultar = function(){
                   $scope.interval_id=setInterval(function(){
                          $http.get("rest/servergcm/eventos").
                                 success(function (response) {
-                                    
-                                    if($scope.findEV){
-                                 
-                                         var diff=response.length-$scope.eventosNot.length;    
+                                   var diff=response.length-$scope.eventosNot.length;    
                                     if(diff>0){
+                                        if(typeof(Storage) !== "undefined") {
+                                            sessionStorage.eventos=JSON.stringify(response);
+                                        }else {
+                                            alert('Sorry! No Web Storage support..');
+                                        }
+                                
                                         $scope.eventosNot=response;
                                         return logger.log("Tiene "+ diff + " evento(s) nuevos !!");
                                     }
-                                }
+                                
                                     
                                    
                               
@@ -4264,23 +4213,43 @@ function(){
                            
                           $http.get("rest/servergcm/noticias").
                                 success(function (response) {
-                                    
-                                    if ($scope.findNot){
-                                    
+                                     
                                         var diff=response.length-$scope.noticiasNot.length;
                                         if(diff>0){
+                                        if(typeof(Storage) !== "undefined") {
+                                            sessionStorage.noticias = JSON.stringify(response);
+                                        }else {
+                                            alert('Sorry! No Web Storage support..');
+                                        }
+                                
                                             $scope.noticiasNot=response;
                                             return logger.log("Tiene "+ diff + " noticia(s) nuevos !!");
                                         }
                                
                                     
-                                    }
+                                    
+                                }).
+                                error(function (data, status, headers, config) {
+                                    alert('error!' + data + '/' + status);
+                                });
+                                
+                                $http.get("rest/servergcm/intereses").
+                                    success(function (response) {
+                                        
+                                     if(typeof(Storage) !== "undefined") {
+                                           sessionStorage.intereses =  JSON.stringify(response);
+                                           
+                                     }else {
+                                            alert('Sorry! No Web Storage support..');
+                                     }
+                     
+                                        
                                 }).
                                 error(function (data, status, headers, config) {
                                     alert('error!' + data + '/' + status);
                                 });
                        
-                   },100);
+                   },2000);
                  
                
                
