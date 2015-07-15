@@ -496,7 +496,7 @@ public class facade {
         
         Boolean resp = false;
         
-        if(!Objects.isNull(mensaje.getUsuariosByUsuariodestino())){
+        if(mensaje.getUsuariosByUsuariodestino()!=null){
             
             if(!usuCrud.exists(mensaje.getUsuariosByUsuariodestino().getCarne()))
                 throw new servergcmExceptions("El usuario destino identificado con carne N°"+ mensaje.getUsuariosByUsuariodestino().getCarne() + " no existe.");
@@ -509,7 +509,7 @@ public class facade {
             mensaCrud.save(mensaje);
             
             resp = enviarMensajeUsuario(remitente, destino, mensaje.getContenido());
-        }else if(!Objects.isNull(mensaje.getGrupos())){
+        }else if(mensaje.getGrupos()!=null){
             
             if(!gruposCrud.exists(mensaje.getGrupos().getId()))
                 throw new servergcmExceptions("Este grupo no esta registrado.");
