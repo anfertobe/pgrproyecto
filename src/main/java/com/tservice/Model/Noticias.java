@@ -55,7 +55,7 @@ public class Noticias  implements java.io.Serializable {
     }
 
     
-    @Column(name="contenido", length=45)
+    @Column(name="contenido", length=255)
     public String getContenido() {
         return this.contenido;
     }
@@ -75,7 +75,7 @@ public class Noticias  implements java.io.Serializable {
     }
 
     
-    @Column(name="titulo", length=45)
+    @Column(name="titulo", length=100)
     public String getTitulo() {
         return this.titulo;
     }
