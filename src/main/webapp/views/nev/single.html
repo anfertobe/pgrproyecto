@@ -32,22 +32,21 @@
         <div class="col-sm-9">
             <section class="panel panel-default mail-container">
                 <div class="panel-heading"><strong><span class="glyphicon glyphicon-th"></span> Ver {{tipo}}</strong></div>
-                <div class="panel-body">
-                    <div class="mail-header row">
-                        <div class="col-md-8">
-                            <h3>{{NEV.titulo}}</h3>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="pull-right">
-                               <a href="javascript:;" class="btn btn-sm btn-default"><i class="fa fa-print"></i></a>
-                                <a href="javascript:;" class="btn btn-sm btn-default"><i class="fa fa-trash-o"></i></a>
-                            </div>
+                <div class="tl-body">
+                    <div class="tl-tile text-primary">
+                        
+                        <div class="pull-center">
+                            <h3>    {{NEV.titulo}}</h3>
                         </div>
                     </div>
-                    <div class="mail-info">
+                    <br>
+                   
+                    <div class="tl-tile text-info">
                         <div class="row">
                             <div class="col-md-8">
-                                <strong>{{NEV.autoria}}</strong> 
+                                <div class="pull-left">
+                                     <strong>{{NEV.autoria}}</strong> 
+                                </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="pull-right">
@@ -56,6 +55,12 @@
                             </div>
                         </div>
                     </div>
+                     <br>
+                    <div class="tl-content">
+                        <div text-angular ng-model="NEV.contenido" class="ui-editor" ></div>
+                    </div>
+                    <br>
+                    <br>
                     
                      <section class="panel panel-default">
                              <div class="panel-heading"><strong><span class="glyphicon glyphicon-th"></span> Intereses</strong></div>
@@ -63,7 +68,7 @@
                             <tags-input ng-model="NEV.intereses" class="ui-tags-input" ></tags-input>
                         </div>
                      </section>
-                    <div text-angular ng-model="NEV.contenido"  class="ui-editor"></div>
+                  
                   
                 </div>
             </section>

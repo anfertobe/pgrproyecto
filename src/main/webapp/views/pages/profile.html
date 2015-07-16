@@ -1,11 +1,12 @@
 <div class="page page-profile">
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-6" ng-controller="PerfilCtrl">
             <section class="panel panel-box">
                 <div class="panel-top bg-primary">
                     <div class="text-center">
-                        <h3>{{main.name}}</h3>
-                        <p>Project ManagerRRR</p> 
+                        <h3>{{usuario.nombre}}</h3>
+                        <h3><p>{{usuario.perfil}}</p> </h3>
+                        <h3><p>{{usuario.semestre}} Semestre</p> </h3>
                     </div>
                     <div class="divider divider-lg"></div>
                     <div class="divider divider-lg"></div>
@@ -16,152 +17,88 @@
                 <div class="list-justified-container">
                     <ul class="list-justified text-center">
                         <li>
-                            <p class="size-h3">679</p>
-                            <p class="text-muted">Tweets</p>
-                        </li>
-                        <li>
-                            <p class="size-h3">575</p>
-                            <p class="text-muted">Followers</p>
-                        </li>
-                        <li>
-                            <p class="size-h3">23</p>
-                            <p class="text-muted">Following</p>
+
+                            <p><h3><span class="icon glyphicon glyphicon-envelope"></span>
+                                <label>Email</label></h3></p>
+                                <h4><label>{{usuario.correo}}</label></h4>
+
                         </li>
                     </ul>
                 </div>
             </section>
-
             <div class="row">
                 <div class="col-sm-6">
                     <div class="panel mini-box">
                         <span class="box-icon rounded bg-danger">
-                            <i class="fa fa-film"></i>
+                            <i class="fa fa-user stat-icon"></i>
                         </span>
                         <div class="box-info">
-                            <p class="size-h2">39</p>
-                            <p class="text-muted">Amazing Films</p>
+                            <p class="size-h2">{{cantContactos}}</p>
+                            <p class="text-muted">Contactos</p>
                         </div>
                     </div>                    
                 </div>
                 <div class="col-sm-6">
                     <div class="panel mini-box">
                         <span class="box-icon rounded bg-warning">
-                            <i class="fa fa-camera"></i>
+                            <i class="fa fa-users stat-icon"></i>
                         </span>
                         <div class="box-info">
-                            <p class="size-h2">63</p>
-                            <p class="text-muted">Wonderful Photos</p>
+                            <p class="size-h2">{{cantGrupos}}</p>
+                            <p class="text-muted">Grupos</p>
                         </div>
                     </div>                    
                 </div>
             </div>
-            <div class="row">
-                <div class="col-sm-6">
-                    <div class="panel mini-box">
-                        <span class="box-icon rounded bg-success">
-                            <i class="fa fa-bookmark-o"></i>
-                        </span>
-                        <div class="box-info">
-                            <p class="size-h2">55</p>
-                            <p class="text-muted">New Collections</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-6">
-                    <div class="panel mini-box">
-                        <span class="box-icon rounded bg-info">
-                            <i class="fa fa-check"></i>
-                        </span>
-                        <div class="box-info">
-                            <p class="size-h2">34</p>
-                            <p class="text-muted">Tasks Finised</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
             <div class="row">
                 <div class="col-sm-6">
-                    <section class="panel panel-box">
-                        <div class="panel-top bg-facebook">
-                            <div class="divider divider"></div>
-                            <i class="fa fa-facebook size-h1"></i>
-                            <div class="divider divider"></div>
-                        </div>
-                        <div class="list-justified-container">
-                            <ul class="list-justified text-center">
-                                <li>
-                                    <p class="size-h3">575</p>
-                                    <p class="text-muted">Followers</p>
-                                </li>
-                                <li>
-                                    <p class="size-h3">23</p>
-                                    <p class="text-muted">Following</p>
+                        <div class="col-md-13">
+                    <div class="panel panel-default">
+                        <div class="panel panel-default mail-categories " data-slim-scroll data-scroll-height="320px">
+                            <ul class="list-group">
+                                <li class="list-group-item">
+                                    <a href="javascript:;" class="rounded box-info">
+                                        <div class="row" data-ng-repeat="contact in contactos">
+                                            <div class="col-sm-1">
+                                                <span class="box-icon badge badge-success "><i class="fa fa-user stat-icon"></i></span>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <p class="text-info size-h4">{{contact}}</p>
+                                            </div>
+                                        </div>
+                                    </a>
                                 </li>
                             </ul>
                         </div>
-                    </section>
+                    </div>
+                </div>                
                 </div>
                 <div class="col-sm-6">
-                    <section class="panel panel-box">
-                        <div class="panel-top bg-twitter">
-                            <div class="divider divider"></div>
-                            <i class="fa fa-twitter size-h1"></i>
-                            <div class="divider divider"></div>
-                        </div>
-                        <div class="list-justified-container">
-                            <ul class="list-justified text-center">
-                                <li>
-                                    <p class="size-h3">575</p>
-                                    <p class="text-muted">Followers</p>
-                                </li>
-                                <li>
-                                    <p class="size-h3">23</p>
-                                    <p class="text-muted">Following</p>
+                        <div class="col-md-13">
+                    <div class="panel panel-default">
+                        <div class="panel panel-default mail-categories " data-slim-scroll data-scroll-height="320px">
+                            <ul class="list-group">
+                                <li class="list-group-item">
+                                    <a href="javascript:;" class="rounded box-info">
+                                        <div class="row" data-ng-repeat="group in grupos">
+                                            <div class="col-sm-1">
+                                                <span class="box-icon badge badge-success "><i class="fa fa-users stat-icon"></i></span>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <p class="text-info size-h4">{{group}}</p>
+                                            </div>
+                                        </div>
+                                    </a>
                                 </li>
                             </ul>
                         </div>
-                    </section>                        
+                    </div>
+                </div>                
                 </div>
             </div>
 
-            <div class="panel panel-default">
-                <div class="panel-heading"><strong><span class="glyphicon glyphicon-th"></span> Profile Info</strong></div>
-                <div class="panel-body">
-                    <div class="media">
-                        <div class="media-body">
-                            <ul class="list-unstyled list-info">
-                                <li>
-                                    <span class="icon glyphicon glyphicon-user"></span>
-                                    <label>User name</label>
-                                    {{main.name}}
-                                </li>
-                                <li>
-                                    <span class="icon glyphicon glyphicon-envelope"></span>
-                                    <label>Email</label>
-                                    name@example.com
-                                </li>
-                                <li>
-                                    <span class="icon glyphicon glyphicon-home"></span>
-                                    <label>Address</label>
-                                    Street 123, Avenue 45, Country
-                                </li>
-                                <li>
-                                    <span class="icon glyphicon glyphicon-earphone"></span>
-                                    <label>Contact</label>
-                                    (+012) 345 6789
-                                </li>
-                                <li>
-                                    <span class="icon glyphicon glyphicon-flag"></span>
-                                    <label>Nationality</label>
-                                    Australia
-                                </li>
-                            </ul>
-                            
-                        </div>
-                    </div>
-                </div>
-            </div>
+            
           
         </div>
         <div class="col-md-6">

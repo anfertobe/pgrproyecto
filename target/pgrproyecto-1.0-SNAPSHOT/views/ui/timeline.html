@@ -1,8 +1,61 @@
-<div class="page">
+<div class="page" ng-controller="timeLine as evt" ng-init="evt.consultar()">
     
     <div class="ui-timline-container">
         <section class="ui-timeline">
-            <article class="tl-item">
+           
+          
+            
+         <article class="tl-item">
+                <div class="tl-body">
+                    <div class="tl-entry">
+                        <div class="tl-caption">
+                            <a href="javascript:;" class="btn btn-danger btn-block">Noticias</a>
+                        </div>
+                    </div>
+                </div>
+            </article>
+            
+            
+             <article class="{{ev.posicion}}" ng-repeat="ev in noticias">
+                <div class="tl-body">
+                    <div class="tl-entry">
+                        <div class="tl-time">{{ev.time}}</div>
+                        <div class="{{ev.info}}"><i class="{{ev.image}}"></i></div>
+                        <div class="tl-content">
+                            <h4 class="{{ev.ctexto}}">{{ev.text}}</h4>
+                            <p>{{ev.content}}</p>
+                        </div>
+                    </div>
+                </div>
+            </article>
+            
+              <article class="tl-item">
+                <div class="tl-body">
+                    <div class="tl-entry">
+                        <div class="tl-caption">
+                            <a href="javascript:;" class="btn btn-primary btn-block">Eventos</a>
+                        </div>
+                    </div>
+                </div>
+            </article>
+            
+               
+            <article class="{{ev.posicion}}" ng-repeat="ev in eventos">
+                <div class="tl-body">
+                    <div class="tl-entry">
+                        <div class="tl-time">{{ev.time}}</div>
+                        <div  class="{{ev.info}}"><i class="{{ev.image}}"></i></div>
+                        <div class="tl-content">
+                            <h4 class="{{ev.ctexto}}">{{ev.text}}</h4>
+                            <p>{{ev.content}}</p>
+                        </div>
+                    </div>
+                </div>
+            </article>
+            
+            <!--
+            
+             <article class="tl-item">
                 <div class="tl-body">
                     <div class="tl-entry">
                         <div class="tl-caption">
@@ -11,7 +64,7 @@
                     </div>
                 </div>
             </article>
-
+            
             <article class="tl-item">
                 <div class="tl-body">
                     <div class="tl-entry">
@@ -152,7 +205,7 @@
                     </div>
                 </div>
             </article>
-
+            --->
         </section>
     </div>
 

@@ -2262,32 +2262,31 @@ function(){
                                 return start=(page-1)*$scope.numPerPage,
 				end=start+$scope.numPerPage,
 				$scope.currentPageStores=
-                                        $scope.filteredStores.slice(start,
-				end)
+                                        $scope.filteredStores.slice(start,end);
 			},
 			$scope.onFilterChange=function(){
 				return $scope.select(1),
 				$scope.currentPage=1,
-				$scope.row=""
+				$scope.row="";
 			},
 			$scope.onNumPerPageChange=function(){
 				return $scope.select(1),
-				$scope.currentPage=1
+				$scope.currentPage=1;
 			},
 			$scope.onOrderChange=function(){
 				return $scope.select(1),
-				$scope.currentPage=1
+				$scope.currentPage=1;
 			},
 			$scope.search=function(){
 				return $scope.filteredStores=$filter("filter")($scope.stores,
 				$scope.searchKeywords),
-				$scope.onFilterChange()
+				$scope.onFilterChange();
 			},
 			$scope.order=function(rowName){
 				return $scope.row!==rowName?($scope.row=rowName,
 				$scope.filteredStores=$filter("orderBy")($scope.stores,
 				rowName),
-				$scope.onOrderChange()):void 0
+				$scope.onOrderChange()):void 0;
 			},
 			$scope.numPerPageOpt=[
 				3,
@@ -3176,8 +3175,8 @@ function(){
 		}
 	])
 }.call(this),
-function(){
-	"use strict";
+ function() {
+       "use strict";
     angular.module("app",
 	[
 		"ngRoute",
@@ -3188,6 +3187,11 @@ function(){
 		"ui.tree",
 		"ngMap",
 		"ngTagsInput",
+                "login.controllers",
+                "profile.controllers",
+                "perfil.controllers",
+                "carreras.controllers",
+                "singup.controllers",
 		"app.controllers",
 		"app.directives",
 		"app.localization",
@@ -3211,6 +3215,8 @@ function(){
 			var routes,
 			setRoutes;
                     return routes=[
+                                "index2",
+                                "index",
 				"dashboard",
 				"ecimessage/generargrupos",
 				"ui/typography",
@@ -3264,9 +3270,16 @@ function(){
 			}),
 			$routeProvider.when("/",
 			{
-				templateUrl:"views/pages/signin.html"
+				templateUrl:"views/dashboard.html"
+			})              .when("/signup",
+			{
+				templateUrl:"signup.html"
 			})
-                                        .when("/i2",
+                                        .when("/index",
+			{
+				templateUrl:"index.html"
+			})
+                                    .when("/index2",
 			{
 				templateUrl:"index2.html"
 			})
@@ -3279,7 +3292,7 @@ function(){
 			})
 		}
 	])
-}.call(this),
+    }.call(this),
 function(){
 	"use strict";
     angular.module("app.nav",
@@ -3761,34 +3774,411 @@ function(){
 	[
 		"$scope",
 		function(){}
-	]).controller("loginCtrl",["$scope","$rootScope","$http",
+	]) }.call(this), 
+        function() {"use strict";angular.module("carreras.controllers",
+	[]).controller("CarrerasTableCtrl", ["$scope", "$filter","$http", function($scope, $filter, $http) {              
+            var init;
+            $scope.stores = [];
+            return $http.get("rest/servergcm/carreras").
+                                success(function (response) {
+                                    $scope.stores = response;
+                                    
+                                }).
+                                error(function (data, status, headers, config) {
+                                    //alert('error!' + data + '/' + status);
+                                }),
+            
+            $scope.searchKeywords = "", $scope.filteredStores = [], $scope.row = "", $scope.select = function(page) {
+                var end, start;
+                return start = (page - 1) * $scope.numPerPage, end = start + $scope.numPerPage, $scope.currentPageStores = $scope.filteredStores
+                    .slice(start, end)
+            }, $scope.onFilterChange = function() {
+                return $scope.select(1), $scope.currentPage = 1, $scope.row = ""
+            }, $scope.onNumPerPageChange = function() {
+                return $scope.select(1), $scope.currentPage = 1
+            }, $scope.onOrderChange = function() {
+                return $scope.select(1), $scope.currentPage = 1
+            }, $scope.search = function() {
+                return $scope.filteredStores = $filter("filter")($scope.stores, $scope.searchKeywords), $scope.onFilterChange()
+            }, $scope.order = function(rowName) {
+                return $scope.row !== rowName ? ($scope.row = rowName, $scope.filteredStores = $filter("orderBy")($scope.stores, rowName),
+                    $scope.onOrderChange()) : void 0
+            }, $scope.numPerPageOpt = [0, 3, 5, 10, 20], $scope.numPerPage = $scope.numPerPageOpt[0], $scope.currentPage = 1, $scope.currentPageStores = [], (
+                init = function() {
+                    return $scope.search(), $scope.select($scope.currentPage)
+                })()
+
+        }])
+           .controller("CarrerasInptuCtrl", ["$scope", "$http", 
+            function($scope, $http){
+                   $scope.carrera ={
+                    id:0,
+                    nombre:'',
+                    descrpcion:'',
+                    eventoses :[],
+                    usuarioses :[],
+                    intereseses :[]
+                };
+                   
+                   $scope.registrar = function(){
+                       $http.put("rest/servergcm/carrera", $scope.carrera).
+                                success(function (response) {
+                                        alert('solicitud aceptada');
+                                }).
+                                error(function (data, status, headers, config) {
+                                    alert('error!' + data + '/' + status);
+                                });
+                   };
+           }])}.call(this),
+        function(){
+	"use strict";angular.module("login.controllers",
+	[])
+                
+        .controller("loginCtrl",["$scope","$rootScope","$http",
         function($scope, $rootScope, $http){
             
-
-              $scope.usuario="1",
-              $scope.password="1"
-
-
-            this.pageSucces='#/pages/profile';
+            $rootScope.showsection = false;
+            $rootScope.user="";
+            $scope.usuario="",
+            $scope.password=""
+            sessionStorage.user= "";
+            sessionStorage.nombreApp= "SCMECI";
             
+            $scope.singup = function(){
+                window.location='signup.html';
+            }
                 
             this.login = function(){
                 $http.get("rest/servergcm/login/"+ $scope.usuario +"/"+ $scope.password).
                                 success(function (response) {
-                                    $rootScope.showsection = true;
+                                    sessionStorage.showsection = true;
                                     sessionStorage.user= $scope.usuario;
-                                    window.location='#/pages/profile';
+                                    window.location='index2.html';
                                 }).
                                 error(function (data, status, headers, config) {
                                     alert('error!' + data + '/' + status);
                                 });
             }
-        }]).controller("eventosCtrl",["$scope","$rootScope","$http",'$timeout',
-        function($scope, $rootScope, $http,$timeout){
+        }])}.call(this),
+    function(){
+	"use strict";angular.module("singup.controllers",
+	[]).controller("SignupCtrl",["$scope","$http",
+        function($scope, $http){
+                    $scope.usuario = {
+                            identificacion : '',
+                            carne : '', 
+                            nombre  :'',
+                            email  :'',
+                            password : '',
+                            semestre : 1,
+                            identificaciongoogle : null,
+                            perfil:'',
+                            carrerases:[],
+                            materiases:[],
+                            gruposes_1:[]
+                            
+                        },
+
+                $scope.semestreOption = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            
+                        
+                        this.registrarUsuario =  function(){
+                                $http.put("rest/servergcm/registro/1", $scope.usuario).
+                                success(function (response) {
+                                        alert('solicitud aceptada' + $scope.usuario.semestre);
+                                }).
+                                error(function (data, status, headers, config) {
+                                    alert('error!' + data + '/' + status + $scope.usuario.carne + $scope.usuario.identificacion+ $scope.usuario.semestre+ $scope.usuario.nombre+ $scope.usuario.email);
+                                });
+                            };
+        }])}.call(this),
+    function(){
+	"use strict";angular.module("profile.controllers",
+	[]).controller("ProfileCtrl",["$scope","$http",
+        function($scope, $http){
+                    $scope.usuario = {
+                            identificacion : '',
+                            carne : '', 
+                            nombre  :'',
+                            email  :'',
+                            password : '',
+                            semestre : 1,
+                            identificaciongoogle : null,
+                            perfil:'',
+                            carrerases:[],
+                            materiases:[],
+                            gruposes_1:[]
+                            
+                        },
+
+                $scope.semestreOption = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            
+                        
+                        this.registrarUsuario =  function(){
+                                $http.put("rest/servergcm/registro/1", $scope.usuario).
+                                success(function (response) {
+                                        alert('solicitud aceptada' + $scope.usuario.semestre);
+                                }).
+                                error(function (data, status, headers, config) {
+                                    alert('error!' + data + '/' + status + $scope.usuario.carne + $scope.usuario.identificacion+ $scope.usuario.semestre+ $scope.usuario.nombre+ $scope.usuario.email);
+                                });
+                            };
+        }])}.call(this),
+    function(){
+	"use strict";angular.module("perfil.controllers",
+	[]).controller("PerfilCtrl",["$scope","$http",
+        function($scope, $http){ 
+            $scope.grupos = [],
+            $scope.contactos = [],
+            $scope.usuario = {
+                    nombre : '',
+                    semestre : '',
+                    perfil : '',
+                    correo : '',
+                    carne : ''          
+                }
+                
+            $scope.cantGrupos = 0,
+            $scope.cantContactos = 0,  
+
+
+                $http.get("rest/servergcm/usuario/" + sessionStorage.user).
+                success(function (response) {
+                        
+                            $scope.usuario.carne = response.toString().split(',')[0],    
+                            $scope.usuario.nombre = response.toString().split(',')[1],
+                            $scope.usuario.correo = response.toString().split(',')[2],
+                            $scope.usuario.perfil = response.toString().split(',')[3],
+                            $scope.usuario.semestre = response.toString().split(',')[4]
+
+                }).
+                error(function (data, status, headers, config) {
+                    alert('error!' + data + '/' + status );
+                });
+            
+                $http.get("rest/servergcm/contactos/" + sessionStorage.user).
+                success(function (response) {
+                        $scope.contactos = response;
+                        $scope.cantContactos = $scope.contactos.length
+                        
+                }).
+                error(function (data, status, headers, config) {
+                    alert('error!' + data + '/' + status);
+                });
+            
+                $http.get("rest/servergcm/grupos/" + sessionStorage.user).
+                success(function (response) {
+                        $scope.grupos = response;
+                        $scope.cantGrupos = $scope.grupos.length;
+                        alert('solicitud aceptada' + $scope.usuario.semestre);
+                }).
+                error(function (data, status, headers, config) {
+                    alert('error!' + data + '/' + status );
+                });
+            
+        }]).controller("eventosCtrl",["$scope","$rootScope","$http",'$timeout','$filter',
+        function($scope, $rootScope, $http,$timeout,$filter){
+            var init;
+            $scope.NEVS=[];        
+            this.consultar = function(){
+            
+                 if(typeof(Storage) !== "undefined") {
+                      if(sessionStorage.eventos!=null){
+                          var jsonData = JSON.parse(sessionStorage.eventos);
+                          $scope.eventos=jsonData;
+                          $scope.NEVS=[];
+                          for(var i=0;i<$scope.eventos.length;i++){
+                                
+                                var NEV={
+                                    id: 0,
+                                    contenido: '',
+                                    autoria: '',
+                                    titulo: '',
+                                    fecha: '',
+                                    tipo: '',
+                                    intereses:[]
+                                };
+                               NEV.id=$scope.eventos[i].id;
+                               NEV.fecha=$scope.eventos[i].fecha;
+                               NEV.contenido=$scope.eventos[i].descripcion;
+                               NEV.titulo=$scope.eventos[i].titulo;
+                               NEV.autoria="";
+                               NEV.tipo="fa fa-circle color-info";
+                              $scope.NEVS.push(NEV);
+                          }
+                          
+                          
+                       }
+                        if(sessionStorage.noticias!=null){
+                            var jsonData = JSON.parse(sessionStorage.noticias);
+                           $scope.noticias=jsonData;
+                           for(var i=0;i<$scope.noticias.length;i++){
+                                 var NEV={
+                                    id: 0,
+                                    contenido: '',
+                                    autoria: '',
+                                    titulo: '',
+                                    fecha: '',
+                                    tipo: '',
+                                    intereses:[]
+                                };
+                                   NEV.id=$scope.noticias[i].id;
+                                   NEV.contenido=$scope.noticias[i].contenido;
+                                   NEV.autoria=$scope.noticias[i].autoria;
+                                   NEV.titulo=$scope.noticias[i].titulo;
+                                   var rightNow = new Date();
+                                   var res = rightNow.toISOString().slice(0,10);
+                                   NEV.fecha=res;
+                                   NEV.tipo="fa fa-circle color-danger";
+                                   
+                                   $scope.NEVS.push(NEV);
+                          }
+                           
+                        }
+                        if(sessionStorage.intereses!=null){
+                           var jsonData = JSON.parse(sessionStorage.intereses);
+                           $scope.intereses=jsonData;
+                           
+                        }	
+                }else {
+                     alert('Sorry! No Web Storage support..');
+                }
+                                
+                $scope.interval_id=setInterval(function(){
+                           if(typeof(Storage) !== "undefined") {
+                      if(sessionStorage.eventos!=null){
+                          var jsonData = JSON.parse(sessionStorage.eventos);
+                          $scope.eventos=jsonData;
+                          $scope.NEVS=[];
+                          for(var i=0;i<$scope.eventos.length;i++){
+                                var NEV={
+                                    id: 0,
+                                    contenido: '',
+                                    autoria: '',
+                                    titulo: '',
+                                    fecha: '',
+                                    tipo: '',
+                                    intereses:[]
+                                };
+                               NEV.id=$scope.eventos[i].id;
+                               NEV.fecha=$scope.eventos[i].fecha;
+                               NEV.contenido=$scope.eventos[i].descripcion;
+                               NEV.titulo=$scope.eventos[i].titulo;
+                               NEV.autoria="";
+                               NEV.tipo="fa fa-circle color-info";
+                               $scope.NEVS.push(NEV);
+                          }
+                       }
+                        if(sessionStorage.noticias!=null){
+                           var jsonData = JSON.parse(sessionStorage.noticias);
+                           $scope.noticias=jsonData;
+                           for(var i=0;i<$scope.noticias.length;i++){
+                                 var NEV={
+                                    id: 0,
+                                    contenido: '',
+                                    autoria: '',
+                                    titulo: '',
+                                    fecha: '',
+                                    tipo: '',
+                                    intereses:[]
+                                };
+                                   NEV.id=$scope.noticias[i].id;
+                                   NEV.contenido=$scope.noticias[i].contenido;
+                                   NEV.autoria=$scope.noticias[i].autoria;
+                                   NEV.titulo=$scope.noticias[i].titulo;
+                                   var rightNow = new Date();
+                                   var res = rightNow.toISOString().slice(0,10);
+                                  NEV.fecha=res;
+                                   NEV.tipo="fa fa-circle color-danger";
+                                   
+                                   $scope.NEVS.push(NEV);
+                          }
+                        }
+                        if(sessionStorage.intereses!=null){
+                           var jsonData = JSON.parse(sessionStorage.intereses);
+                           $scope.intereses=jsonData;
+                           
+                        }	
+                }else {
+                     alert('Sorry! No Web Storage support..');
+                }
+            
+                },4000);
+          
+            
             
             $scope.eventos=[];
-            $scope.noticias=[];
-            $scope.intereses=[];
+            $scope.searchKeywords = "";
+            $scope.filteredStores = [];
+            $scope.row = "";       
+            $scope.numPerPageOpt = [0, 3, 5, 10, 20];
+            $scope.numPerPage = $scope.numPerPageOpt[0];
+            $scope.currentPage = 1;
+            $scope.currentPageStores = [];
+          
+                $scope.select=function(page){
+				var end,
+				start;
+                                return start=(page-1)*$scope.numPerPage,
+				end=start+$scope.numPerPage,
+				$scope.currentPageStores=
+                                        $scope.filteredStores.slice(start,end);
+			},
+			$scope.onFilterChange=function(){
+				return $scope.select(1),
+				$scope.currentPage=1,
+				$scope.row="";
+			},
+			$scope.onNumPerPageChange=function(){
+				return $scope.select(1),
+				$scope.currentPage=1;
+			},
+			$scope.onOrderChange=function(){
+				return $scope.select(1),
+				$scope.currentPage=1;
+			},
+			$scope.search=function(){
+				return $scope.filteredStores=$filter("filter")($scope.NEVS,
+				$scope.searchKeywords),
+				$scope.onFilterChange();
+			},
+			$scope.order=function(rowName){
+				return $scope.row!==rowName?($scope.row=rowName,
+				$scope.filteredStores=$filter("orderBy")($scope.NEVS,
+				rowName),
+				$scope.onOrderChange()):void 0;
+			},
+			$scope.numPerPageOpt=[
+				3,
+				5,
+				10,
+				20
+			],
+			$scope.numPerPage=$scope.numPerPageOpt[
+				2
+			],
+			$scope.currentPage=1,
+			$scope.currentPageStores=[],
+			(init=function(){
+				return $scope.search(),
+				$scope.select($scope.currentPage)
+			})()
+             this.clickNEV=function(id,tipo){
+                if(typeof(Storage) !== "undefined") {
+                        if(tipo=="fa fa-circle color-info"){
+                            sessionStorage.verEvento =  id ;
+                            sessionStorage.verNoticia =  -1 ;
+                        }else{
+                            sessionStorage.verNoticia =  id ;
+                            sessionStorage.verEvento =  -1 ;
+                        }
+                        
+                   } else {
+                     alert('Sorry! No Web Storage support..');
+                   }
+                   window.location="#/nev/single";
+            };
+            
             this.clickEV=function(id){
                 if(typeof(Storage) !== "undefined") {
                         sessionStorage.verEvento =  id ;
@@ -3809,50 +4199,9 @@ function(){
                   window.location="#/nev/single";
             };
 
-                
-            this.consultar = function(){
-                 if(typeof(Storage) !== "undefined") {
-                      if(sessionStorage.eventos!=null){
-                          var jsonData = JSON.parse(sessionStorage.eventos);
-                          $scope.eventos=jsonData;
-                          
-                       }
-                        if(sessionStorage.noticias!=null){
-                            var jsonData = JSON.parse(sessionStorage.noticias);
-                           $scope.noticias=jsonData;
-                           
-                        }
-                        if(sessionStorage.intereses!=null){
-                           var jsonData = JSON.parse(sessionStorage.intereses);
-                           $scope.intereses=jsonData;
-                           
-                        }	
-                }else {
-                     alert('Sorry! No Web Storage support..');
-                }
-                                
-                $scope.interval_id=setInterval(function(){
-                           if(typeof(Storage) !== "undefined") {
-                      if(sessionStorage.eventos!=null){
-                          var jsonData = JSON.parse(sessionStorage.eventos);
-                          $scope.eventos=jsonData;
-                          
-                       }
-                        if(sessionStorage.noticias!=null){
-                            var jsonData = JSON.parse(sessionStorage.noticias);
-                           $scope.noticias=jsonData;
-                           
-                        }
-                        if(sessionStorage.intereses!=null){
-                           var jsonData = JSON.parse(sessionStorage.intereses);
-                           $scope.intereses=jsonData;
-                           
-                        }	
-                }else {
-                     alert('Sorry! No Web Storage support..');
-                }
             
-                },4000);
+          
+                
           
             };
         }]).controller("selectNEVCtrl",["$scope","$rootScope","$http",'$timeout',
@@ -3884,6 +4233,8 @@ function(){
                       if(sessionStorage.eventos!=null){
                           var jsonData = JSON.parse(sessionStorage.eventos);
                           $scope.eventos=jsonData;
+                          
+                          
                           
                        }
                         if(sessionStorage.noticias!=null){
@@ -3923,6 +4274,7 @@ function(){
             
                 },4000);
                     
+                 
                 
                 $timeout(function() {
                          
@@ -3934,6 +4286,7 @@ function(){
                                               $scope.NEV.id=$scope.eventos[i].id;
                                               $scope.NEV.fecha=$scope.eventos[i].fecha;
                                               $scope.NEV.contenido=$scope.eventos[i].descripcion;
+                                              $scope.NEV.contenido=String($scope.NEV.contenido).replace(/(<([^>]+)>)/ig,"");
                                               $scope.NEV.titulo=$scope.eventos[i].titulo;
                                               $scope.tipo='Evento';
                                               for(var e=0;e<$scope.intereses.length;e++){
@@ -3954,6 +4307,7 @@ function(){
                                              if ($scope.noticias[i].id == sessionStorage.verNoticia) {
                                                  $scope.NEV.id=$scope.noticias[i].id;
                                                  $scope.NEV.contenido=$scope.noticias[i].contenido;
+                                                 $scope.NEV.contenido=String($scope.NEV.contenido).replace(/(<([^>]+)>)/ig,"");
                                                  $scope.NEV.autoria=$scope.noticias[i].autoria;
                                                  $scope.NEV.titulo=$scope.noticias[i].titulo;
                                                  var rightNow = new Date();
@@ -3975,6 +4329,93 @@ function(){
                                      }
                    }});   
                 
+            };
+        }]).controller("timeLine",["$scope","$rootScope","$http",'$timeout',
+        function($scope, $rootScope, $http,$timeout){
+            
+            $scope.eventos=[];
+            $scope.noticias=[];
+          
+                
+            this.consultar = function(){
+                
+                  if(typeof(Storage) !== "undefined") {
+                      if(sessionStorage.eventosNotificaciones!=null){
+                          var jsonData = JSON.parse(sessionStorage.eventosNotificaciones);
+                          $scope.eventos=jsonData;
+                       }
+                        if(sessionStorage.noticiasNotificaciones!=null){
+                           var jsonData = JSON.parse(sessionStorage.noticiasNotificaciones);
+                   
+                           $scope.noticias=jsonData;
+                           
+                        }
+                }else {
+                     alert('Sorry! No Web Storage support..');
+                }
+                                
+                $scope.interval_id=setInterval(function(){
+                        if(typeof(Storage) !== "undefined") {
+                      if(sessionStorage.eventosNotificaciones!=null){
+                          var jsonData = JSON.parse(sessionStorage.eventosNotificaciones);
+                          $scope.eventos=jsonData;
+                       }
+                        if(sessionStorage.noticiasNotificaciones!=null){
+                           var jsonData = JSON.parse(sessionStorage.noticiasNotificaciones);
+                           $scope.noticias=jsonData;
+                           
+                        }
+                    }else {
+                         alert('Sorry! No Web Storage support..');
+                    }
+                },4000);
+                    
+                 
+             
+            };
+        }]).controller("dashboard",["$scope","$rootScope","$http",'$timeout',
+        function($scope, $rootScope, $http,$timeout){
+            
+            $scope.eventos=[];
+            $scope.solicitudesxdia=0;
+            $scope.noticias=[];
+          
+                
+            this.consultar = function(){
+                
+                  if(typeof(Storage) !== "undefined") {
+                      if(sessionStorage.eventosNotificaciones!=null){
+                          var jsonData = JSON.parse(sessionStorage.eventosNotificaciones);
+                          $scope.eventos=jsonData;
+                       }
+                        if(sessionStorage.noticiasNotificaciones!=null){
+                           var jsonData = JSON.parse(sessionStorage.noticiasNotificaciones);
+                   
+                           $scope.noticias=jsonData;
+                           
+                        }
+                }else {
+                     alert('Sorry! No Web Storage support..');
+                }
+                                
+                $scope.interval_id=setInterval(function(){
+                        if(typeof(Storage) !== "undefined") {
+                      if(sessionStorage.eventosNotificaciones!=null){
+                          var jsonData = JSON.parse(sessionStorage.eventosNotificaciones);
+                          $scope.eventos=jsonData;
+                       }
+                        if(sessionStorage.noticiasNotificaciones!=null){
+                           var jsonData = JSON.parse(sessionStorage.noticiasNotificaciones);
+                           $scope.noticias=jsonData;
+                           
+                        }
+                    }else {
+                         alert('Sorry! No Web Storage support..');
+                    }
+                },4000);
+                    
+                 
+             
             };
         }]).controller("addNEVCtrl",["$scope","$rootScope","$http",'$timeout',"logger",
         function($scope, $rootScope, $http,$timeout,logger){
@@ -4205,9 +4646,13 @@ function(){
         function($scope, $rootScope, $http,$timeout,logger){
            
             var consulta=null;
-            
+            var count = 0;
+            var aleaotorio = 0;
             $scope.noticiasNot=[];
+            $scope.noticiasNotificaciones=[];
             $scope.eventosNot=[];
+            $scope.eventosNotificaciones=[];
+            
             
             this.consultar = function(){
                   $scope.interval_id=setInterval(function(){
@@ -4217,10 +4662,83 @@ function(){
                                     if(diff>0){
                                         if(typeof(Storage) !== "undefined") {
                                             sessionStorage.eventos=JSON.stringify(response);
+                                            $scope.eventosNotificaciones=[];
+                                            var find=false;
+                                            for(var i=0;i<response.length;i++){
+                                                find=false;
+                                                for(var e=0;e< $scope.eventosNot.length;e++){
+                                                    if(response[i].id== $scope.eventosNot[e].id){
+                                                        find=true;
+                                                    }
+                                                }
+                                                if(!find){
+                                                    var EV={
+                                                        text:'',
+                                                        time:'',
+                                                        content:'',
+                                                        image:'',
+                                                        posicion:'',
+                                                        info:'',
+                                                        ctexto:''
+                                                    };
+                                                    var today = new Date();
+                                                    var h = today.getHours();
+                                                    var m = today.getMinutes();
+                                                    var s = today.getSeconds();
+                                                    // add a zero in front of numbers<10
+                                                    if (m < 10) {
+                                                        m = "0" + m;
+                                                    }
+                                                    if (s < 10) {
+                                                        s = "0" + s;
+                                                    }
+                                                    EV.time = h + ":" + m + ":" + s;
+                                                    EV.text='Evento nuevo '+response[i].titulo;
+                                                    EV.content=response[i].descripcion;
+                                                    EV.content=String(EV.content).replace(/(<([^>]+)>)/ig,"");
+                                                    aleaotorio=Math.round(Math.random()*3);
+                                                    
+                                                    if (count==0){
+                                                         EV.posicion='tl-item';
+                                                         count+=1;
+                                                    }else{
+                                                        EV.posicion='tl-item  alt';
+                                                        count-=1;
+                                                    }
+                                                    
+                                                    if(aleaotorio==0){
+                                                        EV.image='fa fa-asterisk';
+                                                        EV.info='tl-icon btn-icon-round btn-icon-lined btn-info';
+                                                        EV.ctexto='tl-tile text-primary';
+                                                    }else{
+                                                        if(aleaotorio==1){
+                                                            EV.image='fa fa-camera';
+                                                            EV.info='tl-icon btn-icon-round btn-icon-lined btn-success';
+                                                            EV.ctexto='tl-tile text-warning';
+                                                        }else{
+                                                            if(aleaotorio==2){
+                                                                EV.image='fa fa-check';
+                                                                EV.info='tl-icon btn-icon-round btn-icon-lined btn-danger';
+                                                                EV.ctexto='tl-tile text-success';
+                                                            }else{
+                                                               EV.image = 'fa fa-comment-o';
+                                                               EV.info='tl-icon btn-icon-round btn-icon-lined btn-success';
+                                                               EV.ctexto='tl-tile text-warning';
+                                                            }
+                                                        }
+                                                    }
+                                                                                             
+                                                                                                       
+                                                    $scope.eventosNotificaciones.push(EV);
+                                                }
+                                            }
+                                      
+                                            sessionStorage.eventosNotificaciones=JSON.stringify($scope.eventosNotificaciones);
                                         }else {
                                             alert('Sorry! No Web Storage support..');
                                         }
-                                
+                                                        
+                                      
                                         $scope.eventosNot=response;
                                         return logger.log("Tiene "+ diff + " evento(s) nuevos !!");
                                     }
@@ -4230,7 +4748,7 @@ function(){
                               
                                 }).
                                 error(function (data, status, headers, config) {
-                                    alert('error!' + data + '/' + status);
+                                    //alert('error!' + data + '/' + status);
                           });
                            
                           $http.get("rest/servergcm/noticias").
@@ -4240,6 +4758,77 @@ function(){
                                         if(diff>0){
                                         if(typeof(Storage) !== "undefined") {
                                             sessionStorage.noticias = JSON.stringify(response);
+                                            $scope.noticiasNotificaciones=[];
+                                            var find=false;
+                                            for(var i=0;i<response.length;i++){
+                                                find=false;
+                                                for(var e=0;e<$scope.noticiasNot.length;e++){
+                                                    if(response[i].id==$scope.noticiasNot[e].id){
+                                                        find=true;
+                                                    }
+                                                }
+                                                if(!find){
+                                                    var EV={
+                                                        text:'',
+                                                        time:'',
+                                                        content:'',
+                                                        image:'',
+                                                        posicion:'',
+                                                        info:'',
+                                                        ctexto:''
+                                                    };
+                                                    var today = new Date();
+                                                    var h = today.getHours();
+                                                    var m = today.getMinutes();
+                                                    var s = today.getSeconds();
+                                                    // add a zero in front of numbers<10
+                                                    if (m < 10) {
+                                                        m = "0" + m;
+                                                    }
+                                                    if (s < 10) {
+                                                        s = "0" + s;
+                                                    }
+                                                    EV.time = h + ":" + m + ":" + s;
+                                                    EV.text='Noticia nueva '+response[i].titulo;
+                                                    EV.content=response[i].contenido;
+                                                    EV.content=String(EV.content).replace(/(<([^>]+)>)/ig,"");
+                                                    aleaotorio=Math.round(Math.random()*3);
+                                                    
+                                                    if (count==0){
+                                                         EV.posicion='tl-item';
+                                                         count+=1;
+                                                    }else{
+                                                        EV.posicion='tl-item  alt';
+                                                        count-=1;
+                                                    }
+                                                    
+                                                        if(aleaotorio==0){
+                                                        EV.image='fa fa-asterisk';
+                                                        EV.info='tl-icon btn-icon-round btn-icon-lined btn-info';
+                                                        EV.ctexto='tl-tile text-primary';
+                                                    }else{
+                                                        if(aleaotorio==1){
+                                                            EV.image='fa fa-camera';
+                                                            EV.info='tl-icon btn-icon-round btn-icon-lined btn-success';
+                                                            EV.ctexto='tl-tile text-warning';
+                                                        }else{
+                                                            if(aleaotorio==2){
+                                                                EV.image='fa fa-check';
+                                                                EV.info='tl-icon btn-icon-round btn-icon-lined btn-danger';
+                                                                EV.ctexto='tl-tile text-success';
+                                                            }else{
+                                                               EV.image = 'fa fa-comment-o';
+                                                               EV.info='tl-icon btn-icon-round btn-icon-lined btn-success';
+                                                               EV.ctexto='tl-tile text-warning';
+                                                            }
+                                                        }
+                                                    }
+                                                    
+                                                    
+                                                    $scope.noticiasNotificaciones.push(EV);
+                                                }
+                                            }
+                                            sessionStorage.noticiasNotificaciones=JSON.stringify($scope.noticiasNotificaciones);
                                         }else {
                                             alert('Sorry! No Web Storage support..');
                                         }
@@ -4252,7 +4841,7 @@ function(){
                                     
                                 }).
                                 error(function (data, status, headers, config) {
-                                    alert('error!' + data + '/' + status);
+                                    //alert('error!' + data + '/' + status);
                                 });
                                 
                                 $http.get("rest/servergcm/intereses").
@@ -4268,7 +4857,7 @@ function(){
                                         
                                 }).
                                 error(function (data, status, headers, config) {
-                                    alert('error!' + data + '/' + status);
+                                    //alert('error!' + data + '/' + status);
                                 });
                        
                    },2000);

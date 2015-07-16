@@ -21,14 +21,57 @@
         <!--[if lt IE 9]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
-
-        <section data-ng-include=" 'views/header.html' " id="header" data-ng-show="showsection" class="header-container" data-ng-class=" {'header-fixed': admin.fixedHeader} " data-ng-controller="HeaderCtrl"></section>
-
+        
         <div class="main-container">
-            <aside data-ng-include=" 'views/nav.html' " id="nav-container" data-ng-show="showsection" class="nav-container" data-ng-class=" {'nav-fixed': admin.fixedHeader, 'nav-horizontal': admin.menu === 'horizontal', 'nav-horizontal': admin.menu === 'horizontal'}">
-            </aside>
+                <div class="page-signin">
+    <div class="signin-header">
+        <section class="logo text-center">
+            <a   href="#/">{{main.brand}}</a>
+        </section>
+    </div>
 
-            <section data-ng-view="" id="content" class="content-container {{admin.pageTransition.class}}"></section>
+    <div class="signin-body" data-ng-controller="loginCtrl as log">
+        
+        
+        <div class="container">
+            <div class="form-container">
+
+                <form class="form-horizontal" >
+                    <fieldset >
+                        <div class="form-group">
+                            <div class="btn-icon-lined btn-icon-round btn-icon-sm btn-default-light">
+                                <span class="glyphicon glyphicon-user"></span>
+                            </div>
+                            <input  type="text" data-ng-model="usuario"
+                                   class="form-control input-lg input-round text-center"
+                                   placeholder="Username"
+                                   >
+                        </div>
+                        <div class="form-group">
+                            <div class="btn-icon-lined btn-icon-round btn-icon-sm btn-default-light">
+                                <span class="glyphicon glyphicon-lock"></span>
+                            </div>
+                            <input type="password" data-ng-model="password"
+                                   class="form-control input-lg input-round text-center"
+                                   placeholder="Password"
+                                   >
+                        </div>
+                        <div class="form-group center-block">
+                            <button type="button" data-ng-click="log.login()" class="btn btn-primary btn-block btn-default-light btn-round ">Log In</button>
+                        </div>
+                    </fieldset>
+                </form>
+
+                <section>
+                    <p class="text-center"><a data="#/pages/forgot-password">Forgot your password?</a></p>
+                    <p class="text-center text-muted text-small">Don't have an account yet? <a href="javascript:;" data-ng-click="singup()">Sign up</a></p>
+                </section>
+                
+            </div>
+        </div>
+    </div>
+
+</div>
         </div>
         
         

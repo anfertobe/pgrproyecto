@@ -16,7 +16,7 @@
                     </form>
                 </div>
                 <div class="col-sm-3 col-xs-6 filter-result-info">
-                    <span>
+                    <span>-
                         Showing {{filteredStores.length}}/{{stores.length}} entries
                     </span>              
                 </div>
@@ -34,6 +34,15 @@
                         <span class="fa fa-angle-down"
                               data-ng-click=" order('-name') "
                               data-ng-class="{active: row == '-name'}"></span>
+                    </div></th>
+                    <th><div class="th">
+                        Tipo
+                        <span class="fa fa-angle-up"
+                              data-ng-click=" order('price') "
+                              data-ng-class="{active: row == 'price'}"></span>
+                        <span class="fa fa-angle-down"
+                              data-ng-click=" order('-price') "
+                              data-ng-class="{active: row == '-price'}"></span>
                     </div></th>
                     <th><div class="th">
                         Price
@@ -65,8 +74,9 @@
                 </tr>
             </thead>
             <tbody>
-                <tr data-ng-repeat="store in currentPageStores">
+                <tr class="mail-unread" data-ng-repeat="store in currentPageStores">
                     <td>{{store.name}}</td>
+                    <td><i class="fa fa-circle color-info"></i></td>
                     <td>{{store.price}}</td>
                     <td>{{store.sales}}</td>
                     <td>{{store.rating}}</td>

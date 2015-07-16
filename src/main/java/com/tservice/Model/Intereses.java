@@ -73,7 +73,7 @@ public class Intereses  implements java.io.Serializable {
         this.eventos = eventos;
     }
 
-@ManyToOne(fetch=FetchType.EAGER)
+    @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="noticias_id")
     public Noticias getNoticias() {
         return this.noticias;

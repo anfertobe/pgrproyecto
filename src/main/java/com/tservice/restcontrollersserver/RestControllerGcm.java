@@ -59,6 +59,50 @@ public class RestControllerGcm {
          return new ResponseEntity<>(result, HttpStatus.ACCEPTED);
      }
     
+     
+    @RequestMapping(value="/carrera",method = RequestMethod.PUT)
+     public ResponseEntity<?> aadCarreras(@RequestBody Carreras carrera){
+             
+            carrecrud.save(carrera);
+                         
+         return new ResponseEntity<>(HttpStatus.ACCEPTED);
+     } 
+      
+    @RequestMapping(value="/mensajes",method = RequestMethod.GET)        
+    public List<Mensajes> consultarMensajes()  throws ResourceNotFoundException { 
+        
+        List<Mensajes> edificios = new LinkedList<Mensajes>();
+        
+        for(Mensajes edif : mensaCrud.findAll())
+            edificios.add(edif);
+        
+          return edificios;
+    }
+    
+            @RequestMapping(value="/grupos",method = RequestMethod.GET)        
+    public List<Grupos> consultarGrupos()  throws ResourceNotFoundException { 
+        
+        List<Grupos> edificios = new LinkedList<Grupos>();
+        
+        for(Grupos edif : grupoCrud.findAll())
+            edificios.add(edif);
+        
+          return edificios;
+    }
+    
+            @RequestMapping(value="/usuarios",method = RequestMethod.GET)        
+    public List<Usuarios> consultarUsuarios()  throws ResourceNotFoundException { 
+        
+        List<Usuarios> edificios = new LinkedList<Usuarios>();
+        
+        for(Usuarios edif : usuaCrud.findAll())
+            edificios.add(edif);
+        
+          return edificios;
+    }
+    
+    
+     
     @RequestMapping(value="/calificacion/{usuario}/{tipo}/{idTipo}",method = RequestMethod.PUT)
      public ResponseEntity<?> adicionarCalificacion(@RequestBody Calificacion calificacion,@PathVariable("usuario") String usuario,@PathVariable("tipo") String tipo,@PathVariable("idTipo") String idTipo){
          boolean result = false;
@@ -205,42 +249,7 @@ public class RestControllerGcm {
     }
     
     
-    
-    
-    @RequestMapping(value="/mensajes",method = RequestMethod.GET)        
-    public List<Mensajes> consultarMensajes()  throws ResourceNotFoundException { 
-        
-        List<Mensajes> edificios = new LinkedList<Mensajes>();
-        
-        for(Mensajes edif : mensaCrud.findAll())
-            edificios.add(edif);
-        
-          return edificios;
-    }
-    
-            @RequestMapping(value="/grupos",method = RequestMethod.GET)        
-    public List<Grupos> consultarGrupos()  throws ResourceNotFoundException { 
-        
-        List<Grupos> edificios = new LinkedList<Grupos>();
-        
-        for(Grupos edif : grupoCrud.findAll())
-            edificios.add(edif);
-        
-          return edificios;
-    }
-    
-            @RequestMapping(value="/usuarios",method = RequestMethod.GET)        
-    public List<Usuarios> consultarUsuarios()  throws ResourceNotFoundException { 
-        
-        List<Usuarios> edificios = new LinkedList<Usuarios>();
-        
-        for(Usuarios edif : usuaCrud.findAll())
-            edificios.add(edif);
-        
-          return edificios;
-    }
-    
-    
+ 
     /****************************************************************************/
     
     @RequestMapping(value="/mensaje",method = RequestMethod.PUT)        
@@ -271,6 +280,31 @@ public class RestControllerGcm {
          return new ResponseEntity<>(respuesta, HttpStatus.ACCEPTED);
      }
     
+      @RequestMapping(value="/usuario/{carne}",method = RequestMethod.GET)        
+    public List<Usuarios> consultarUsuario(@PathVariable("carne") String carne )  throws ResourceNotFoundException { 
+
+          return usuaCrud.search(carne);
+    }
+    
+    @RequestMapping(value="/contactos/{carne}",method = RequestMethod.GET)        
+    public List<Usuarios> consultarContactos(@PathVariable("carne") String carne )  throws ResourceNotFoundException { 
+
+          return usuaCrud.searchContactos(carne);
+    }
+    
+    @RequestMapping(value="/grupos/{carne}",method = RequestMethod.GET)        
+    public List<Grupos> consultargrupos(@PathVariable("carne") String carne )  throws ResourceNotFoundException { 
+
+          return grupoCrud.searchGrupos(carne);
+    }
+    
+      
+    @RequestMapping(value="/carreras",method = RequestMethod.GET)        
+    public Iterable<Carreras> consultarcarreras()  throws ResourceNotFoundException { 
+
+          return carrecrud.findAll();
+    }
+     
     @RequestMapping(value="/adicion/{idAmgo}",method = RequestMethod.POST)
      public Usuarios adicionarAmigo(@PathVariable("idAmgo") String idAmgo) throws servergcmExceptions{
             
@@ -319,12 +353,7 @@ public class RestControllerGcm {
 //          return carrecrud.search();
 //    }
     
-    @RequestMapping(value="/carreas",method = RequestMethod.GET)        
-    public Iterable<Carreras> consultarcarreras()  throws ResourceNotFoundException { 
-
-          return carrecrud.findAll();
-    }
-    
+   
     
     
 }
