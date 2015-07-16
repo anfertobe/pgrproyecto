@@ -3823,7 +3823,7 @@ function(){
                    $scope.registrar = function(){
                        $http.put("rest/servergcm/carrera", $scope.carrera).
                                 success(function (response) {
-                                        alert('solicitud aceptada');
+                                        alert('Carrera agregada correctamente');
                                 }).
                                 error(function (data, status, headers, config) {
                                     alert('error!' + data + '/' + status);
@@ -4559,7 +4559,7 @@ function(){
                        $scope.evento.titulo= $scope.NEV.titulo;
                        $scope.evento.fecha= $scope.NEV.fecha;
                       
-                      alert(JSON.stringify($scope.evento));
+                
                        $http.put('rest/servergcm/evento',  $scope.evento).
                                 success(function (data, status, headers, config) {
                                     for (var i = 0; i < $scope.NEV.intereses.length; i++) {
