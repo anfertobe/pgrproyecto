@@ -4598,7 +4598,7 @@ function(){
                     
                 }
                     
-                
+               window.location="#/nev/inbox"; 
                 
             }
             this.tipo = function(tipo){
