@@ -4528,7 +4528,11 @@ function(){
                        delete $scope.noticia.carrerases
                        delete $scope.noticia.ubicacion
                        
-                        $http.put('rest/servergcm/noticia',  $scope.noticia).
+                       if ($scope.noticia.contenido.length>500){
+                            return logger.logError("La noticia no debe superar 500 caracteres"); 
+                       }
+                       
+                       $http.put('rest/servergcm/noticia',  $scope.noticia).
                                 success(function (data, status, headers, config) {
                                          for (var i = 0; i < $scope.NEV.intereses.length; i++) {
                                                $scope.noticia.id=$scope.noticias.length+1;
@@ -4559,6 +4563,11 @@ function(){
                        $scope.evento.titulo= $scope.NEV.titulo;
                        $scope.evento.fecha= $scope.NEV.fecha;
                       
+                
+                
+                       if ($scope.evento.descripcion.length>500){
+                            return logger.logError("El evento no debe superar 500 caracteres"); 
+                       }
                 
                        $http.put('rest/servergcm/evento',  $scope.evento).
                                 success(function (data, status, headers, config) {
