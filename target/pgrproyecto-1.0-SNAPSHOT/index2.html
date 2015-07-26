@@ -26,8 +26,8 @@
 
         <section data-ng-include=" 'views/header.html' " id="header" class="header-container" data-ng-class=" {'header-fixed': admin.fixedHeader} " data-ng-controller="HeaderCtrl as head"></section>
 
-        <div class="main-container">
-            <aside data-ng-include=" 'views/nav.html' " id="nav-container" class="nav-container" data-ng-class=" {'nav-fixed': admin.fixedHeader, 'nav-horizontal': admin.menu === 'horizontal', 'nav-horizontal': admin.menu === 'horizontal'}">
+        <div class="main-container" >
+            <aside id="nav-container" class="nav-container" data-ng-class=" {'nav-fixed': admin.fixedHeader, 'nav-horizontal': admin.menu === 'horizontal', 'nav-horizontal': admin.menu === 'horizontal'}">
             </aside>
 
             <section data-ng-view="" id="content" class="content-container {{admin.pageTransition.class}}"></section>

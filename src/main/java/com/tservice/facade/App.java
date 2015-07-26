@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
 public class App 
 {
     
-    String apiKey = "AIzaSyDDO1Rb4lyjbUp5HjeYJ-LMCrm-RiiAYZU";
+    String apiKey = "AIzaSyBIhljIN82q0ZJDKNi9pgu3sMRMLKtTzXk";
     
     public void main(ArrayList<String> RegId, String remitente, String contenidoMensaje, String claseMensaje, String idGrupo)
     {

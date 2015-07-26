@@ -38,9 +38,26 @@
                     <input type="text" class="form-control" placeholder="Search...">
                 </div>
             </li>-->
+            <li>
+                <a href="#/ui/timeline" class="dropdown-toggle" data-toggle="dropdown">
+                    <i class="glyphicon glyphicon-home"></i>
+                </a>
+            </li>
+            <li>
+                <a href="#/nev/inbox" class="dropdown-toggle" data-toggle="dropdown">
+                    <i class="fa fa-file-text-o"></i>
+                    <span class="badge badge-info">{{noticiasNotificaciones.length}}</span>
+                </a>
+            </li>
+            <li>
+                <a href="#/nev/inbox" class="dropdown-toggle" data-toggle="dropdown">
+                    <i class="glyphicon glyphicon-calendar"></i>
+                    <span class="badge badge-danger">{{eventosNotificaciones.length}}</span>
+                </a>
+            </li>
             <li class="dropdown">
                 <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
-                    <i class="fa fa-file-text-o"></i>
+                    <i class="fa fa-users"></i>
                     <span class="badge badge-info">{{noticiasNotificaciones.length}}</span>
                 </a>
                 <div class="dropdown-menu with-arrow panel panel-dark">
@@ -65,33 +82,7 @@
                     </div>
                 </div>
             </li>
-            <li class="dropdown">
-                <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
-                    <i class="glyphicon glyphicon-calendar"></i>
-                    <span class="badge badge-danger">{{eventosNotificaciones.length}}</span>
-                </a>
-                <div class="dropdown-menu with-arrow panel panel-dark">
-                    <div class="panel-heading">
-                        You have {{eventosNotificaciones.length}} events.
-                    </div>
-                    <ul class="list-group">
-                        <li class="list-group-item"  ng-repeat="eve in eventosNotificaciones">
-                            <a href="javascript:;" class="media">
-                                <span class="pull-left media-icon">
-                                    <span class="btn-icon-lined btn-icon-round btn-success"><i class="glyphicon glyphicon-calendar"></i></span>
-                                </span>
-                                  <div class="media-body">
-                                    <span class="block">{{eve.text}}</span>
-                                    <span class="text-muted block">Hora: {{eve.time}}</span>
-                                </div>
-                            </a>
-                        </li>
-                    </ul>
-                    <div class="panel-footer">
-                        <a href="#/nev/inbox">Show all events.</a>
-                    </div>
-                </div>
-            </li>
+            
         </ul> 
 
         <ul class="nav-right pull-right list-unstyled">

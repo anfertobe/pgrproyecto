@@ -15,17 +15,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.hibernate.cfg.Configuration;
-import org.hibernate.service.ServiceRegistry;
-import org.hibernate.service.ServiceRegistryBuilder;
-import org.hibernate.cfg.Configuration;
-
 /**
  *
  * @author andres
@@ -184,14 +175,14 @@ public class facade {
     }
     
     
-    public Boolean login(String carne, String contraseña) throws servergcmExceptions{
+    public Boolean login(String carne, String contrasena) throws servergcmExceptions{
         if(!usuCrud.exists(carne))
             throw new servergcmExceptions("El usuario identificado con carne N° "+ carne +" no esta registrado, por favor revice su numero de cerne o registrece para poder acceder a nuestros servicios.");
         
         Usuarios usuarioRegistro = usuCrud.findOne(carne);
         
-        if(!contraseña.equals(usuarioRegistro.getPassword()))
-            throw new servergcmExceptions("Contraseña incorrecta, por favor verifique.");
+        if(!contrasena.equals(usuarioRegistro.getPassword()))
+            throw new servergcmExceptions("Contrasena incorrecta, por favor verifique.");
         
         return true;
     }
@@ -408,14 +399,14 @@ public class facade {
         return true;
     }
     
-    public Boolean login(String carne, String contraseña, String regId) throws servergcmExceptions{
+    public Boolean login(String carne, String contrasena, String regId) throws servergcmExceptions{
         if(!usuCrud.exists(carne))
             throw new servergcmExceptions("El usuario identificado con carne N° "+ carne +" no esta registrado, por favor revice su numero de cerne o registrece para poder acceder a nuestros servicios.");
         
         Usuarios usuarioRegistro = usuCrud.findOne(carne);
         
-        if(!contraseña.equals(usuarioRegistro.getPassword()))
-            throw new servergcmExceptions("Contraseña incorrecta, por favor verifique.");
+        if(!contrasena.equals(usuarioRegistro.getPassword()))
+            throw new servergcmExceptions("Contrasena incorrecta, por favor verifique.");
         
         usuarioRegistro.setIdentificaciongoogle(regId);
         usuCrud.save(usuarioRegistro);

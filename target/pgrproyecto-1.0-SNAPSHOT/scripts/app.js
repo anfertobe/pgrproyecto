@@ -3270,7 +3270,7 @@ function(){
 			}),
 			$routeProvider.when("/",
 			{
-				templateUrl:"views/dashboard.html"
+				templateUrl:"views/ui/timeline.html"
 			})              .when("/signup",
 			{
 				templateUrl:"signup.html"
@@ -3281,7 +3281,7 @@ function(){
 			})
                                     .when("/index2",
 			{
-				templateUrl:"index2.html"
+				templateUrl:"ui/timeline"
 			})
                                        .when("/404",
 			{
