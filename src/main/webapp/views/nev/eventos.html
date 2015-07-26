@@ -1,0 +1,125 @@
+<div class="page" ng-controller="eventosCtrl as evt" ng-init="evt.consultar()">
+
+        <div >
+            <section class="panel panel-default mail-container">
+                <div class="panel-heading"><strong><span class="glyphicon glyphicon-th"></span>Eventos</strong></div>
+                     <div class="table-filters">
+                        <div class="row">
+                            <div class="col-sm-4 col-xs-6">
+                            <form>
+                                <input type="text"
+                                    placeholder="Search..."
+                                    class="form-control"
+                                    ng-model="searchKeywords"
+                                    ng-keyup="search()">
+                        </form>
+                     </div>
+                        <div class="col-sm-3 col-xs-6 filter-result-info">
+                            <span>-
+                                Showing {{filteredStores.length}}/{{NEVS.length}} entries
+                            </span>              
+                        </div>
+                    </div>
+                  
+                
+                <table class="table table-bordered table-striped table-responsive">
+                    <thead>
+                <tr>
+                    <th><div class="th">
+                        Titulo
+                        <span class="fa fa-angle-up"
+                              ng-click=" order('titulo') "
+                              ng-class="{active: row == 'titulo'}"></span>
+                        <span class="fa fa-angle-down"
+                              ng-click=" order('-titulo') "
+                              ng-class="{active: row == '-titulo'}"></span>
+                    </div></th>
+
+                    <th><div class="th">
+                        Contenido
+                        <span class="fa fa-angle-up"
+                              ng-click=" order('titulo') "
+                              ng-class="{active: row == 'titulo'}"></span>
+                        <span class="fa fa-angle-down"
+                              ng-click=" order('-titulo') "
+                              ng-class="{active: row == '-titulo'}"></span>
+                    </div></th>
+                    <th><div class="th">
+                       Fecha
+                        <span class="fa fa-angle-up"
+                              ng-click=" order('fecha') "
+                              ng-class="{active: row == 'fecha'}"></span>
+                        <span class="fa fa-angle-down"
+                              ng-click=" order('-fecha') "
+                              ng-class="{active: row == '-fecha'}"></span>
+                    </div></th>
+                  
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="mail-unread" ng-repeat="eve in currentPageStores" ng-click="evt.clickNEV(eve.id,eve.tipo)">
+                    <td>{{eve.titulo}}</td>
+                    <td>{{eve.titulo}}</td>
+                    <td>{{eve.fecha}}</td>
+                 </tr>
+            </tbody>
+        </table>
+                           <footer class="table-footer">
+            <div class="row">
+                <div class="col-md-6 page-num-info">
+                    <span>
+                        Show 
+                        <select ng-model="numPerPage"
+                                ng-options="num for num in numPerPageOpt"
+                                ng-change="onNumPerPageChange()">
+                        </select> 
+                        entries per page
+                    </span>
+                </div>
+                <div class="col-md-6 text-right pagination-container">
+                    <pagination class="pagination-sm"
+                                ng-model="currentPage"
+                                total-items="filteredStores.length"
+                                max-size="4"
+                                ng-change="select(currentPage)"
+                                items-per-page="numPerPage"
+                                rotate="false"
+                                previous-text="&lsaquo;" next-text="&rsaquo;"
+                                boundary-links="true"></pagination>
+                </div>
+            </div>
+        </footer>
+                    
+                    
+                    
+                    
+                    <!--<thead class="table table-hover table-responsive">
+                    <th></th>
+                    <th>Titutlo</th>
+                    <th>Tipo</th>
+                    <th>Contenido</th>
+                    <th></th>
+                    <th>Fecha</th>
+                    <th>Like</th>
+                    </thead>
+                    <tr class="mail-unread" ng-repeat="eve in eventos" ng-click="evt.clickEV(eve.id)">
+                        <td><label class="ui-checkbox"><input name="checkbox1" type="checkbox" value="option1" ><span></span></label></td>
+                        <td>{{eve.titulo}}</td>
+                        <td><i class="fa fa-circle color-info"></i></td>
+                        <td>{{eve.titulo}}</td>
+                        <td><i class="fa fa-paperclip"></i></td>
+                        <td>{{eve.fecha}}</td>
+                        <td><i class="fa fa-star"></i></td>
+                    </tr>
+                     <tr class="mail-unread" ng-repeat="not in noticias" ng-click="evt.clickNOT(not.id)">
+                        <td><label class="ui-checkbox"><input name="checkbox1" type="checkbox" value="option1" ><span></span></label></td>
+                        <td>{{not.titulo}}</td>
+                        <td><i class="fa fa-circle color-danger"></i></td>
+                        <td>{{not.autoria}}</td>
+                        <td><i class="fa fa-paperclip"></i></td>
+                        <td><i class="glyphicon glyphicon-time"></td>
+                        <td><i class="fa fa-star"></i></td>
+                    </tr>-->
+               </section>
+        </div>
+    </div>

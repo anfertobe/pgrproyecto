@@ -1,35 +1,7 @@
 <div class="page" ng-controller="selectNEVCtrl as evt" ng-init="evt.consultar()">
-    <div class="row">
-        <div class="col-sm-3">
-             <section class="panel panel-default mail-categories">
-                <div class="panel-heading">
-                    <a href="#/nev/compose" class="btn btn-block btn-lg btn-primary">Agregar</a>
-                </div>
-                <ul class="list-group">
-                    <li class="list-group-item"><a href="javascript:;">
-                        <i class="fa fa-envelope-o"></i>Noticias<span class="badge badge-danger pull-right">{{noticias.length}}</span>
-                    </a></li>
-                    <li class="list-group-item"><a href="javascript:;">
-                        <i class="fa fa-star"></i>Eventos
-                        <span class="badge badge-info pull-right">{{eventos.length}}</span>
-                    </a></li>
-                </ul>
-            </section>
 
-             <section class="panel panel-default mail-categories">
-                <div class="panel-heading">Tipo Nom</div>
-                <ul class="list-group">
-                    <li class="list-group-item"><a href="javascript:;">
-                        Noticias <i class="fa fa-circle color-danger pull-right"></i>
-                    </a></li>
-                    <li class="list-group-item"><a href="javascript:;">
-                        Eventos <i class="fa fa-circle color-info pull-right"></i>
-                    </a></li>
-                </ul>
-            </section>
-        </div>
         
-        <div class="col-sm-9">
+        <div >
             <section class="panel panel-default mail-container">
                 <div class="panel-heading"><strong><span class="glyphicon glyphicon-th"></span> Ver {{tipo}}</strong></div>
                 <div class="tl-body">
@@ -74,4 +46,3 @@
             </section>
         </div>
     </div>
-</div>
