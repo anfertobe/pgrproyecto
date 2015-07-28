@@ -3251,6 +3251,7 @@ function(){
 				"nev/compose",
 				"nev/noticias",
                                 "nev/eventos",
+                                "nev/Contactos",
 				"nev/single",
 				"tasks/tasks"
 			],
@@ -3881,15 +3882,26 @@ function(){
                         },
 
                 $scope.semestreOption = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                $scope.carrerasOption =[],
             
-                        
-                        this.registrarUsuario =  function(){
-                                $http.put("rest/servergcm/registro/1", $scope.usuario).
+                $http.get("rest/servergcm/carreras").
                                 success(function (response) {
-                                        alert('solicitud aceptada' + $scope.usuario.semestre);
+                                        $scope.carrerasOption = response;
                                 }).
                                 error(function (data, status, headers, config) {
                                     alert('error!' + data + '/' + status + $scope.usuario.carne + $scope.usuario.identificacion+ $scope.usuario.semestre+ $scope.usuario.nombre+ $scope.usuario.email);
+                                });
+                                
+                    $scope.carrera = 'Ingenieria Civil';
+                        
+                        this.registrarUsuario =  function(){
+                            
+                                $http.put("rest/servergcm/registro/" + $scope.carrera.id, $scope.usuario).
+                                success(function (response) {
+                                    alert($scope.carrera.id + " " + $scope.usuario);
+                                }).
+                                error(function (data, status, headers, config) {
+                                    alert('error!' + data + '/' + status + $scope.usuario.carne + $scope.usuario.identificacion+ $scope.usuario.semestre+ $scope.usuario.nombre+ $scope.usuario.email + $scope.carrera.id);
                                 });
                             };
         }])}.call(this),
@@ -3927,41 +3939,15 @@ function(){
         }])}.call(this),
     function(){
 	"use strict";angular.module("perfil.controllers",
-	[]).controller("PerfilCtrl",["$scope","$http",
+	[]).controller("contactosCtrl",["$scope","$http",
         function($scope, $http){ 
             $scope.grupos = [],
             $scope.contactos = [],
-            $scope.usuario = {
-                    nombre : '',
-                    semestre : '',
-                    perfil : '',
-                    correo : '',
-                    carne : ''          
-                }
-                
-            $scope.cantGrupos = 0,
-            $scope.cantContactos = 0,  
-
-
-                $http.get("rest/servergcm/usuario/" + sessionStorage.user).
-                success(function (response) {
-                        
-                            $scope.usuario.carne = response.toString().split(',')[0],    
-                            $scope.usuario.nombre = response.toString().split(',')[1],
-                            $scope.usuario.correo = response.toString().split(',')[2],
-                            $scope.usuario.perfil = response.toString().split(',')[3],
-                            $scope.usuario.semestre = response.toString().split(',')[4]
-
-                }).
-                error(function (data, status, headers, config) {
-                    alert('error!' + data + '/' + status );
-                });
             
                 $http.get("rest/servergcm/contactos/" + sessionStorage.user).
                 success(function (response) {
                         $scope.contactos = response;
                         $scope.cantContactos = $scope.contactos.length
-                        
                 }).
                 error(function (data, status, headers, config) {
                     alert('error!' + data + '/' + status);

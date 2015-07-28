@@ -300,9 +300,8 @@ public class RestControllerGcm {
     
       
     @RequestMapping(value="/carreras",method = RequestMethod.GET)        
-    public Iterable<Carreras> consultarcarreras()  throws ResourceNotFoundException { 
-
-          return carrecrud.findAll();
+    public List<Carreras> consultarcarreras()  throws ResourceNotFoundException { 
+          return carrecrud.searchcarreras();
     }
      
     @RequestMapping(value="/adicion/{idAmgo}",method = RequestMethod.POST)
@@ -352,8 +351,6 @@ public class RestControllerGcm {
 //
 //          return carrecrud.search();
 //    }
-    
-   
-    
+
     
 }

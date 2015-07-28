@@ -9,13 +9,14 @@ import com.tservice.Model.*;
 import java.util.List;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
-
 /**
- *
  * @author andres
  */
 public interface CarrerasCrudFactory extends CrudRepository<Carreras, Integer>{
     
     @Query("select id, nombre from Carreras")
         public List<Carreras> search();
+        
+    @Query("select new map(id as id, nombre as nombre) from Carreras")
+    public List<Carreras> searchcarreras();
 }

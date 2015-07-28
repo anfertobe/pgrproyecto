@@ -1,0 +1,44 @@
+<div ng-controller="contactosCtrl">
+    <section class="panel panel-default">
+        <div class="panel-heading"><span class="fa fa-list-alt"></span> Contactos</div>
+        <div class="panel-body text-center">
+            <div class="row text-center">
+                <div class="col-lg-1 "><span ></span></div>
+                <div class="col-lg-5 ">
+                    <section class="panel panel-default" >
+                        <div class="panel-heading"><span class="glyphicon glyphicon-user"></span> Amigos</div>
+                        <div class="panel-body text-center" ng-repeat="contacto in contactos">
+                            <section class="panel panel-box">
+                                <div class="panel-left panel-item bg-info">
+                                    <img alt="" src="images/g2.png" class="img-circle">
+                                </div>
+                                <div class="panel-right panel-item bg-reverse">
+                                    <p class="size-h1">{{contacto.nombre}}</p>
+                                    <p class="text-muted">{{contacto.perfil}}</p>
+                                    <p class="text-muted">{{contacto.semestre}}° semestre</p>
+                                    <p class="text-muted">{{contacto.carrerases[0].nombre}}</p>
+                                </div>
+                            </section>
+                        </div>
+                    </section>
+                </div>
+                <div class="col-lg-5 left">
+                    <section class="panel panel-default">
+                    <div class="panel-heading"><span class="fa fa-users"></span>Grupos</div>
+                        <div class="panel-body text-center" ng-repeat="grupo in grupos" >
+                            <section class="panel panel-box">
+                                <div class="panel-left panel-item bg-reverse">
+                                    <p class="size-h1">{{grupo.nombre}}</p>
+                                    <p class="text-muted">N° Contactos: {{grupo.numcontactos}}</p>
+                                </div>
+                                <div class="panel-right panel-item bg-success">
+                                    <img alt="" src="images/g2.png" class="img-circle">
+                                </div>
+                            </section>
+                        </div>
+                    </section>
+                </div>
+            </div> 
+        </div> 
+    </section>  
+</div>

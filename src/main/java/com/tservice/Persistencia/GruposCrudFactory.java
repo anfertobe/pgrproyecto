@@ -16,6 +16,6 @@ import org.springframework.data.repository.query.Param;
  * @author andres
  */
 public interface GruposCrudFactory extends CrudRepository<Grupos, Integer>{
-        @Query("select m.grupos.nombre from Mensajes m where m.usuariosByUsuariosorigen.carne = :idcarne group by m.grupos.id")
+        @Query("select new map(m.nombre as nombre, m.usuarioses.size as numcontactos) from Grupos m where :idcarne = some elements(m.usuarioses)")
         public List<Grupos> searchGrupos(@Param("idcarne") String idcarne);
 }

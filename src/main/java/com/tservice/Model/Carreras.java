@@ -86,7 +86,7 @@ public class Carreras  implements java.io.Serializable {
         this.eventoses = eventoses;
     }
 
-@ManyToMany(fetch=FetchType.EAGER)
+@ManyToMany(fetch=FetchType.LAZY)
     @JoinTable(name="carreras_has_usuarios",joinColumns = { 
         @JoinColumn(name="carreras_id", nullable=false, updatable=false) }, inverseJoinColumns = { 
         @JoinColumn(name="usuarios_carne", nullable=false, updatable=false) })

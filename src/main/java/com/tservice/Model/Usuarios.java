@@ -153,7 +153,7 @@ public class Usuarios  implements java.io.Serializable {
         this.semestre = semestre;
     }
 
-@ManyToMany(fetch=FetchType.LAZY)
+@ManyToMany(fetch=FetchType.EAGER)
     @JoinTable(name="carreras_has_usuarios", joinColumns = { 
         @JoinColumn(name="usuarios_carne", nullable=false, updatable=false) }, inverseJoinColumns = { 
         @JoinColumn(name="carreras_id", nullable=false, updatable=false) })

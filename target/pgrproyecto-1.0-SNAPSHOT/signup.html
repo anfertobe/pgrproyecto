@@ -90,6 +90,13 @@
                                         <span class="ui-select"><select ng-model="usuario.semestre" ng-options="opt for opt in semestreOption"></select></span>
                                     </p>
                                 </div>
+                                <div class="form-group" >
+                                                        <p>
+                                        Carrera:
+                                        <span class="space"></span>
+                                        <span class="ui-select"><select ng-model="carrera" ng-options="carrera.nombre for carrera in carrerasOption" required="true"></select></span>
+                                    </p>
+                                </div>
 
                                 <div class="form-group">
                                     <p class="text-muted text-small">By clicking on Sign up, you agree to <a href="javascript:;">terms & conditions</a> and <a href="javascript:;">privacy policy</a></p>
