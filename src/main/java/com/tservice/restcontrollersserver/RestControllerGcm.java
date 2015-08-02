@@ -79,6 +79,22 @@ public class RestControllerGcm {
           return edificios;
     }
     
+    
+    @RequestMapping(value="/mensajes/{usuario}",method = RequestMethod.GET)        
+    public List<Mensajes> consultarMensajes(@PathVariable("usuario") String usuario)  throws ResourceNotFoundException { 
+        
+        List<Mensajes> edificios = new LinkedList<Mensajes>();
+        
+        for(Mensajes edif : mensaCrud.findAll())
+            if(edif.getUsuariosByUsuariodestino()!=null && edif.getUsuariosByUsuariodestino().getCarne().equals(usuario)){
+                edificios.add(edif);
+            }
+        
+          return edificios;
+    }
+    
+    
+    
             @RequestMapping(value="/grupos",method = RequestMethod.GET)        
     public List<Grupos> consultarGrupos()  throws ResourceNotFoundException { 
         

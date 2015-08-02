@@ -62,7 +62,7 @@ public class Mensajes  implements java.io.Serializable {
         this.grupos = grupos;
     }
 
-@ManyToOne(fetch=FetchType.LAZY)
+@ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="usuariosorigen")
     public Usuarios getUsuariosByUsuariosorigen() {
         return this.usuariosByUsuariosorigen;
@@ -72,7 +72,7 @@ public class Mensajes  implements java.io.Serializable {
         this.usuariosByUsuariosorigen = usuariosByUsuariosorigen;
     }
 
-@ManyToOne(fetch=FetchType.LAZY)
+@ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="usuariodestino")
     public Usuarios getUsuariosByUsuariodestino() {
         return this.usuariosByUsuariodestino;

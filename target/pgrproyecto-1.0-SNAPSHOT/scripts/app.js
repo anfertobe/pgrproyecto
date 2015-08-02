@@ -4450,21 +4450,50 @@ function(){
             
             $scope.eventos=[];
             $scope.noticias=[];
-          
+            $scope.mensajes=[];
+            $scope.NEVS=[];     
+            
                 
             this.consultar = function(){
                 
                   if(typeof(Storage) !== "undefined") {
                       if(sessionStorage.eventosNotificaciones!=null){
                           var jsonData = JSON.parse(sessionStorage.eventosNotificaciones);
-                          $scope.eventos=jsonData;
+                           $scope.eventos=jsonData;
+                      
+                           for(var i=0;i<$scope.eventos.length;i++){
+                                $scope.NEVS.push($scope.eventos[i]);
+                           }
+                        
+                           
+          
+                          
                        }
                         if(sessionStorage.noticiasNotificaciones!=null){
                            var jsonData = JSON.parse(sessionStorage.noticiasNotificaciones);
                    
                            $scope.noticias=jsonData;
-                           
+                           for(var i=0;i<$scope.noticias.length;i++){
+                                $scope.NEVS.push($scope.noticias[i]);
+                           }
                         }
+                        
+                        if(sessionStorage.mensajesNotificaciones!=null){
+                           var jsonData = JSON.parse(sessionStorage.mensajesNotificaciones);
+                   
+                           $scope.mensajes=jsonData;
+                           for(var i=0;i<$scope.mensajes.length;i++){
+                                $scope.NEVS.push($scope.mensajes[i]);
+                           }
+                        }
+                        
+                        $scope.NEVS.sort(function(a,b){
+                            var c = new Date(a.time);
+                            var d = new Date(b.time);
+                            return d-c;
+                         });
+                                            
+                        
                 }else {
                      alert('Sorry! No Web Storage support..');
                 }
@@ -4478,6 +4507,11 @@ function(){
                         if(sessionStorage.noticiasNotificaciones!=null){
                            var jsonData = JSON.parse(sessionStorage.noticiasNotificaciones);
                            $scope.noticias=jsonData;
+                           
+                        }
+                        if(sessionStorage.mensajesNotificaciones!=null){
+                           var jsonData = JSON.parse(sessionStorage.mensajesNotificaciones);
+                           $scope.mensajes=jsonData;
                            
                         }
                     }else {
@@ -4776,7 +4810,8 @@ function(){
             $scope.noticiasNotificaciones=[];
             $scope.eventosNot=[];
             $scope.eventosNotificaciones=[];
-            
+            $scope.mensajesNot=[];
+            $scope.mensajesNotificaciones=[];
             
             this.consultar = function(){
                   $scope.interval_id=setInterval(function(){
@@ -4797,6 +4832,7 @@ function(){
                                                 }
                                                 if(!find){
                                                     var EV={
+                                                        id:'',
                                                         text:'',
                                                         time:'',
                                                         content:'',
@@ -4805,10 +4841,30 @@ function(){
                                                         info:'',
                                                         ctexto:''
                                                     };
-                                                    var today = new Date();
+                                                    var today = new Date(response[i].fecha);
+                                                    
+                                                    var d = new Date(today || Date.now()),
+                                                    month = '' + (d.getMonth() + 1),
+                                                    day = '' + d.getDate(),
+                                                    year = d.getFullYear();
+                                                    if (month.length < 2) month = '0' + month;
+                                                    if (day.length < 2) day = '0' + day;    
+                                                    var ddate=today.getDay();
+                                                    var ydate=today.getYear();
+                                                    var mdate=today.getMonth();
                                                     var h = today.getHours();
                                                     var m = today.getMinutes();
                                                     var s = today.getSeconds();
+                                                    
+                                                      // add a zero in front of numbers<10
+                                                    if (ddate < 10) {
+                                                        ddate = "0" + ddate;
+                                                    }
+                                                    if (mdate < 10) {
+                                                        mdate = "0" + mdate;
+                                                    }
+                                                    
+                                                    
                                                     // add a zero in front of numbers<10
                                                     if (m < 10) {
                                                         m = "0" + m;
@@ -4816,41 +4872,16 @@ function(){
                                                     if (s < 10) {
                                                         s = "0" + s;
                                                     }
-                                                    EV.time = h + ":" + m + ":" + s;
+                                                    EV.id=response[i].id;
+                                                    EV.time = [year,month, day].join('/')+ " "+ h + ":" + m + ":" + s;
                                                     EV.text='Evento nuevo '+response[i].titulo;
                                                     EV.content=response[i].descripcion;
                                                     EV.content=String(EV.content).replace(/(<([^>]+)>)/ig,"");
-                                                    aleaotorio=Math.round(Math.random()*3);
-                                                    
-                                                    if (count==0){
-                                                         EV.posicion='tl-item';
-                                                         count+=1;
-                                                    }else{
-                                                        EV.posicion='tl-item  alt';
-                                                        count-=1;
-                                                    }
-                                                    
-                                                    if(aleaotorio==0){
-                                                        EV.image='fa fa-asterisk';
-                                                        EV.info='tl-icon btn-icon-round btn-icon-lined btn-info';
-                                                        EV.ctexto='tl-tile text-primary';
-                                                    }else{
-                                                        if(aleaotorio==1){
-                                                            EV.image='fa fa-camera';
-                                                            EV.info='tl-icon btn-icon-round btn-icon-lined btn-success';
-                                                            EV.ctexto='tl-tile text-warning';
-                                                        }else{
-                                                            if(aleaotorio==2){
-                                                                EV.image='fa fa-check';
-                                                                EV.info='tl-icon btn-icon-round btn-icon-lined btn-danger';
-                                                                EV.ctexto='tl-tile text-success';
-                                                            }else{
-                                                               EV.image = 'fa fa-comment-o';
-                                                               EV.info='tl-icon btn-icon-round btn-icon-lined btn-success';
-                                                               EV.ctexto='tl-tile text-warning';
-                                                            }
-                                                        }
-                                                    }
+                                                    EV.posicion='tl-item  alt';
+                                                    count-=1;
+                                                    EV.image='fa fa-asterisk';
+                                                    EV.info='tl-icon btn-icon-round btn-icon-lined btn-info';
+                                                    EV.ctexto='tl-tile text-primary';
                                                                                              
                                                                                                        
                                                     $scope.eventosNotificaciones.push(EV);
@@ -4865,6 +4896,103 @@ function(){
                                       
                                         $scope.eventosNot=response;
                                         return logger.log("Tiene "+ diff + " evento(s) nuevos !!");
+                                    }
+                                
+                                    
+                                   
+                              
+                                }).
+                                error(function (data, status, headers, config) {
+                                    //alert('error!' + data + '/' + status);
+                          });
+                          
+                          var user="";
+                          if(typeof(Storage) !== "undefined") {
+                              user=sessionStorage.user;
+                          }
+                          
+                          
+                          
+                          $http.get("rest/servergcm/mensajes/"+user).
+                                success(function (response) {
+                                   var diff=response.length-$scope.mensajesNot.length;    
+                                    if(diff>0){
+                                        if(typeof(Storage) !== "undefined") {
+                                            sessionStorage.mesajes=JSON.stringify(response);
+                                            $scope.mensajesNotificaciones=[];
+                                            var find=false;
+                                            for(var i=0;i<response.length;i++){
+                                                find=false;
+                                                for(var e=0;e< $scope.mensajesNot.length;e++){
+                                                    if(response[i].id== $scope.mensajesNot[e].id){
+                                                        find=true;
+                                                    }
+                                                }
+                                                if(!find){
+                                                    var EV={
+                                                        id:'',
+                                                        text:'',
+                                                        time:'',
+                                                        content:'',
+                                                        image:'',
+                                                        posicion:'',
+                                                        info:'',
+                                                        ctexto:''
+                                                    };
+                                                    var today = new Date(response[i].fecha);
+                                                    var d = new Date(today || Date.now()),
+                                                    month = '' + (d.getMonth() + 1),
+                                                    day = '' + d.getDate(),
+                                                    year = d.getFullYear();
+                                                    if (month.length < 2) month = '0' + month;
+                                                    if (day.length < 2) day = '0' + day;    
+                                                    var ddate=today.getDay();
+                                                    var ydate=today.getYear();
+                                                    var mdate=today.getMonth();
+                                                    var h = today.getHours();
+                                                    var m = today.getMinutes();
+                                                    var s = today.getSeconds();
+                                                    
+                                                      // add a zero in front of numbers<10
+                                                    if (ddate < 10) {
+                                                        ddate = "0" + ddate;
+                                                    }
+                                                    if (mdate < 10) {
+                                                        mdate = "0" + mdate;
+                                                    }
+                                                    
+                                                    
+                                                    // add a zero in front of numbers<10
+                                                    if (m < 10) {
+                                                        m = "0" + m;
+                                                    }
+                                                    if (s < 10) {
+                                                        s = "0" + s;
+                                                    }
+                                                    EV.id=response[i].id;
+                                                    EV.time = [year,month, day].join('/')+ " "+ h + ":" + m + ":" + s;
+                                                    EV.text='Mensaje nuevo de'+response[i].usuariosByUsuariosorigen.nombre;
+                                                    EV.content=response[i].contenido;
+                                                    EV.content=String(EV.content).replace(/(<([^>]+)>)/ig,"");
+                                                    EV.posicion='tl-item';
+                                                    
+                                                    EV.image = 'fa fa-comment-o';
+                                                    EV.info='tl-icon btn-icon-round btn-icon-lined btn-success';
+                                                    EV.ctexto='tl-tile text-warning';
+                                                                                             
+                                                                                                       
+                                                    $scope.mensajesNotificaciones.push(EV);
+                                                }
+                                            }
+                                      
+                                            sessionStorage.mensajesNotificaciones=JSON.stringify($scope.mensajesNotificaciones);
+                                        }else {
+                                            alert('Sorry! No Web Storage support..');
+                                        }
+                                                        
+                                      
+                                        $scope.mensajesNot=response;
+                                        return logger.log("Tiene "+ diff + " mensaje(s) nuevos !!");
                                     }
                                 
                                     
@@ -4902,9 +5030,28 @@ function(){
                                                         ctexto:''
                                                     };
                                                     var today = new Date();
+                                                    var d = new Date(today || Date.now()),
+                                                    month = '' + (d.getMonth() + 1),
+                                                    day = '' + d.getDate(),
+                                                    year = d.getFullYear();
+                                                    if (month.length < 2) month = '0' + month;
+                                                    if (day.length < 2) day = '0' + day;    
+                                                    var ddate=today.getDay();
+                                                    var ydate=today.getYear();
+                                                    var mdate=today.getMonth();
                                                     var h = today.getHours();
                                                     var m = today.getMinutes();
                                                     var s = today.getSeconds();
+                                                    
+                                                      // add a zero in front of numbers<10
+                                                    if (ddate < 10) {
+                                                        ddate = "0" + ddate;
+                                                    }
+                                                    if (mdate < 10) {
+                                                        mdate = "0" + mdate;
+                                                    }
+                                                    
+                                                    
                                                     // add a zero in front of numbers<10
                                                     if (m < 10) {
                                                         m = "0" + m;
@@ -4912,43 +5059,17 @@ function(){
                                                     if (s < 10) {
                                                         s = "0" + s;
                                                     }
-                                                    EV.time = h + ":" + m + ":" + s;
+                                                    EV.id=response[i].id;
+                                                    EV.time = [year,month, day].join('/')+ " "+ h + ":" + m + ":" + s;
                                                     EV.text='Noticia nueva '+response[i].titulo;
                                                     EV.content=response[i].contenido;
                                                     EV.content=String(EV.content).replace(/(<([^>]+)>)/ig,"");
-                                                    aleaotorio=Math.round(Math.random()*3);
-                                                    
-                                                    if (count==0){
-                                                         EV.posicion='tl-item';
-                                                         count+=1;
-                                                    }else{
-                                                        EV.posicion='tl-item  alt';
-                                                        count-=1;
-                                                    }
-                                                    
-                                                        if(aleaotorio==0){
-                                                        EV.image='fa fa-asterisk';
-                                                        EV.info='tl-icon btn-icon-round btn-icon-lined btn-info';
-                                                        EV.ctexto='tl-tile text-primary';
-                                                    }else{
-                                                        if(aleaotorio==1){
-                                                            EV.image='fa fa-camera';
-                                                            EV.info='tl-icon btn-icon-round btn-icon-lined btn-success';
-                                                            EV.ctexto='tl-tile text-warning';
-                                                        }else{
-                                                            if(aleaotorio==2){
-                                                                EV.image='fa fa-check';
-                                                                EV.info='tl-icon btn-icon-round btn-icon-lined btn-danger';
-                                                                EV.ctexto='tl-tile text-success';
-                                                            }else{
-                                                               EV.image = 'fa fa-comment-o';
-                                                               EV.info='tl-icon btn-icon-round btn-icon-lined btn-success';
-                                                               EV.ctexto='tl-tile text-warning';
-                                                            }
-                                                        }
-                                                    }
-                                                    
-                                                    
+                                                    EV.posicion='tl-item  alt';
+                                                    count-=1;
+                                                    EV.image='fa fa-camera';
+                                                    EV.info='tl-icon btn-icon-round btn-icon-lined btn-success';
+                                                    EV.ctexto='tl-tile text-warning';
+                                                   
                                                     $scope.noticiasNotificaciones.push(EV);
                                                 }
                                             }
