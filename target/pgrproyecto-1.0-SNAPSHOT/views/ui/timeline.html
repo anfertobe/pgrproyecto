@@ -2,7 +2,7 @@
     
     <div class="ui-timline-container">
         <section class="ui-timeline" >
-            <article class="{{ev.posicion}}"  ng-repeat="ev in NEVS" >
+            <article class="{{ev.posicion}}"  ng-repeat="ev in NEVS" ng-click="evt.clickNEV(ev.id,ev.tipo)">
                 <div class="tl-body">
                     <div class="tl-entry">
                         <div class="tl-time">{{ev.time}} </div>

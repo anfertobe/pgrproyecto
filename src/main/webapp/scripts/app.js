@@ -4452,7 +4452,24 @@ function(){
             $scope.noticias=[];
             $scope.mensajes=[];
             $scope.NEVS=[];     
+
             
+            this.clickNEV=function(id,tipo){
+                if(typeof(Storage) !== "undefined") {
+                        if(tipo=="Evento"){
+                            sessionStorage.verEvento =  id ;
+                            sessionStorage.verNoticia =  -1 ;
+                        }else{
+                            sessionStorage.verNoticia =  id ;
+                            sessionStorage.verEvento =  -1 ;
+                        }
+                        
+                   } else {
+                     alert('Sorry! No Web Storage support..');
+                   }
+                   window.location="#/nev/single";
+            };
+
                 
             this.consultar = function(){
                 
@@ -4839,7 +4856,8 @@ function(){
                                                         image:'',
                                                         posicion:'',
                                                         info:'',
-                                                        ctexto:''
+                                                        ctexto:'',
+                                                        tipo:''
                                                     };
                                                     var today = new Date(response[i].fecha);
                                                     
@@ -4878,6 +4896,7 @@ function(){
                                                     EV.content=response[i].descripcion;
                                                     EV.content=String(EV.content).replace(/(<([^>]+)>)/ig,"");
                                                     EV.posicion='tl-item  alt';
+                                                    EV.tipo="Evento";
                                                     count-=1;
                                                     EV.image='fa fa-asterisk';
                                                     EV.info='tl-icon btn-icon-round btn-icon-lined btn-info';
@@ -4937,7 +4956,8 @@ function(){
                                                         image:'',
                                                         posicion:'',
                                                         info:'',
-                                                        ctexto:''
+                                                        ctexto:'',
+                                                        tipo:''
                                                     };
                                                     var today = new Date(response[i].fecha);
                                                     var d = new Date(today || Date.now()),
@@ -4975,7 +4995,7 @@ function(){
                                                     EV.content=response[i].contenido;
                                                     EV.content=String(EV.content).replace(/(<([^>]+)>)/ig,"");
                                                     EV.posicion='tl-item';
-                                                    
+                                                    EV.tipo="Mensaje";
                                                     EV.image = 'fa fa-comment-o';
                                                     EV.info='tl-icon btn-icon-round btn-icon-lined btn-success';
                                                     EV.ctexto='tl-tile text-warning';
@@ -5027,7 +5047,8 @@ function(){
                                                         image:'',
                                                         posicion:'',
                                                         info:'',
-                                                        ctexto:''
+                                                        ctexto:'',
+                                                        tipo:''
                                                     };
                                                     var today = new Date();
                                                     var d = new Date(today || Date.now()),
@@ -5066,6 +5087,7 @@ function(){
                                                     EV.content=String(EV.content).replace(/(<([^>]+)>)/ig,"");
                                                     EV.posicion='tl-item  alt';
                                                     count-=1;
+                                                    EV.tipo="Noticia";
                                                     EV.image='fa fa-camera';
                                                     EV.info='tl-icon btn-icon-round btn-icon-lined btn-success';
                                                     EV.ctexto='tl-tile text-warning';
