@@ -4459,15 +4459,17 @@ function(){
                         if(tipo=="Evento"){
                             sessionStorage.verEvento =  id ;
                             sessionStorage.verNoticia =  -1 ;
-                        }else{
+                            window.location="#/nev/single";
+                        }else if(tipo=="Noticia"){
                             sessionStorage.verNoticia =  id ;
                             sessionStorage.verEvento =  -1 ;
+                            window.location="#/nev/single";
                         }
                         
                    } else {
                      alert('Sorry! No Web Storage support..');
                    }
-                   window.location="#/nev/single";
+                   
             };
 
                 
