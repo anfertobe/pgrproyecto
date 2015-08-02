@@ -4475,63 +4475,95 @@ function(){
                 
             this.consultar = function(){
                 
-                  if(typeof(Storage) !== "undefined") {
-                      if(sessionStorage.eventosNotificaciones!=null){
-                          var jsonData = JSON.parse(sessionStorage.eventosNotificaciones);
-                           $scope.eventos=jsonData;
-                      
-                           for(var i=0;i<$scope.eventos.length;i++){
-                                $scope.NEVS.push($scope.eventos[i]);
-                           }
-                        
-                           
-          
-                          
-                       }
-                        if(sessionStorage.noticiasNotificaciones!=null){
-                           var jsonData = JSON.parse(sessionStorage.noticiasNotificaciones);
-                   
-                           $scope.noticias=jsonData;
-                           for(var i=0;i<$scope.noticias.length;i++){
-                                $scope.NEVS.push($scope.noticias[i]);
-                           }
-                        }
-                        
-                        if(sessionStorage.mensajesNotificaciones!=null){
-                           var jsonData = JSON.parse(sessionStorage.mensajesNotificaciones);
-                   
-                           $scope.mensajes=jsonData;
-                           for(var i=0;i<$scope.mensajes.length;i++){
-                                $scope.NEVS.push($scope.mensajes[i]);
-                           }
-                        }
-                        
-                        $scope.NEVS.sort(function(a,b){
-                            var c = new Date(a.time);
-                            var d = new Date(b.time);
-                            return d-c;
-                         });
-                                            
-                        
-                }else {
-                     alert('Sorry! No Web Storage support..');
+                if(typeof(Storage) !== "undefined") {
+                    if (sessionStorage.eventosNotificaciones !== undefined  &&  $scope.eventos.length==0){
+                        $scope.eventos=sessionStorage.eventosNotificaciones;
+                    }
+                    
+                    if (sessionStorage.noticiasNotificaciones !== undefined &&  $scope.noticias.length==0){
+                        $scope.noticias=sessionStorage.noticiasNotificaciones;
+                    }
+                    
+                    if (sessionStorage.mensajesNotificaciones !== undefined &&  $scope.mensajes.length==0){
+                        $scope.mensajes=sessionStorage.mensajesNotificaciones ;
+                    
+                    }
                 }
+                
+                
                                 
                 $scope.interval_id=setInterval(function(){
-                        if(typeof(Storage) !== "undefined") {
-                      if(sessionStorage.eventosNotificaciones!=null){
+                    if(typeof(Storage) !== "undefined") {
+                                           
+                        if(sessionStorage.eventosNotificaciones!== undefined ){
                           var jsonData = JSON.parse(sessionStorage.eventosNotificaciones);
+                                             
+                          var find=false;
+                          for(var i=0;i<jsonData.length;i++){
+                              find=false;
+                               for(var e=0;e<$scope.eventos.length;e++){
+                                    if($scope.eventos[e].id==jsonData[i].id){
+                                        find=true;
+                                    }
+                                }
+                                if(!find){
+                                  
+                                  $scope.NEVS.push(jsonData[i]);
+                                  $scope.NEVS.sort(function(a,b){
+                                      var c = new Date(a.time);
+                                      var d = new Date(b.time);
+                                        return d-c;
+                                    });
+              
+                               }
+                          }
+                          
                           $scope.eventos=jsonData;
-                       }
-                        if(sessionStorage.noticiasNotificaciones!=null){
-                           var jsonData = JSON.parse(sessionStorage.noticiasNotificaciones);
-                           $scope.noticias=jsonData;
-                           
+                          
                         }
-                        if(sessionStorage.mensajesNotificaciones!=null){
-                           var jsonData = JSON.parse(sessionStorage.mensajesNotificaciones);
-                           $scope.mensajes=jsonData;
+                        if(sessionStorage.noticiasNotificaciones!== undefined ){
+                           var jsonData = JSON.parse(sessionStorage.noticiasNotificaciones);
                            
+                          for(var i=0;i<jsonData.length;i++){
+                              find=false;
+                               for(var e=0;e<$scope.noticias.length;e++){
+                                    find=($scope.noticias[e].id==jsonData[i].id);
+                                }
+                                if(!find){
+                                $scope.NEVS.push(jsonData[i]);
+                                  $scope.NEVS.sort(function(a,b){
+                                      var c = new Date(a.time);
+                                      var d = new Date(b.time);
+                                        return d-c;
+                                    });
+              
+                               }
+                          }
+                           $scope.noticias=jsonData;
+                          
+                        }
+                        if(sessionStorage.mensajesNotificaciones!== undefined ){
+                           var jsonData = JSON.parse(sessionStorage.mensajesNotificaciones);
+                           
+                                      
+                           
+                          for(var i=0;i<jsonData.length;i++){
+                              find=false;
+                               for(var e=0;e<$scope.mensajes.length;e++){
+                                    find=($scope.mensajes[e].id==jsonData[i].id);
+                                }
+                                if(!find){
+                                $scope.NEVS.push(jsonData[i]);
+                                  $scope.NEVS.sort(function(a,b){
+                                      var c = new Date(a.time);
+                                      var d = new Date(b.time);
+                                        return d-c;
+                                    });
+              
+                               }
+                          }
+                            
+                           $scope.mensajes=jsonData; 
                         }
                     }else {
                          alert('Sorry! No Web Storage support..');
@@ -4833,9 +4865,26 @@ function(){
             $scope.mensajesNotificaciones=[];
             
             this.consultar = function(){
-                  $scope.interval_id=setInterval(function(){
+                if(typeof(Storage) !== "undefined") {
+                 
+                    if (sessionStorage.eventos !== undefined  &&  $scope.eventosNot.length==0){
+                        $scope.eventosNot=sessionStorage.eventos;
+                    }
+                    
+                    if (sessionStorage.mesajes !== undefined &&  $scope.mensajesNot.length==0){
+                        $scope.mensajesNot=sessionStorage.mesajes;
+                    }
+                    
+                    if (sessionStorage.noticias !== undefined &&  $scope.noticiasNot.length==0){
+                        $scope.noticiasNot=sessionStorage.noticias ;
+                    
+                    }
+                    
+                }
+                $scope.interval_id=setInterval(function(){
                          $http.get("rest/servergcm/eventos").
                                 success(function (response) {
+                                    
                                    var diff=response.length-$scope.eventosNot.length;    
                                     if(diff>0){
                                         if(typeof(Storage) !== "undefined") {
