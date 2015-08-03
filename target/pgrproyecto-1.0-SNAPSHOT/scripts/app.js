@@ -4367,22 +4367,20 @@ function(){
                 }
                                 
                 $scope.interval_id=setInterval(function(){
-                           if(typeof(Storage) !== "undefined") {
+                    if(typeof(Storage) !== "undefined") {
                       if(sessionStorage.eventos!=null){
                           var jsonData = JSON.parse(sessionStorage.eventos);
                           $scope.eventos=jsonData;
-                          
-                       }
-                        if(sessionStorage.noticias!=null){
-                            var jsonData = JSON.parse(sessionStorage.noticias);
-                           $scope.noticias=jsonData;
+                      }
+                      if(sessionStorage.noticias!=null){
+                          var jsonData = JSON.parse(sessionStorage.noticias);
+                          $scope.noticias=jsonData;
+                      }
+                       if(sessionStorage.intereses!=null){
+                          var jsonData = JSON.parse(sessionStorage.intereses);
+                          $scope.intereses=jsonData;
                            
-                        }
-                        if(sessionStorage.intereses!=null){
-                           var jsonData = JSON.parse(sessionStorage.intereses);
-                           $scope.intereses=jsonData;
-                           
-                        }	
+                     }	
                 }else {
                      alert('Sorry! No Web Storage support..');
                 }
@@ -4401,7 +4399,7 @@ function(){
                                               $scope.NEV.id=$scope.eventos[i].id;
                                               $scope.NEV.fecha=$scope.eventos[i].fecha;
                                               $scope.NEV.contenido=$scope.eventos[i].descripcion;
-                                              $scope.NEV.contenido=String($scope.NEV.contenido).replace(/(<([^>]+)>)/ig,"");
+                                              $scope.NEV.contenido=String($scope.NEV.contenido);
                                               $scope.NEV.titulo=$scope.eventos[i].titulo;
                                               $scope.tipo='Evento';
                                               for(var e=0;e<$scope.intereses.length;e++){
@@ -4422,7 +4420,7 @@ function(){
                                              if ($scope.noticias[i].id == sessionStorage.verNoticia) {
                                                  $scope.NEV.id=$scope.noticias[i].id;
                                                  $scope.NEV.contenido=$scope.noticias[i].contenido;
-                                                 $scope.NEV.contenido=String($scope.NEV.contenido).replace(/(<([^>]+)>)/ig,"");
+                                                 $scope.NEV.contenido=String($scope.NEV.contenido);
                                                  $scope.NEV.autoria=$scope.noticias[i].autoria;
                                                  $scope.NEV.titulo=$scope.noticias[i].titulo;
                                                  var rightNow = new Date();
@@ -4490,6 +4488,82 @@ function(){
                     }
                 }
                 
+                if(typeof(Storage) !== "undefined") {
+                                           
+                        if(sessionStorage.eventosNotificaciones!== undefined ){
+                          var jsonData = JSON.parse(sessionStorage.eventosNotificaciones);
+                                             
+                          var find=false;
+                          for(var i=0;i<jsonData.length;i++){
+                              find=false;
+                               for(var e=0;e<$scope.eventos.length;e++){
+                                    if($scope.eventos[e].id==jsonData[i].id){
+                                        find=true;
+                                    }
+                                }
+                                if(!find){
+                                  
+                                  $scope.NEVS.push(jsonData[i]);
+                                  $scope.NEVS.sort(function(a,b){
+                                      var c = new Date(a.time);
+                                      var d = new Date(b.time);
+                                        return d-c;
+                                    });
+              
+                               }
+                          }
+                          
+                          $scope.eventos=jsonData;
+                          
+                        }
+                        if(sessionStorage.noticiasNotificaciones!== undefined ){
+                           var jsonData = JSON.parse(sessionStorage.noticiasNotificaciones);
+                           
+                          for(var i=0;i<jsonData.length;i++){
+                              find=false;
+                               for(var e=0;e<$scope.noticias.length;e++){
+                                    find=($scope.noticias[e].id==jsonData[i].id);
+                                }
+                                if(!find){
+                                $scope.NEVS.push(jsonData[i]);
+                                  $scope.NEVS.sort(function(a,b){
+                                      var c = new Date(a.time);
+                                      var d = new Date(b.time);
+                                        return d-c;
+                                    });
+              
+                               }
+                          }
+                           $scope.noticias=jsonData;
+                          
+                        }
+                        if(sessionStorage.mensajesNotificaciones!== undefined ){
+                           var jsonData = JSON.parse(sessionStorage.mensajesNotificaciones);
+                           
+                                      
+                           
+                          for(var i=0;i<jsonData.length;i++){
+                              find=false;
+                               for(var e=0;e<$scope.mensajes.length;e++){
+                                    find=($scope.mensajes[e].id==jsonData[i].id);
+                                }
+                                if(!find){
+                                $scope.NEVS.push(jsonData[i]);
+                                  $scope.NEVS.sort(function(a,b){
+                                      var c = new Date(a.time);
+                                      var d = new Date(b.time);
+                                        return d-c;
+                                    });
+              
+                               }
+                          }
+                            
+                           $scope.mensajes=jsonData; 
+                        }
+                    }else {
+                         alert('Sorry! No Web Storage support..');
+                    }
+  
                 
                                 
                 $scope.interval_id=setInterval(function(){
@@ -4568,10 +4642,7 @@ function(){
                     }else {
                          alert('Sorry! No Web Storage support..');
                     }
-                },4000);
-                    
-                 
-             
+                },4500);
             };
         }]).controller("dashboard",["$scope","$rootScope","$http",'$timeout',
         function($scope, $rootScope, $http,$timeout){
@@ -5178,7 +5249,7 @@ function(){
                                     //alert('error!' + data + '/' + status);
                                 });
                        
-                   },2000);
+                   },4000);
                  
                
                
