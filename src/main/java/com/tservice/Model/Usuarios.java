@@ -26,6 +26,7 @@ public class Usuarios  implements java.io.Serializable {
      private Set<Carreras> carrerases = new HashSet(0);
      private Set<Materias> materiases = new HashSet(0);
      private Set<Grupos> gruposes_1 = new HashSet(0);
+     private Set<Usuarios> usuariosesForUsuariosIdentificacion = new HashSet(0);
 
     public Usuarios() {
     }
@@ -177,7 +178,6 @@ public class Usuarios  implements java.io.Serializable {
         this.materiases = materiases;
     }
 
-
 @ManyToMany(fetch=FetchType.LAZY)
     @JoinTable(name="usuarios_has_grupos", joinColumns = { 
         @JoinColumn(name="usuarios_carne", nullable=false, updatable=false) }, inverseJoinColumns = { 
@@ -191,7 +191,17 @@ public class Usuarios  implements java.io.Serializable {
     }
 
 
-
+@ManyToMany(fetch=FetchType.LAZY)
+    @JoinTable(name="contactos", catalog="coswg2", joinColumns = { 
+        @JoinColumn(name="usuarios_identificacion1", nullable=false, updatable=false) }, inverseJoinColumns = { 
+        @JoinColumn(name="usuarios_identificacion", nullable=false, updatable=false) })
+    public Set<Usuarios> getUsuariosesForUsuariosIdentificacion() {
+        return this.usuariosesForUsuariosIdentificacion;
+    }
+    
+    public void setUsuariosesForUsuariosIdentificacion(Set<Usuarios> usuariosesForUsuariosIdentificacion) {
+        this.usuariosesForUsuariosIdentificacion = usuariosesForUsuariosIdentificacion;
+    }
 
 }
 

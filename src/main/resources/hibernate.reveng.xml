@@ -6,6 +6,7 @@
   <table-filter match-name="Edificio"/>
   <table-filter match-name="materias"/>
   <table-filter match-name="carreras"/>
+  <table-filter match-name="contactos"/>
   <table-filter match-name="usuarios"/>
   <table-filter match-name="intereses"/>
   <table-filter match-name="usuarios_has_grupos"/>
