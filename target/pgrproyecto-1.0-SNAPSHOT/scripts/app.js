@@ -4488,6 +4488,82 @@ function(){
                     }
                 }
                 
+                if(typeof(Storage) !== "undefined") {
+                                           
+                        if(sessionStorage.eventosNotificaciones!== undefined ){
+                          var jsonData = JSON.parse(sessionStorage.eventosNotificaciones);
+                                             
+                          var find=false;
+                          for(var i=0;i<jsonData.length;i++){
+                              find=false;
+                               for(var e=0;e<$scope.eventos.length;e++){
+                                    if($scope.eventos[e].id==jsonData[i].id){
+                                        find=true;
+                                    }
+                                }
+                                if(!find){
+                                  
+                                  $scope.NEVS.push(jsonData[i]);
+                                  $scope.NEVS.sort(function(a,b){
+                                      var c = new Date(a.time);
+                                      var d = new Date(b.time);
+                                        return d-c;
+                                    });
+              
+                               }
+                          }
+                          
+                          $scope.eventos=jsonData;
+                          
+                        }
+                        if(sessionStorage.noticiasNotificaciones!== undefined ){
+                           var jsonData = JSON.parse(sessionStorage.noticiasNotificaciones);
+                           
+                          for(var i=0;i<jsonData.length;i++){
+                              find=false;
+                               for(var e=0;e<$scope.noticias.length;e++){
+                                    find=($scope.noticias[e].id==jsonData[i].id);
+                                }
+                                if(!find){
+                                $scope.NEVS.push(jsonData[i]);
+                                  $scope.NEVS.sort(function(a,b){
+                                      var c = new Date(a.time);
+                                      var d = new Date(b.time);
+                                        return d-c;
+                                    });
+              
+                               }
+                          }
+                           $scope.noticias=jsonData;
+                          
+                        }
+                        if(sessionStorage.mensajesNotificaciones!== undefined ){
+                           var jsonData = JSON.parse(sessionStorage.mensajesNotificaciones);
+                           
+                                      
+                           
+                          for(var i=0;i<jsonData.length;i++){
+                              find=false;
+                               for(var e=0;e<$scope.mensajes.length;e++){
+                                    find=($scope.mensajes[e].id==jsonData[i].id);
+                                }
+                                if(!find){
+                                $scope.NEVS.push(jsonData[i]);
+                                  $scope.NEVS.sort(function(a,b){
+                                      var c = new Date(a.time);
+                                      var d = new Date(b.time);
+                                        return d-c;
+                                    });
+              
+                               }
+                          }
+                            
+                           $scope.mensajes=jsonData; 
+                        }
+                    }else {
+                         alert('Sorry! No Web Storage support..');
+                    }
+  
                 
                                 
                 $scope.interval_id=setInterval(function(){
@@ -4566,7 +4642,7 @@ function(){
                     }else {
                          alert('Sorry! No Web Storage support..');
                     }
-                },6000);
+                },4500);
             };
         }]).controller("dashboard",["$scope","$rootScope","$http",'$timeout',
         function($scope, $rootScope, $http,$timeout){
