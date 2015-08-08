@@ -7,16 +7,10 @@ import com.tservice.Persistencia.*;
 import com.tservice.exceptions.servergcmExceptions;
 import com.tservice.facade.facade;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.logging.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.*;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author Andres Torres y Luis Gomez
@@ -362,11 +356,12 @@ public class RestControllerGcm {
          return new ResponseEntity<>(respuesta, HttpStatus.ACCEPTED);
      }
 
-//            @RequestMapping(value="/carreras",method = RequestMethod.GET)        
-//    public List<Carreras> consultarCarreras()  throws ResourceNotFoundException { 
-//
-//          return carrecrud.search();
-//    }
+            @RequestMapping(value="/pruebaConsultas/{keySearch}",method = RequestMethod.GET)        
+    public List<Usuarios> SearchContactos(@PathVariable("keySearch") String keySearch)  throws ResourceNotFoundException { 
+                  return usuaCrud.searchContactosByNombre("%"+keySearch.toLowerCase()+"%");
+    }
 
+     
+     
     
 }

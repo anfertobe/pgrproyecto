@@ -9,6 +9,7 @@ import com.tservice.Model.*;
 import java.util.List;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 /**
  * @author andres
  */
@@ -19,4 +20,7 @@ public interface CarrerasCrudFactory extends CrudRepository<Carreras, Integer>{
         
     @Query("select new map(id as id, nombre as nombre) from Carreras")
     public List<Carreras> searchcarreras();
+    
+    @Query("from Carreras c where lower(c.nombre) Like :carrera")
+    public List<Carreras> searchcarrerasByKey(@Param("carrera") String carrera);
 }

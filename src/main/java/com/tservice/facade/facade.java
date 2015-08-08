@@ -547,4 +547,24 @@ public class facade {
         
     }
     
+    public List<Usuarios> BusquedaContactos(String keySerch){
+        
+        
+        
+        return null;
+    }
+    
+    
+    private boolean isNumber(String number){
+        try  
+        {  
+          Integer d = Integer.parseInt(number);  
+        }  
+        catch(Exception nfe)  
+        {  
+          return false;  
+        }  
+        return true;  
+    }
+    
 }
