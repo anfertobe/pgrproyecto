@@ -4503,6 +4503,13 @@ function(){
                                 }
                                 if(!find){
                                   
+                                  var n =jsonData[i].text.length;
+                                  
+                                  if (n>100){
+                                      jsonData[i].text=jsonData[i].text.substring(0,100) + '...';
+                                  }
+                                  
+                                  
                                   $scope.NEVS.push(jsonData[i]);
                                   $scope.NEVS.sort(function(a,b){
                                       var c = new Date(a.time);
@@ -4525,6 +4532,13 @@ function(){
                                     find=($scope.noticias[e].id==jsonData[i].id);
                                 }
                                 if(!find){
+                                    var n =jsonData[i].text.length;
+                                  
+                                  if (n>100){
+                                      jsonData[i].text=jsonData[i].text.substring(0,100) + '...';
+                                  }
+                                  
+                                    
                                 $scope.NEVS.push(jsonData[i]);
                                   $scope.NEVS.sort(function(a,b){
                                       var c = new Date(a.time);
@@ -4548,6 +4562,12 @@ function(){
                                     find=($scope.mensajes[e].id==jsonData[i].id);
                                 }
                                 if(!find){
+                                    var n =jsonData[i].text.length;
+                                  
+                                  if (n>100){
+                                      jsonData[i].text=jsonData[i].text.substring(0,100) + '...';
+                                  }
+                                  
                                 $scope.NEVS.push(jsonData[i]);
                                   $scope.NEVS.sort(function(a,b){
                                       var c = new Date(a.time);
