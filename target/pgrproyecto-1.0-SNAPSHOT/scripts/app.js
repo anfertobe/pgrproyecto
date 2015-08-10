@@ -4392,9 +4392,40 @@ function(){
                 $timeout(function() {
                          
                        if(typeof(Storage) !== "undefined") {
+                           
+                            
+                          if (sessionStorage.verMensaje !== undefined && sessionStorage.verMensaje!=-1){
+                              
+                              
+                              
+                              var mensajes=[];
+
+
+                              if (sessionStorage.mensajesNotificaciones !== undefined &&  mensajes.length==0){
+                                  var jsonData = JSON.parse(sessionStorage.mensajesNotificaciones);
+                                mensajes=jsonData ;
+                              }
+            
+                                      for (var i = 0; i < mensajes.length; i++) {
+                                          
+                                            if (mensajes[i].id == sessionStorage.verMensaje) {
+                                              $scope.NEV.id=mensajes[i].id;
+                                              $scope.NEV.fecha=mensajes[i].time;
+                                               $scope.NEV.contenido=String(mensajes[i].content);
+                                              $scope.NEV.titulo=mensajes[i].text;
+                                              $scope.tipo='Mensaje';
+                                               $scope.inter.text='Mensajes';
+                                              $scope.NEV.intereses.push($scope.inter);
+                                           }
+                                       }
+                                       
+                                    
+                    
+                              sessionStorage.verMensaje=-1;
+                          }
+                           
                           if(sessionStorage.verNoticia==-1){
-                                   
-                                     for (var i = 0; i < $scope.eventos.length; i++) {
+                                 for (var i = 0; i < $scope.eventos.length; i++) {
                                             if ($scope.eventos[i].id == sessionStorage.verEvento) {
                                               $scope.NEV.id=$scope.eventos[i].id;
                                               $scope.NEV.fecha=$scope.eventos[i].fecha;
@@ -4457,10 +4488,17 @@ function(){
                         if(tipo=="Evento"){
                             sessionStorage.verEvento =  id ;
                             sessionStorage.verNoticia =  -1 ;
+                            sessionStorage.verMensaje =  -1 ;
                             window.location="#/nev/single";
                         }else if(tipo=="Noticia"){
                             sessionStorage.verNoticia =  id ;
                             sessionStorage.verEvento =  -1 ;
+                            sessionStorage.verMensaje =  -1 ;
+                            window.location="#/nev/single";
+                        }else{
+                            sessionStorage.verNoticia =  -1 ;
+                            sessionStorage.verEvento =  -1 ;
+                            sessionStorage.verMensaje =  id ;
                             window.location="#/nev/single";
                         }
                         
@@ -4503,10 +4541,10 @@ function(){
                                 }
                                 if(!find){
                                   
-                                  var n =jsonData[i].text.length;
-                                  
+                                  var n =jsonData[i].content.length;
+                            
                                   if (n>100){
-                                      jsonData[i].text=jsonData[i].text.substring(0,100) + '...';
+                                       jsonData[i].content=jsonData[i].content.substring(0,100) + '...';
                                   }
                                   
                                   
@@ -4532,12 +4570,12 @@ function(){
                                     find=($scope.noticias[e].id==jsonData[i].id);
                                 }
                                 if(!find){
-                                    var n =jsonData[i].text.length;
-                                  
+                                  var n =jsonData[i].content.length;
+                            
                                   if (n>100){
-                                      jsonData[i].text=jsonData[i].text.substring(0,100) + '...';
+                                       jsonData[i].content=jsonData[i].content.substring(0,100) + '...';
                                   }
-                                  
+                                          
                                     
                                 $scope.NEVS.push(jsonData[i]);
                                   $scope.NEVS.sort(function(a,b){
@@ -4562,12 +4600,12 @@ function(){
                                     find=($scope.mensajes[e].id==jsonData[i].id);
                                 }
                                 if(!find){
-                                    var n =jsonData[i].text.length;
-                                  
+                                  var n =jsonData[i].content.length;
+                            
                                   if (n>100){
-                                      jsonData[i].text=jsonData[i].text.substring(0,100) + '...';
+                                       jsonData[i].content=jsonData[i].content.substring(0,100) + '...';
                                   }
-                                  
+                                          
                                 $scope.NEVS.push(jsonData[i]);
                                   $scope.NEVS.sort(function(a,b){
                                       var c = new Date(a.time);
@@ -4601,7 +4639,13 @@ function(){
                                     }
                                 }
                                 if(!find){
-                                  
+                                 
+                                     var n =jsonData[i].content.length;
+                            
+                                  if (n>100){
+                                       jsonData[i].content=jsonData[i].content.substring(0,100) + '...';
+                                  }
+                                 
                                   $scope.NEVS.push(jsonData[i]);
                                   $scope.NEVS.sort(function(a,b){
                                       var c = new Date(a.time);
@@ -4624,6 +4668,12 @@ function(){
                                     find=($scope.noticias[e].id==jsonData[i].id);
                                 }
                                 if(!find){
+                                     var n =jsonData[i].content.length;
+                            
+                                  if (n>100){
+                                       jsonData[i].content=jsonData[i].content.substring(0,100) + '...';
+                                  }
+                                 
                                 $scope.NEVS.push(jsonData[i]);
                                   $scope.NEVS.sort(function(a,b){
                                       var c = new Date(a.time);
@@ -4647,6 +4697,12 @@ function(){
                                     find=($scope.mensajes[e].id==jsonData[i].id);
                                 }
                                 if(!find){
+                                     var n =jsonData[i].content.length;
+                            
+                                  if (n>100){
+                                       jsonData[i].content=jsonData[i].content.substring(0,100) + '...';
+                                  }
+                                 
                                 $scope.NEVS.push(jsonData[i]);
                                   $scope.NEVS.sort(function(a,b){
                                       var c = new Date(a.time);
@@ -4819,8 +4875,8 @@ function(){
                        delete $scope.noticia.carrerases
                        delete $scope.noticia.ubicacion
                        
-                       if ($scope.noticia.contenido.length>500){
-                            return logger.logError("La noticia no debe superar 500 caracteres"); 
+                       if ($scope.noticia.contenido.length>1000){
+                            return logger.logError("La noticia no debe superar 1000 caracteres"); 
                        }
                        
                        $http.put('rest/servergcm/noticia',  $scope.noticia).
@@ -4856,8 +4912,8 @@ function(){
                       
                 
                 
-                       if ($scope.evento.descripcion.length>500){
-                            return logger.logError("El evento no debe superar 500 caracteres"); 
+                       if ($scope.evento.descripcion.length>1000){
+                            return logger.logError("El evento no debe superar 1000 caracteres"); 
                        }
                 
                        $http.put('rest/servergcm/evento',  $scope.evento).
@@ -4959,15 +5015,18 @@ function(){
                 if(typeof(Storage) !== "undefined") {
                  
                     if (sessionStorage.eventos !== undefined  &&  $scope.eventosNot.length==0){
-                        $scope.eventosNot=sessionStorage.eventos;
+                         var jsonData = JSON.parse(sessionStorage.eventos);
+                        $scope.eventosNot=jsonData;
                     }
                     
                     if (sessionStorage.mesajes !== undefined &&  $scope.mensajesNot.length==0){
-                        $scope.mensajesNot=sessionStorage.mesajes;
+                        var jsonData = JSON.parse(sessionStorage.mesajes);
+                        $scope.mensajesNot=jsonData;
                     }
                     
                     if (sessionStorage.noticias !== undefined &&  $scope.noticiasNot.length==0){
-                        $scope.noticiasNot=sessionStorage.noticias ;
+                        var jsonData = JSON.parse(sessionStorage.noticias);
+                        $scope.noticiasNot=jsonData ;
                     
                     }
                     
@@ -5167,9 +5226,10 @@ function(){
                            
                           $http.get("rest/servergcm/noticias").
                                 success(function (response) {
-                                     
+                                 
                                         var diff=response.length-$scope.noticiasNot.length;
                                         if(diff>0){
+                                            
                                         if(typeof(Storage) !== "undefined") {
                                             sessionStorage.noticias = JSON.stringify(response);
                                             $scope.noticiasNotificaciones=[];
