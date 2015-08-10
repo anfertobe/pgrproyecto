@@ -358,7 +358,7 @@ public class RestControllerGcm {
 
             @RequestMapping(value="/pruebaConsultas/{keySearch}",method = RequestMethod.GET)        
     public List<Usuarios> SearchContactos(@PathVariable("keySearch") String keySearch)  throws ResourceNotFoundException { 
-                  return usuaCrud.searchContactosByNombre("%"+keySearch.toLowerCase()+"%");
+                  return usuaCrud.pruebaQuery("%"+keySearch.toLowerCase()+"%");
     }
 
      
